@@ -45,14 +45,22 @@ public class Map {
 		mainMap [c.pos.x, c.pos.y].Add(c);
 	}
 	public IntVector2 Seek(Character c) {
-		return new IntVector2 (0, 0);
-	}
+        for (int i = 0; i < MAP_WIDTH + 2; i++) {
+            for (int j = 0; j < MAP_HEIGHT + 2; j++) {
+                if(mainMap[i,j].Contains(c))
+                    return new IntVector2(0, 0);
+            }
+        }
+        return new IntVector2(-1, -1);
+    }
 	public List<Character> Seek(IntVector2 pos) {
-		return mainMap [0, 0];
+        return mainMap [pos.x, pos.y];
 	}
 	public void Create(Character c) {
+		mainMap [c.pos.x, c.pos.y].Add (c);
 	}
 	public void Destroy(Character c) {
+		mainMap [c.pos.x, c.pos.y].Remove (c);
 	}
 
 }
