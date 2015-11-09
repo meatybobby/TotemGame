@@ -15,33 +15,37 @@ public class Player : Character {
 	void Start () {
 		mode = IDLE;
 		Map.mainMap [1, 1].Add (this);
+		Debug.Log (Time.deltaTime);
 	}
 
 	void Update () {
 		float moveH = Input.GetAxis ("Horizontal");
 		float moveV = Input.GetAxis ("Vertical");
 
-		if ( !(Mathf.Abs(moveH) == 0.0f && Mathf.Abs(moveV) == 0.0f) && !isMoving) {
+		if (!(Mathf.Abs (moveH) == 0.0f && Mathf.Abs (moveV) == 0.0f) && !isMoving) {
 
-			int unitH = moveH==0.0f? 0 : (moveH>0.0f? 1 : -1);
-			int unitV = moveV==0.0f? 0 : (moveV>0.0f? 1 : -1);
+			int unitH = moveH == 0.0f ? 0 : (moveH > 0.0f ? 1 : -1);
+			int unitV = moveV == 0.0f ? 0 : (moveV > 0.0f ? 1 : -1);
 
 			IntVector2 movement = new IntVector2 (unitH, unitV);
 
-			if(movement!=dir && mode!=CATCH) {
+			if ((movement != dir && mode != CATCH) ) {
 				Rotate (movement);
-			}
-			else {
+				//pre += Time.deltaTime;
+			} else if ( (Mathf.Abs (moveH) >= 0.5f || Mathf.Abs (moveV) >= 0.5f) ) {
 
-				if(mode == CATCH) {
+				if (mode == CATCH) {
 					// Slant move is not allowed when CATCH
-					if( Mathf.Abs(movement.x+movement.y)==1 )
-						MoveByVector(movement);
+					if (Mathf.Abs (movement.x + movement.y) == 1)
+						MoveByVector (movement);
 				} else {
-					MoveByVector(movement);
+					MoveByVector (movement);
+
 				}
 			}
-		}
+		} /*else if( Mathf.Abs (moveH) == 0.0f && Mathf.Abs (moveV) == 0.0f ) {
+			pre = 0.0f;
+		}*/
 
 		// Plant a totem when pressing left ctrl and not moving and not slant
 		if (Input.GetKeyDown (KeyCode.LeftControl) && !isMoving && ( Mathf.Abs(dir.x+dir.y)==1)) {
@@ -51,9 +55,11 @@ public class Player : Character {
 			if(Map.mainMap [plantPos.x, plantPos.y].Count==0) {
 				GameObject totemObj = Instantiate (totem, totemSpawn.position, Quaternion.Euler(0f,0f,0f)) as GameObject;
 				Totem newTotem = totemObj.GetComponent<Totem>();
+				newTotem.Rotate(dir);
 				newTotem.pos = pos+dir;
-				newTotem.dir = new IntVector2(0,-1);
+				//newTotem.dir = new IntVector2(0,-1);
 				newTotem.isCaught = false;
+				newTotem.speed = speed;
 				newTotem.playerRef = this;
 				Map.mainMap [pos.x+dir.x, pos.y+dir.y].Add (newTotem);
 			}

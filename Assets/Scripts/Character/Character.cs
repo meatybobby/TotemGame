@@ -105,7 +105,7 @@ public class Character : MonoBehaviour {
 
 		int angle;
 		angle = a.x==0? (90*a.y):(90 - 90*a.x + 45*a.x*a.y);
-		transform.rotation = Quaternion.Euler (0.0f, 0.0f, (float)angle);
+		transform.rotation = Quaternion.Euler (0.0f, 0.0f, (float)angle+90.0f);
 	}
 	
 

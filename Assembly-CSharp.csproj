@@ -50,10 +50,12 @@
      <Compile Include="Assets\Scripts\Character\Ground.cs" />
      <Compile Include="Assets\Scripts\Character\Player.cs" />
      <Compile Include="Assets\Scripts\Character\Totem.cs" />
+     <Compile Include="Assets\Scripts\DestroyByBoundary.cs" />
      <Compile Include="Assets\Scripts\GameController.cs" />
      <Compile Include="Assets\Scripts\Generator.cs" />
      <Compile Include="Assets\Scripts\Information.cs" />
      <Compile Include="Assets\Scripts\Map.cs" />
+     <Compile Include="Assets\Scripts\Mover.cs" />
      <Compile Include="Assets\Scripts\UIController.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

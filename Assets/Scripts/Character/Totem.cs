@@ -5,14 +5,23 @@ public class Totem : Character {
 
 	public bool isCaught;
 	public Player playerRef;
+	public Transform shotSpawn;
+	public GameObject shot;
+
+	public float shotIntv;
 
 	// Use this for initialization
 	void Start () {
-	
+		StartCoroutine (Shooting ());
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+
+	IEnumerator Shooting () {
+		while(true) {
+			GameObject obj = Instantiate(shot, shotSpawn.position, shotSpawn.rotation) as GameObject;
+			obj.GetComponent<Rigidbody2D>().velocity = -transform.up * speed;
+			yield return new WaitForSeconds(shotIntv);
+		}
+		
 	}
 }
