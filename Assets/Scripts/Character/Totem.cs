@@ -19,7 +19,7 @@ public class Totem : Character {
 	IEnumerator Shooting () {
 		while(true) {
 			GameObject obj = Instantiate(shot, shotSpawn.position, shotSpawn.rotation) as GameObject;
-			obj.GetComponent<Rigidbody2D>().velocity = -transform.up * speed;
+			obj.GetComponent<Rigidbody2D>().velocity = -transform.up * 6;
 			yield return new WaitForSeconds(shotIntv);
 		}
 		

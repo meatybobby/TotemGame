@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Player : Character {
 
@@ -10,12 +11,14 @@ public class Player : Character {
 	public Transform totemSpawn;
 	public GameObject totem;
 	public Totem caughtTotem;
-	
+
+	public IntVector2 oldDir;
 
 	void Start () {
 		mode = IDLE;
 		Map.mainMap [1, 1].Add (this);
 		Debug.Log (Time.deltaTime);
+		oldDir = dir;
 	}
 
 	void Update () {
@@ -31,21 +34,22 @@ public class Player : Character {
 
 			if ((movement != dir && mode != CATCH) ) {
 				Rotate (movement);
-				//pre += Time.deltaTime;
-			} else if ( (Mathf.Abs (moveH) >= 0.5f || Mathf.Abs (moveV) >= 0.5f) ) {
 
+			} else if ( movement==oldDir || (Mathf.Abs (moveH) >= 0.5f || Mathf.Abs (moveV) >= 0.5f) ) {
+				       // If move toward the same direction or key hold for long enough
+					   // move the player
 				if (mode == CATCH) {
 					// Slant move is not allowed when CATCH
 					if (Mathf.Abs (movement.x + movement.y) == 1)
 						MoveByVector (movement);
 				} else {
 					MoveByVector (movement);
-
 				}
 			}
-		} /*else if( Mathf.Abs (moveH) == 0.0f && Mathf.Abs (moveV) == 0.0f ) {
-			pre = 0.0f;
-		}*/
+		} 
+		else if( Mathf.Abs (moveH) == 0.0f && Mathf.Abs (moveV) == 0.0f ) {
+			oldDir = dir;
+		}
 
 		// Plant a totem when pressing left ctrl and not moving and not slant
 		if (Input.GetKeyDown (KeyCode.LeftControl) && !isMoving && ( Mathf.Abs(dir.x+dir.y)==1)) {
@@ -90,6 +94,23 @@ public class Player : Character {
 				mode = IDLE;
 				break;
 			}
+		}
+
+		// Testing the MoveByVectorArray function by pressing 'M'
+		if (Input.GetKeyDown (KeyCode.M) && !isMoving) {
+			List<IntVector2> vecList = new List<IntVector2>();
+			// right, right, up, up, left
+			vecList.Add(new IntVector2(1,0));
+			vecList.Add(new IntVector2(1,0));
+			vecList.Add(new IntVector2(0,1));
+			vecList.Add(new IntVector2(0,1));
+			vecList.Add(new IntVector2(-1,0));
+			vecList.Add(new IntVector2(1,0));
+			vecList.Add(new IntVector2(1,0));
+			vecList.Add(new IntVector2(0,1));
+			vecList.Add(new IntVector2(0,1));
+			float newSpeed = 10.0f;
+			StartCoroutine(MoveByVectorArray(vecList, newSpeed));
 		}
 	}
 

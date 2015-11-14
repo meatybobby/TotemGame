@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class IntVector2{
@@ -49,6 +50,26 @@ public class Character : MonoBehaviour {
 	public Character(){
 	}
 
+
+	// Move the character according to the vecList, 
+	// it will ignore the barriers on the map when moving
+	public IEnumerator MoveByVectorArray(List<IntVector2> vecList, float newSpeed) {
+		float tempSpeed = speed;
+		speed = newSpeed;
+		foreach (IntVector2 vec in vecList) {
+
+			while (isMoving)
+				yield return new WaitForSeconds (0.01f);
+			// rotate the character when moving toward different direction
+			if(vec != dir) {
+				Rotate (vec);
+			}
+			MoveByVector(vec);
+		}
+		speed = tempSpeed;
+	}
+
+
 	public void MoveByVector(IntVector2 offset) {
 
 		IntVector2 newPos; // the new pos after being moved
@@ -83,12 +104,14 @@ public class Character : MonoBehaviour {
 				p.caughtTotem.isMoving = true;
 			}
 		}
+		
 		isMoving = true;
 		while (transform.position != next) {
 			transform.position = Vector3.MoveTowards(transform.position, next, speed * Time.deltaTime);
 			yield return null;
 		}
 		isMoving = false;
+
 		if (playerCatch) {
 			p = this as Player;
 			p.caughtTotem.isMoving = false;

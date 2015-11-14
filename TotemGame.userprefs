@@ -1,6 +1,14 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Character\Character.cs">
+    <Files>
+      <File FileName="Assets\Scripts\DestroyByBoundary.cs" Line="12" Column="1" />
+      <File FileName="Assets\Scripts\Character\Totem.cs" Line="22" Column="64" />
+      <File FileName="Assets\Scripts\Character\Player.cs" Line="108" Column="4" />
+      <File FileName="Assets\Scripts\Character\Character.cs" Line="60" Column="3" />
+      <File FileName="Assets\Scripts\Map.cs" Line="30" Column="42" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
