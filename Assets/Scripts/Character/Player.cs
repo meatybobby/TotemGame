@@ -65,9 +65,7 @@ public class Player : Character {
 				Totem newTotem = totemObj.GetComponent<Totem>();
 				newTotem.Rotate(dir);
 				newTotem.pos = pos+dir;
-				//newTotem.dir = new IntVector2(0,-1);
 				newTotem.isCaught = false;
-				newTotem.speed = speed;
 				newTotem.playerRef = this;
 				Map.Create(newTotem);
 				totemNum++;
@@ -147,6 +145,19 @@ public class Player : Character {
 
 		base.MoveByVector (offset);
 	}
-	                                            
+
+
+	void OnTriggerEnter2D(Collider2D other) {
+		// Destroy everything that leaves the trigger
+		if (other.tag == "MonsterHand") {
+			Debug.Log ("attacked by monster!");
+			HP--;
+			if(HP<=0) {
+				Destroy(gameObject);
+				Map.Destroy(this);
+			}
+		}
+		
+	}
 
 }

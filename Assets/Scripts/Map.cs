@@ -42,7 +42,8 @@ public class Map {
 
 		mainMap [pre.x, pre.y].Remove (c);
 		mainMap [c.pos.x, c.pos.y].Add(c);
-        ShortestMapUpdate(c);
+        if(c.GetType()!=typeof(Enemy))
+			ShortestMapUpdate(c);
     }
 	public IntVector2 Seek(Character c) {
         for (int i = 0; i < MAP_WIDTH + 2; i++) {
@@ -58,16 +59,24 @@ public class Map {
 	}
 	public static void Create(Character c) {
 		mainMap [c.pos.x, c.pos.y].Add (c);
-        ShortestMapUpdate(c);
-    }
+
+		if(c.GetType()!=typeof(Enemy))
+			ShortestMapUpdate(c);
+	}
 	public static void Destroy(Character c) {
 		mainMap [c.pos.x, c.pos.y].Remove (c);
-        ShortestMapUpdate(c);
-    }
 
+		ShortestMapUpdate(c);
+	}
+	
 	public static bool IsEmpty(IntVector2 pos) {
 		return mainMap [pos.x, pos.y].Count == 0;
 	}
+
+	public static Vector3 GetRealPosition(IntVector2 pos){
+		return new Vector3 (MAP_POS [pos.x, pos.y].x, MAP_POS [pos.x, pos.y].y, 0.0f);
+	}
+
     private static void ShortestMapUpdate(Character c)
     {
         for (int i = 0; i < MAP_WIDTH+2; i++)
@@ -80,7 +89,7 @@ public class Map {
                         {
                             Enemy enemy = (Enemy)mainMap[i, j][k];
                             enemy.disMap = FindPath.ShortestPath(mainMap[i, j][k].pos);
-                            enemy.mapUpdated = true;
+							enemy.mapUpdated = true;
                         }
                 }
             }

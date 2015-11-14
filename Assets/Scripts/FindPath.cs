@@ -4,13 +4,25 @@ using System.Collections.Generic;
 
 public class FindPath :MonoBehaviour{
 
-    public static int[,] ShortestPath(IntVector2 pos)
+	public static List<IntVector2> four_dir;
+
+	static FindPath(){
+		four_dir = new List<IntVector2>();
+		four_dir.Add(new IntVector2(-1,0));
+		four_dir.Add(new IntVector2(1,0));
+		four_dir.Add(new IntVector2(0,-1));
+		four_dir.Add(new IntVector2(0,1));
+	}
+	public static int[,] ShortestPath(IntVector2 pos)
     {
         int[,] calc = new int[Map.MAP_WIDTH + 2, Map.MAP_HEIGHT + 2];
         bool[,] visited = new bool[Map.MAP_WIDTH + 2, Map.MAP_HEIGHT + 2];
         for (int i = 0; i < Map.MAP_WIDTH+2; i++)
-            for (int j = 0; j < Map.MAP_HEIGHT+2; j++)
-                visited[i,j] = false;
+			for (int j = 0; j < Map.MAP_HEIGHT+2; j++) {
+				visited[i,j] = false;
+				calc[i,j] = -1;
+			}
+                
         visited[pos.x, pos.y] = true;
         calc[pos.x, pos.y] = 0;
         Queue<IntVector2> queue = new Queue<IntVector2>();
@@ -83,17 +95,39 @@ public class FindPath :MonoBehaviour{
     {
         IntVector2 tmpPos = new IntVector2(pos.x, pos.y);
         IntVector2[] path = new IntVector2[(Map.MAP_WIDTH + 2) * (Map.MAP_HEIGHT + 2)];
-        while (map[tmpPos.x, tmpPos.y] != 0)
+        while (map[tmpPos.x, tmpPos.y] > 0)
         {
-            //Debug.Log(map[pos.x, pos.y]);
+
             bool check = false;
-            for (int i = -1; i <= 1; i++)
-            {
-                for (int j = -1; j <= 1; j++)
-                {
-                    if (Mathf.Abs(i) + Mathf.Abs(j) == 1)
-                    {
-                        if (map[tmpPos.x + i, tmpPos.y + j] == map[tmpPos.x, tmpPos.y] - 1)
+		 	
+			// Shuffle the directions
+			for (int i = 0; i < four_dir.Count; i++) {
+				IntVector2 temp = four_dir[i];
+				int randomIndex = Random.Range(i, four_dir.Count);
+				four_dir[i] = four_dir[randomIndex];
+				four_dir[randomIndex] = temp;
+			}
+			
+			foreach(IntVector2 dir in four_dir) {
+				if (map[tmpPos.x + dir.x, tmpPos.y + dir.y] == map[tmpPos.x, tmpPos.y] - 1)
+				{
+					tmpPos.x = tmpPos.x + dir.x;
+					tmpPos.y = tmpPos.y + dir.y;
+					path[map[tmpPos.x, tmpPos.y]] = new IntVector2(-dir.x, -dir.y);
+					//Debug.Log(map[tmpPos.x, tmpPos.y]);
+					//Debug.Log(map[tmpPos.x, tmpPos.y] + " " + path[map[tmpPos.x, tmpPos.y]].x+","+ path[map[tmpPos.x, tmpPos.y]].y);
+					check = true;
+					break;
+				}
+			}
+			
+			/*for (int i = -1; i <= 1; i++)
+			{
+				for (int j = -1; j <= 1; j++)
+				{
+					if (Mathf.Abs(i) + Mathf.Abs(j) == 1)
+					{
+						if (map[tmpPos.x + i, tmpPos.y + j] == map[tmpPos.x, tmpPos.y] - 1)
                         {
                             tmpPos.x = tmpPos.x + i;
                             tmpPos.y = tmpPos.y + j;
@@ -109,7 +143,7 @@ public class FindPath :MonoBehaviour{
                 {
                     break;
                 }
-            }
+            }*/
         }
         return path;
     }

@@ -24,4 +24,17 @@ public class Totem : Character {
 		}
 		
 	}
+
+	void OnTriggerEnter2D(Collider2D other) {
+		// Destroy everything that leaves the trigger
+		if (other.tag == "MonsterHand") {
+			Debug.Log ("attacked by monster!");
+			HP--;
+			if(HP<=0) {
+				Destroy(gameObject);
+				Map.Destroy(this);
+			}
+		}
+		
+	}
 }

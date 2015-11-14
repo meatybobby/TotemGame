@@ -1,8 +1,13 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Character\Enemy.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\FindPath.cs">
     <Files>
-      <File FileName="Assets\Scripts\Character\Enemy.cs" Line="25" Column="6" />
+      <File FileName="Assets\Scripts\Character\Enemy.cs" Line="22" Column="20" />
+      <File FileName="Assets\Scripts\Character\Player.cs" Line="73" Column="16" />
+      <File FileName="Assets\Scripts\FindPath.cs" Line="22" Column="42" />
+      <File FileName="Assets\Scripts\Map.cs" Line="25" Column="46" />
+      <File FileName="Assets\Scripts\Character\Character.cs" Line="85" Column="3" />
+      <File FileName="Assets\Scripts\PreventBullet.cs" Line="12" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
