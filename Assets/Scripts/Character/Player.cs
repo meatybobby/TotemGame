@@ -16,7 +16,8 @@ public class Player : Character {
 
 	void Start () {
 		mode = IDLE;
-		Map.mainMap [1, 1].Add (this);
+		//Map.mainMap [1, 1].Add (this);
+		Map.Create (this);
 		Debug.Log (Time.deltaTime);
 		oldDir = dir;
 	}
@@ -56,7 +57,7 @@ public class Player : Character {
 
 			IntVector2 plantPos = Map.BoundPos(pos+dir);
 			// If the grid is empty
-			if(Map.mainMap [plantPos.x, plantPos.y].Count==0) {
+			if(Map.IsEmpty(plantPos)) {
 				GameObject totemObj = Instantiate (totem, totemSpawn.position, Quaternion.Euler(0f,0f,0f)) as GameObject;
 				Totem newTotem = totemObj.GetComponent<Totem>();
 				newTotem.Rotate(dir);
@@ -65,7 +66,7 @@ public class Player : Character {
 				newTotem.isCaught = false;
 				newTotem.speed = speed;
 				newTotem.playerRef = this;
-				Map.mainMap [pos.x+dir.x, pos.y+dir.y].Add (newTotem);
+				Map.Create(newTotem);
 			}
 		}
 
@@ -75,7 +76,8 @@ public class Player : Character {
 			IntVector2 actionPos = pos+dir;
 			switch(mode) {
 			case IDLE:
-				foreach(Character c in Map.mainMap[actionPos.x, actionPos.y]) {
+				List<Character> charList = Map.Seek(actionPos);
+				foreach(Character c in charList) {
 					// If there's a totem in front of Player
 					if(c.GetType() == typeof(Totem)) {
 						caughtTotem = (Totem)c;
@@ -120,15 +122,14 @@ public class Player : Character {
 
 			IntVector2 totemNewPos = Map.BoundPos (pos + dir + offset);
 			if (offset == dir) { // forward
-				if (Map.mainMap [totemNewPos.x, totemNewPos.y].Count != 0) {
+				if ( !Map.IsEmpty(totemNewPos) ) {
 					return;
 				}
 			} else if (offset == -dir) { // backward
-				if (Map.mainMap [newPos.x, newPos.y].Count != 0)
+				if ( !Map.IsEmpty(newPos) )
 					return;
 			} else { // 平移
-				if (Map.mainMap [totemNewPos.x, totemNewPos.y].Count != 0 || 
-					Map.mainMap [newPos.x, newPos.y].Count != 0)
+				if ( !Map.IsEmpty(totemNewPos) || !Map.IsEmpty(newPos) )
 					return;
 			}
 			// Update the pos of the caught totem
@@ -136,7 +137,7 @@ public class Player : Character {
 			caughtTotem.pos = totemNewPos; 
 			Map.UpdatePos (caughtTotem, totemPre);
 		
-		} else if (Map.mainMap [newPos.x, newPos.y].Count != 0) {
+		} else if (!Map.IsEmpty(newPos)) {
 				return;
 		}
 

@@ -17,7 +17,7 @@ public class Map {
 	//public static float MAP_SIZE_Y = 1.5f;
 	public static float unitCell = 0.75f;
 	public static Vector2[,] MAP_POS = new Vector2[MAP_WIDTH+2, MAP_HEIGHT+2];
-	public static List<Character>[,] mainMap = new List<Character>[MAP_WIDTH+2, MAP_HEIGHT+2];
+	private static List<Character>[,] mainMap = new List<Character>[MAP_WIDTH+2, MAP_HEIGHT+2];
 
 	static Map() {
 
@@ -52,14 +52,18 @@ public class Map {
         }
         return new IntVector2(-1, -1);
     }
-	public List<Character> Seek(IntVector2 pos) {
+	public static List<Character> Seek(IntVector2 pos) {
         return mainMap [pos.x, pos.y];
 	}
-	public void Create(Character c) {
+	public static void Create(Character c) {
 		mainMap [c.pos.x, c.pos.y].Add (c);
 	}
-	public void Destroy(Character c) {
+	public static void Destroy(Character c) {
 		mainMap [c.pos.x, c.pos.y].Remove (c);
+	}
+
+	public static bool IsEmpty(IntVector2 pos) {
+		return mainMap [pos.x, pos.y].Count == 0;
 	}
 
 }
