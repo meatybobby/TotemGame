@@ -11,9 +11,11 @@ public class Player : Character {
 	public Transform totemSpawn;
 	public GameObject totem;
 	public Totem caughtTotem;
+	private IntVector2 oldDir;
 
-	public IntVector2 oldDir;
-
+	public int totemNum = 0;
+	public int maxTotemNum;
+	
 	void Start () {
 		mode = IDLE;
 		//Map.mainMap [1, 1].Add (this);
@@ -53,7 +55,8 @@ public class Player : Character {
 		}
 
 		// Plant a totem when pressing left ctrl and not moving and not slant
-		if (Input.GetKeyDown (KeyCode.LeftControl) && !isMoving && ( Mathf.Abs(dir.x+dir.y)==1)) {
+		if (Input.GetKeyDown (KeyCode.LeftControl) && !isMoving &&
+		     ( Mathf.Abs(dir.x+dir.y)==1) && totemNum < maxTotemNum) {
 
 			IntVector2 plantPos = Map.BoundPos(pos+dir);
 			// If the grid is empty
@@ -67,6 +70,7 @@ public class Player : Character {
 				newTotem.speed = speed;
 				newTotem.playerRef = this;
 				Map.Create(newTotem);
+				totemNum++;
 			}
 		}
 
@@ -99,7 +103,7 @@ public class Player : Character {
 		}
 
 		// Testing the MoveByVectorArray function by pressing 'M'
-		if (Input.GetKeyDown (KeyCode.M) && !isMoving) {
+		if (Input.GetKeyDown (KeyCode.M) && !isMoving && mode != CATCH) {
 			List<IntVector2> vecList = new List<IntVector2>();
 			// right, right, up, up, left
 			vecList.Add(new IntVector2(1,0));
