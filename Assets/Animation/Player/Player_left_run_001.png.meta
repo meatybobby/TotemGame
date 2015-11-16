@@ -1,0 +1,121 @@
+fileFormatVersion: 2
+guid: de7e6bc9d659b4bd2b30e57c7ee68ad6
+timeCreated: 1447523982
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Player_left_run_001_0
+    21300002: Player_left_run_001_1
+    21300004: Player_left_run_001_2
+    21300006: Player_left_run_001_3
+    21300008: Player_left_run_001_4
+    21300010: Player_left_run_001_5
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Player_left_run_001_0
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 11
+        width: 120
+        height: 169
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Player_left_run_001_1
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 10
+        width: 119
+        height: 168
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Player_left_run_001_2
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 12
+        width: 121
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Player_left_run_001_3
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 8
+        width: 115
+        height: 169
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Player_left_run_001_4
+      rect:
+        serializedVersion: 2
+        x: 515
+        y: 9
+        width: 113
+        height: 168
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Player_left_run_001_5
+      rect:
+        serializedVersion: 2
+        x: 633
+        y: 11
+        width: 117
+        height: 167
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

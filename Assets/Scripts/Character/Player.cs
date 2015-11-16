@@ -8,27 +8,37 @@ public class Player : Character {
 	public const int CATCH = 1;
 	public int mode;
 
-	public Transform totemSpawn;
+	//public Transform totemSpawn;
 	public GameObject totem;
 	public Totem caughtTotem;
 	private IntVector2 oldDir;
 
 	public int totemNum = 0;
 	public int maxTotemNum;
-	
+
+	private Animator anim;
+	IntVector2 LEFT = new IntVector2 (-1,0);
+	IntVector2 RIGHT = new IntVector2 (1,0);
+	IntVector2 UP = new IntVector2 (0,1);
+	IntVector2 DOWN = new IntVector2 (0,-1);
+
 	void Start () {
 		mode = IDLE;
 		//Map.mainMap [1, 1].Add (this);
 		Map.Create (this);
-		Debug.Log (Time.deltaTime);
 		oldDir = dir;
+		anim = GetComponent<Animator>();
+		Rotate (dir);
 	}
 
 	void Update () {
 		float moveH = Input.GetAxis ("Horizontal");
 		float moveV = Input.GetAxis ("Vertical");
 
-		if (!(Mathf.Abs (moveH) == 0.0f && Mathf.Abs (moveV) == 0.0f) && !isMoving) {
+
+		if (!(Mathf.Abs (moveH) == 0.0f && Mathf.Abs (moveV) == 0.0f) && !inMoveThread) {
+
+
 
 			int unitH = moveH == 0.0f ? 0 : (moveH > 0.0f ? 1 : -1);
 			int unitV = moveV == 0.0f ? 0 : (moveV > 0.0f ? 1 : -1);
@@ -37,20 +47,29 @@ public class Player : Character {
 
 			if ((movement != dir && mode != CATCH) ) {
 				Rotate (movement);
-
 			} else if ( movement==oldDir || (Mathf.Abs (moveH) >= 0.5f || Mathf.Abs (moveV) >= 0.5f) ) {
 				       // If move toward the same direction or key hold for long enough
 					   // move the player
+
 				if (mode == CATCH) {
 					// Slant move is not allowed when CATCH
-					if (Mathf.Abs (movement.x + movement.y) == 1)
+					if (Mathf.Abs (movement.x + movement.y) == 1) {
 						MoveByVector (movement);
+					}
 				} else {
+					if(!isMoving) {
+						isMoving  = true;
+						Rotate (movement);
+					}
 					MoveByVector (movement);
 				}
 			}
 		} 
 		else if( Mathf.Abs (moveH) == 0.0f && Mathf.Abs (moveV) == 0.0f ) {
+			if(isMoving){
+				isMoving = false;
+				Rotate(dir);
+			}
 			oldDir = dir;
 		}
 
@@ -61,7 +80,8 @@ public class Player : Character {
 			IntVector2 plantPos = Map.BoundPos(pos+dir);
 			// If the grid is empty
 			if(Map.IsEmpty(plantPos)) {
-				GameObject totemObj = Instantiate (totem, totemSpawn.position, Quaternion.Euler(0f,0f,0f)) as GameObject;
+				Vector3 totemRealPos = Map.GetRealPosition(pos+dir);
+				GameObject totemObj = Instantiate (totem, totemRealPos, Quaternion.Euler(0f,0f,0f)) as GameObject;
 				Totem newTotem = totemObj.GetComponent<Totem>();
 				newTotem.Rotate(dir);
 				newTotem.pos = pos+dir;
@@ -146,13 +166,42 @@ public class Player : Character {
 		base.MoveByVector (offset);
 	}
 
+	public void Rotate(IntVector2 a) {
+
+		if (isMoving) {
+			if(a == LEFT) {
+				anim.SetTrigger ("left_run");
+			} else if(a == RIGHT) {
+				anim.SetTrigger ("right_run");
+			} else if(a == DOWN) {
+				anim.SetTrigger ("front_run");
+			} else if(a == UP){
+				anim.SetTrigger ("back_run");
+			}
+
+		} else {
+			if (a == LEFT) {
+				anim.SetTrigger ("left_idle");
+			} else if (a == RIGHT) {
+				anim.SetTrigger ("right_idle");
+			} else if (a == UP) {
+				anim.SetTrigger ("back_idle");
+			} else if (a == DOWN) {
+				anim.SetTrigger ("front_idle");
+			}
+		}
+		dir = a;
+
+	}
 
 	void OnTriggerEnter2D(Collider2D other) {
 		// Destroy everything that leaves the trigger
 		if (other.tag == "MonsterHand") {
-			Debug.Log ("attacked by monster!");
+			Destroy(other.gameObject);
+			Debug.Log ("Player attacked by monster!");
 			HP--;
 			if(HP<=0) {
+				Debug.Log("Destroy!!");
 				Destroy(gameObject);
 				Map.Destroy(this);
 			}

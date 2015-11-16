@@ -5,7 +5,7 @@ public class Enemy : Character {
 	
 	public int[,] disMap;// = new int[Map.MAP_WIDTH + 2, Map.MAP_HEIGHT + 2];
 	public bool mapUpdated;
-	public GameObject attackTrigger;
+	//public GameObject attackTrigger;
 	public float attackSpeed;
 	public bool isAttack;
 	
@@ -13,6 +13,9 @@ public class Enemy : Character {
 	private IntVector2[] guide = new IntVector2[(Map.MAP_WIDTH+2) * (Map.MAP_HEIGHT+2)];
 	private int pace;
 	public IntVector2 targetPos;
+
+	public GameObject hand;
+	public float attackIntv;
 	
 	// Use this for initialization
 	void Start () {
@@ -28,12 +31,13 @@ public class Enemy : Character {
 	
 	// Update is called once per frame
 	void Update() {
+
 		if(mapUpdated == true)
 		{
 			FindDirection();
 			pace = 0;
 		}
-		if (!isMoving && pace < disMap[targetPos.x , targetPos.y] -1)
+		if (!inMoveThread && pace < disMap[targetPos.x , targetPos.y] -1)
 		{
 			//Debug.Log("move like jagger");
 			// Debug.Log("->"+guide[pace].x+" "+ guide[pace].y);
@@ -42,13 +46,15 @@ public class Enemy : Character {
 			}
 			MoveByVector(guide[pace]);
 			pace++;
+			isAttack = false;
 		}
-		else if(!isMoving && pace == disMap[targetPos.x, targetPos.y] - 1 && !isAttack)
+		else if(!inMoveThread && pace == disMap[targetPos.x, targetPos.y] - 1 && !isAttack)
 		{
 			Rotate (guide[pace]);
 			isAttack = true;
 			StartCoroutine(BasicAttack());
 		}
+
 	}
 	void OnTriggerEnter2D(Collider2D other) {
 		// Destroy everything that leaves the trigger
@@ -71,7 +77,17 @@ public class Enemy : Character {
 	}
 	private IEnumerator BasicAttack()
 	{
-		Vector3 attackVector = new Vector3(Map.MAP_POS[pos.x + dir.x, pos.y + dir.y].x, Map.MAP_POS[pos.x + dir.x, pos.y + dir.y].y,0);
+		while(true) {
+			GameObject obj = Instantiate(hand, transform.position, transform.rotation) as GameObject;
+			yield return new WaitForSeconds(attackIntv);
+			if(!isAttack) {
+				Destroy(obj);
+				yield break;
+			}
+		}
+
+
+		/*Vector3 attackVector =   new Vector3(Map.MAP_POS[pos.x + dir.x, pos.y + dir.y].x, Map.MAP_POS[pos.x + dir.x, pos.y + dir.y].y,0);
 		while (attackTrigger.transform.position != attackVector)
 		{
 			attackTrigger.transform.position = Vector3.MoveTowards(attackTrigger.transform.position, attackVector, attackSpeed * Time.deltaTime);
@@ -82,8 +98,8 @@ public class Enemy : Character {
 		{
 			attackTrigger.transform.position = Vector3.MoveTowards(attackTrigger.transform.position, transform.position, attackSpeed * Time.deltaTime);
 			yield return null;
-		}*/
-		isAttack = false;
+		}
+		isAttack = false;*/
 	}
 }
 

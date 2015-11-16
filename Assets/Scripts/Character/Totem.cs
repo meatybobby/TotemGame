@@ -8,6 +8,7 @@ public class Totem : Character {
 	public Transform shotSpawn;
 	public GameObject shot;
 
+	public float bulletSpeed;
 	public float shotIntv;
 
 	// Use this for initialization
@@ -19,7 +20,7 @@ public class Totem : Character {
 	IEnumerator Shooting () {
 		while(true) {
 			GameObject obj = Instantiate(shot, shotSpawn.position, shotSpawn.rotation) as GameObject;
-			obj.GetComponent<Rigidbody2D>().velocity = -transform.up * 6;
+			obj.GetComponent<Rigidbody2D>().velocity = -transform.up * bulletSpeed;
 			yield return new WaitForSeconds(shotIntv);
 		}
 		
@@ -28,7 +29,7 @@ public class Totem : Character {
 	void OnTriggerEnter2D(Collider2D other) {
 		// Destroy everything that leaves the trigger
 		if (other.tag == "MonsterHand") {
-			Debug.Log ("attacked by monster!");
+			Debug.Log ("totem attacked by monster!");
 			HP--;
 			if(HP<=0) {
 				Destroy(gameObject);

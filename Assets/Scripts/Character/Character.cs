@@ -41,6 +41,7 @@ public class Character : MonoBehaviour {
 	public IntVector2 dir;
 	public float speed;
 	public bool isMoving;
+	public bool inMoveThread;
 	
 	// Use this for initialization
 	void Start () {
@@ -58,7 +59,7 @@ public class Character : MonoBehaviour {
 		speed = newSpeed;
 		foreach (IntVector2 vec in vecList) {
 
-			while (isMoving)
+			while (inMoveThread)
 				yield return new WaitForSeconds (0.01f);
 			// rotate the character when moving toward different direction
 			if(vec != dir) {
@@ -101,20 +102,20 @@ public class Character : MonoBehaviour {
 			p = this as Player;
 			if(p.mode==Player.CATCH) {
 				playerCatch = true;
-				p.caughtTotem.isMoving = true;
+				p.caughtTotem.inMoveThread = true;
 			}
 		}
 		
-		isMoving = true;
+		inMoveThread = true;
 		while (transform.position != next) {
 			transform.position = Vector3.MoveTowards(transform.position, next, speed * Time.deltaTime);
 			yield return null;
 		}
-		isMoving = false;
+		inMoveThread = false;
 
 		if (playerCatch) {
 			p = this as Player;
-			p.caughtTotem.isMoving = false;
+			p.caughtTotem.inMoveThread = false;
 		}
 	}
 
@@ -128,6 +129,7 @@ public class Character : MonoBehaviour {
 
 		int angle;
 		angle = a.x==0? (90*a.y):(90 - 90*a.x + 45*a.x*a.y);
+	
 		transform.rotation = Quaternion.Euler (0.0f, 0.0f, (float)angle+90.0f);
 	}
 	
