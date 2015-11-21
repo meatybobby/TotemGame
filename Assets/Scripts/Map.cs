@@ -16,7 +16,7 @@ public class Map {
 	//public static float MAP_SIZE_X = 1.5f;
 	//public static float MAP_SIZE_Y = 1.5f;
 	public static float unitCell = 0.75f;
-	public static Vector2[,] MAP_POS = new Vector2[MAP_WIDTH+2, MAP_HEIGHT+2];
+	public static Vector3[,] MAP_POS = new Vector3[MAP_WIDTH+2, MAP_HEIGHT+2];
 	private static List<Character>[,] mainMap = new List<Character>[MAP_WIDTH+2, MAP_HEIGHT+2];
 
 	static Map() {
@@ -27,6 +27,7 @@ public class Map {
 				//MAP_POS[i,j].y = -(j - (float)(MAP_HEIGHT+2) / 2 + 0.5f) * MAP_SIZE_Y;
 				MAP_POS[i,j].x = (i - (MAP_WIDTH+2)/2) * unitCell + (MAP_WIDTH%2==0? unitCell/2 : 0);
 				MAP_POS[i,j].y = (j - (MAP_HEIGHT+2)/2) * unitCell + (MAP_HEIGHT%2==0? unitCell/2 : 0);
+				MAP_POS[i,j].z = j;
 				mainMap[i,j] = new List<Character>();
 			}
 		}
@@ -40,11 +41,22 @@ public class Map {
 		if (c.pos == pre)
 			return;
 
-		mainMap [pre.x, pre.y].Remove (c);
-		mainMap [c.pos.x, c.pos.y].Add(c);
-        if(c.GetType()!=typeof(Enemy))
+
+		if (c is Enemy) { // Enemy 佔地面積比較多要另外判斷
+			Enemy enemy = c as Enemy;
+			foreach (IntVector2 offset in enemy.shapeVector) {
+				mainMap [pre.x + offset.x, pre.y + offset.y].Remove (enemy);
+				mainMap [enemy.pos.x + offset.x, enemy.pos.y + offset.y].Add (enemy);
+			}
+		} else {
+			mainMap [pre.x, pre.y].Remove (c);
+			mainMap [c.pos.x, c.pos.y].Add(c);
 			ShortestMapUpdate(c);
+		}
+
     }
+	
+
 	public IntVector2 Seek(Character c) {
         for (int i = 0; i < MAP_WIDTH + 2; i++) {
             for (int j = 0; j < MAP_HEIGHT + 2; j++) {
@@ -58,13 +70,27 @@ public class Map {
         return mainMap [pos.x, pos.y];
 	}
 	public static void Create(Character c) {
-		mainMap [c.pos.x, c.pos.y].Add (c);
 
-		if(c.GetType()!=typeof(Enemy))
+		if (c is Enemy) { // Enemy 佔地面積比較多要另外判斷
+			Enemy enemy = c as Enemy;
+			foreach (IntVector2 offset in enemy.shapeVector) {
+				mainMap[enemy.pos.x+offset.x, enemy.pos.y+offset.y].Add(enemy);
+			}
+		} else {
+			mainMap [c.pos.x, c.pos.y].Add (c);
 			ShortestMapUpdate(c);
+		}
+
 	}
 	public static void Destroy(Character c) {
-		mainMap [c.pos.x, c.pos.y].Remove (c);
+		if (c is Enemy) { // Enemy 佔地面積比較多要另外判斷
+			Enemy enemy = c as Enemy;
+			foreach (IntVector2 offset in enemy.shapeVector) {
+				mainMap[enemy.pos.x+offset.x, enemy.pos.y+offset.y].Remove(enemy);
+			}
+		} else {
+			mainMap [c.pos.x, c.pos.y].Remove (c);
+		}
 
 		ShortestMapUpdate(c);
 	}
@@ -74,7 +100,7 @@ public class Map {
 	}
 
 	public static Vector3 GetRealPosition(IntVector2 pos){
-		return new Vector3 (MAP_POS [pos.x, pos.y].x, MAP_POS [pos.x, pos.y].y, 0.0f);
+		return new Vector3 (MAP_POS [pos.x, pos.y].x, MAP_POS [pos.x, pos.y].y, MAP_POS [pos.x, pos.y].z);
 	}
 
     private static void ShortestMapUpdate(Character c)
@@ -88,7 +114,7 @@ public class Map {
                         if (mainMap[i, j][k].GetType() == typeof(Enemy) && (Enemy)mainMap[i, j][k] != c)
                         {
                             Enemy enemy = (Enemy)mainMap[i, j][k];
-                            enemy.disMap = FindPath.ShortestPath(mainMap[i, j][k].pos);
+                            enemy.disMap = FindPath.ShortestPath(enemy.pos, enemy.frontVector);
 							enemy.mapUpdated = true;
                         }
                 }

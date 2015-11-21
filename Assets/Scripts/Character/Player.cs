@@ -21,6 +21,10 @@ public class Player : Character {
 	IntVector2 RIGHT = new IntVector2 (1,0);
 	IntVector2 UP = new IntVector2 (0,1);
 	IntVector2 DOWN = new IntVector2 (0,-1);
+	IntVector2 UP_LEFT = new IntVector2 (-1,1);
+	IntVector2 UP_RIGHT = new IntVector2 (1,1);
+	IntVector2 DOWN_LEFT = new IntVector2 (-1,-1);
+	IntVector2 DOWN_RIGHT = new IntVector2 (1,-1);
 
 	void Start () {
 		mode = IDLE;
@@ -29,6 +33,8 @@ public class Player : Character {
 		oldDir = dir;
 		anim = GetComponent<Animator>();
 		Rotate (dir);
+		Debug.Log ("fasdfaf:"+(this is Character).ToString());
+
 	}
 
 	void Update () {
@@ -37,8 +43,6 @@ public class Player : Character {
 
 
 		if (!(Mathf.Abs (moveH) == 0.0f && Mathf.Abs (moveV) == 0.0f) && !inMoveThread) {
-
-
 
 			int unitH = moveH == 0.0f ? 0 : (moveH > 0.0f ? 1 : -1);
 			int unitV = moveV == 0.0f ? 0 : (moveV > 0.0f ? 1 : -1);
@@ -54,8 +58,13 @@ public class Player : Character {
 				if (mode == CATCH) {
 					// Slant move is not allowed when CATCH
 					if (Mathf.Abs (movement.x + movement.y) == 1) {
+						if(!isMoving) {
+							isMoving  = true;
+							ChangeAnimation(dir);
+						}
 						MoveByVector (movement);
 					}
+
 				} else {
 					if(!isMoving) {
 						isMoving  = true;
@@ -68,13 +77,14 @@ public class Player : Character {
 		else if( Mathf.Abs (moveH) == 0.0f && Mathf.Abs (moveV) == 0.0f ) {
 			if(isMoving){
 				isMoving = false;
-				Rotate(dir);
+				ChangeAnimation(dir);
 			}
+
 			oldDir = dir;
 		}
 
 		// Plant a totem when pressing left ctrl and not moving and not slant
-		if (Input.GetKeyDown (KeyCode.LeftControl) && !isMoving &&
+		if (Input.GetKeyDown (KeyCode.LeftControl) && !inMoveThread &&
 		     ( Mathf.Abs(dir.x+dir.y)==1) && totemNum < maxTotemNum) {
 
 			IntVector2 plantPos = Map.BoundPos(pos+dir);
@@ -93,7 +103,7 @@ public class Player : Character {
 		}
 
 		// Catch or release the totem when pressing Space key
-		if (Input.GetKeyDown (KeyCode.Space) && !isMoving) {
+		if (Input.GetKeyDown (KeyCode.Space) && !inMoveThread) {
 
 			IntVector2 actionPos = pos+dir;
 			switch(mode) {
@@ -168,6 +178,11 @@ public class Player : Character {
 
 	public void Rotate(IntVector2 a) {
 
+		ChangeAnimation (a);
+		dir = a;
+
+	}
+	private void ChangeAnimation(IntVector2 a) {
 		if (isMoving) {
 			if(a == LEFT) {
 				anim.SetTrigger ("left_run");
@@ -178,7 +193,19 @@ public class Player : Character {
 			} else if(a == UP){
 				anim.SetTrigger ("back_run");
 			}
-
+			else if(a == UP_LEFT){
+				anim.SetTrigger ("left_run");
+			}
+			else if(a == UP_RIGHT) {
+				anim.SetTrigger ("right_run");
+			}
+			else if(a == DOWN_LEFT) {
+				anim.SetTrigger ("left_run");
+			}
+			else if(a == DOWN_RIGHT) {
+				anim.SetTrigger ("right_run");
+			}
+			
 		} else {
 			if (a == LEFT) {
 				anim.SetTrigger ("left_idle");
@@ -189,22 +216,36 @@ public class Player : Character {
 			} else if (a == DOWN) {
 				anim.SetTrigger ("front_idle");
 			}
-		}
-		dir = a;
+			else if(a == UP_LEFT){
+				anim.SetTrigger ("left_idle");
+			}
+			else if(a == UP_RIGHT) {
+				anim.SetTrigger ("right_idle");
+			}
+			else if(a == DOWN_LEFT) {
+				anim.SetTrigger ("left_idle");
 
+			}
+			else if(a == DOWN_RIGHT) {
+				anim.SetTrigger ("right_idle");
+			}
+		}
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
 		// Destroy everything that leaves the trigger
 		if (other.tag == "MonsterHand") {
-			Destroy(other.gameObject);
-			Debug.Log ("Player attacked by monster!");
+			Destroy (other.gameObject);
+			//Debug.Log ("Player attacked by monster!");
 			HP--;
-			if(HP<=0) {
-				Debug.Log("Destroy!!");
-				Destroy(gameObject);
-				Map.Destroy(this);
+			if (HP <= 0) {
+				Debug.Log ("Destroy!!");
+				Destroy (gameObject);
+				Map.Destroy (this);
 			}
+		} 
+		if (other.tag == "Enemy") {
+			Debug.Log ("touched by enemy!");
 		}
 		
 	}

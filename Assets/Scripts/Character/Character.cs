@@ -84,14 +84,15 @@ public class Character : MonoBehaviour {
 		pos = newPos; 
 		Map.UpdatePos (this, pre);
 
-		float desX = transform.position.x + (float)offset.x * Map.unitCell;
+		/*float desX = transform.position.x + (float)offset.x * Map.unitCell;
 		float desY = transform.position.y + (float)offset.y * Map.unitCell;
 		Vector3 next = new Vector3
 		(
 			Mathf.Clamp(desX, Boundary.xMin, Boundary.xMax),
 			Mathf.Clamp(desY, Boundary.yMin, Boundary.yMax),
 			0.0f
-		);
+		);*/
+		Vector3 next = Map.GetRealPosition(newPos);
 		StartCoroutine(MoveThread (next));
 	}
 
@@ -105,13 +106,20 @@ public class Character : MonoBehaviour {
 				p.caughtTotem.inMoveThread = true;
 			}
 		}
-		
+
+		// 往下走，z值先更新 （解決斜走重疊的問題）
+		if (transform.position.y > next.y) {
+			transform.position = new Vector3(transform.position.x, transform.position.y, next.z);
+		}
+		Vector3 nextXY = new Vector3 (next.x, next.y, transform.position.z); // 不要移動z
 		inMoveThread = true;
-		while (transform.position != next) {
-			transform.position = Vector3.MoveTowards(transform.position, next, speed * Time.deltaTime);
+		while (transform.position != nextXY) {
+			transform.position = Vector3.MoveTowards(transform.position, nextXY, speed * Time.deltaTime);
 			yield return null;
 		}
 		inMoveThread = false;
+		transform.position = next;//new Vector3( next.x, next.y, next.z);
+
 
 		if (playerCatch) {
 			p = this as Player;

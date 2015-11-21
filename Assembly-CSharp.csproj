@@ -51,6 +51,7 @@
      <Compile Include="Assets\Scripts\Character\Ground.cs" />
      <Compile Include="Assets\Scripts\Character\Player.cs" />
      <Compile Include="Assets\Scripts\Character\Totem.cs" />
+     <Compile Include="Assets\Scripts\Character\TwoByTwoEnemy.cs" />
      <Compile Include="Assets\Scripts\DestroyByBoundary.cs" />
      <Compile Include="Assets\Scripts\FindPath.cs" />
      <Compile Include="Assets\Scripts\GameController.cs" />
@@ -59,6 +60,7 @@
      <Compile Include="Assets\Scripts\Map.cs" />
      <Compile Include="Assets\Scripts\Mover.cs" />
      <Compile Include="Assets\Scripts\PreventBullet.cs" />
+     <Compile Include="Assets\Scripts\Totem001Anim.cs" />
      <Compile Include="Assets\Scripts\UIController.cs" />
  <Reference Include="UnityEngine.Networking">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>

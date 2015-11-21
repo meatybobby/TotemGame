@@ -4,6 +4,7 @@ using System.Collections;
 public class GameController : MonoBehaviour {
 
 	public GameObject monster1;
+	public GameObject monster2;
 	public float waveWait;
 	public int enemyCount = 0;
 	public int enemyNum;
@@ -23,8 +24,10 @@ public class GameController : MonoBehaviour {
 
 			}*/
 			if(enemyCount>=enemyNum) yield break;
-			IntVector2 newPos = new IntVector2(4,1);
+			IntVector2 newPos = new IntVector2(4,4);
 			Vector3 enemyPosition = Map.GetRealPosition(newPos);
+			enemyPosition.x += Map.unitCell/2;
+			enemyPosition.y += Map.unitCell/2;
 			Quaternion enemyRotation = Quaternion.Euler(0f,0f,-90.0f);
 			Instantiate(monster1, enemyPosition , enemyRotation);
 			Enemy enemy = monster1.GetComponent<Enemy>();
