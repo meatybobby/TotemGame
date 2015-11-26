@@ -24,15 +24,21 @@ public class GameController : MonoBehaviour {
 
 			}*/
 			if(enemyCount>=enemyNum) yield break;
-			IntVector2 newPos = new IntVector2(4,4);
+			int rx,ry;
+			IntVector2 newPos = new IntVector2(0,0);
+			while(true) {
+				rx = Random.Range(1,Map.MAP_WIDTH);
+				ry = Random.Range(1,Map.MAP_HEIGHT);
+				newPos.x = rx;
+				newPos.y = ry;
+				if(Map.IsEmpty(newPos) || Map.Seek(newPos)[0] is Enemy) break;
+			}
 			Vector3 enemyPosition = Map.GetRealPosition(newPos);
 			//enemyPosition.x += Map.unitCell/2;
 			//enemyPosition.y += Map.unitCell/2;
 			Quaternion enemyRotation = Quaternion.Euler(0f,0f,-90.0f);
-			Instantiate(monster1, enemyPosition , enemyRotation);
-			Enemy enemy = monster1.GetComponent<Enemy>();
+			Enemy enemy = ((GameObject)Instantiate(monster1, enemyPosition , enemyRotation)).GetComponent<Enemy>() ;
 			enemy.pos = newPos;
-			enemy.Rotate(enemy.dir);
 			enemyCount++;
 //			Map.Create(enemy);
 			yield return new WaitForSeconds(waveWait);

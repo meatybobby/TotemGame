@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 [System.Serializable]
-public class IntVector2{
+public class IntVector2 {
 	public int x, y;
 	public IntVector2(int _x, int _y) {
 		x = _x;
@@ -141,5 +141,7 @@ public class Character : MonoBehaviour {
 		transform.rotation = Quaternion.Euler (0.0f, 0.0f, (float)angle+90.0f);
 	}
 	
-
+	public int getDistance(Character c) {
+		return (pos.x - c.pos.x) * (pos.x - c.pos.x) + (pos.y - c.pos.y) * (pos.y - c.pos.y);
+	}
 }

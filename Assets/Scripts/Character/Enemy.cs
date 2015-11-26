@@ -17,7 +17,7 @@ public class Enemy : Character {
 	public IntVector2 targetPos;
 	public GameObject hand;
 	public float attackIntv;
-	
+
 	// Use this for initialization
 	void Start () {
 		Debug.Log ("enemy start!");
@@ -29,58 +29,66 @@ public class Enemy : Character {
 		shapeVector = new List<IntVector2> ();
 		shapeVector.Add (new IntVector2(0,0));
 		Map.Create(this);
+		Rotate(dir);
 	}
 	
 	// Update is called once per frame
 	void Update() {
-
-		if(mapUpdated == true)
-		{
-			FindDirection(player.pos);
-			pace = 0;
-		}
-
-		if (!inMoveThread && pace < disMap[targetPos.x , targetPos.y] - 1)
-		{
-			//Debug.Log("move like jagger");
-			// Debug.Log("->"+guide[pace].x+" "+ guide[pace].y);
-			if(guide[pace]!=dir) {
-				Rotate(guide[pace]);
+		if (!inMoveThread) {
+			if(mapUpdated == true)
+			{
+				FindDirection(player.pos);
 			}
-			MoveByVector(guide[pace]);
-			pace++;
-			isAttack = false;
-		}
-        else if(!inMoveThread && pace == disMap[targetPos.x, targetPos.y] - 1 && !isAttack && !Map.IsEmpty(targetPos))
-		{
-			Rotate (guide[pace]);
-			isAttack = true;
-			StartCoroutine(BasicAttack());
-		}
-    }
-
-	void OnTriggerEnter2D(Collider2D other) {
-		// Destroy everything that leaves the trigger
-		if (other.tag == "bullet") {
-			Destroy(other.gameObject);
-			HP--;
-			if(HP<=0) {
-				Destroy(gameObject);
-				Map.Destroy(this);
+			Debug.Log(pace + "," + disMap[targetPos.x, targetPos.y] + "/" + guide[pace].x + "," + guide[pace].y);
+			if (pace < disMap [targetPos.x, targetPos.y] - 1) {
+				//Debug.Log("move like jagger");
+				// Debug.Log("->"+guide[pace].x+" "+ guide[pace].y);
+				if (guide [pace] != dir) {
+					Rotate (guide [pace]);
+				}
+				MoveByVector (guide [pace]);
+				pace++;
+				isAttack = false;
+			} else if (pace == disMap [targetPos.x, targetPos.y] - 1) {
+				/*if(Map.IsEmpty(targetPos) || Map.Seek(targetPos)[0] is Enemy) {
+					FindDirection(player.pos);
+				}
+				else */if(!isAttack) {
+					Rotate (guide [pace]);
+					isAttack = true;
+					StartCoroutine (BasicAttack ());
+				}
 			}
 		}
-		
 	}
 
-	private void FindDirection(IntVector2 playerPos)
+	public void FindDirection(IntVector2 playerPos)
 	{
 		disMap = PathFinder.ShortestPath(pos);
-		targetPos = PathFinder.RetrievePlayer (playerPos, disMap);
+		targetPos = null;
+		//if (getDistance (player) <= 25)
+			targetPos = PathFinder.RetrievePlayer (playerPos, disMap);
+		/*else {
+			Totem[] totems = FindObjectsOfType<Totem> ();
+			int min = 26;
+			foreach (Totem t in totems) {
+				if (getDistance (t) < min) {
+					min = getDistance (t);
+					targetPos = PathFinder.RetrievePlayer (t.pos, disMap);
+				}
+			}
+			if (targetPos == null) {
+				int rx = Random.Range (-3, 3), ry = Random.Range (-3, 3);
+				IntVector2 tempPos = Map.BoundPos (new IntVector2 (pos.x + rx, pos.y + ry));
+				targetPos = PathFinder.RetrievePlayer (tempPos, disMap);
+			}
+		}*/
 		guide = PathFinder.TracePath(targetPos, disMap);
-		mapUpdated = false; 
+		pace = 0;
+		mapUpdated = false;
 	}
 
-	private IEnumerator BasicAttack()
+	protected IEnumerator BasicAttack()
 	{
 		while(true) {
 			GameObject obj = Instantiate(hand, transform.position, transform.rotation) as GameObject;

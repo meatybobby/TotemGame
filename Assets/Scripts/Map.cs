@@ -80,7 +80,6 @@ public class Map {
 			mainMap [c.pos.x, c.pos.y].Add (c);
 			ShortestMapUpdate(c);
 		}
-
 	}
 	public static void Destroy(Character c) {
 		if (c is Enemy) { // Enemy 佔地面積比較多要另外判斷
@@ -111,9 +110,9 @@ public class Map {
                 if (mainMap[i, j].Count > 0)
                 {
                     for (int k = 0; k < mainMap[i, j].Count; k++)
-                        if (mainMap[i, j][k].GetType() == typeof(Enemy) && (Enemy)mainMap[i, j][k] != c)
+                        if (mainMap[i, j][k] is Enemy )
                         {
-                            Enemy enemy = (Enemy)mainMap[i, j][k];
+                            Enemy enemy = mainMap[i, j][k] as Enemy;
 							enemy.mapUpdated = true;
                         }
                 }

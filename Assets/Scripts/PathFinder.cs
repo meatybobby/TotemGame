@@ -29,7 +29,7 @@ public class PathFinder : MonoBehaviour{
 			foreach (IntVector2 dir in four_dir) {
 				IntVector2 newPos = temp + dir;
 				if(newPos.x <= 0 || newPos.x > Map.MAP_WIDTH || newPos.y <= 0 || newPos.y > Map.MAP_HEIGHT) continue;
-				if(calc[newPos.x, newPos.y] == -1 && (Map.IsEmpty(newPos) || Map.Seek(newPos)[0].GetType() == typeof(Enemy))) {
+				if(calc[newPos.x, newPos.y] == -1 && (Map.IsEmpty(newPos) || Map.Seek(newPos)[0] is Enemy)) {
 					calc[newPos.x, newPos.y] = calc[temp.x, temp.y] + 1;
 					que.Enqueue(newPos);
 				}
@@ -40,7 +40,7 @@ public class PathFinder : MonoBehaviour{
 
 	// ShortestPathRect(lower,upper)
 	// The parameters is the lower point and the upper point of the rectangle.
-	// We use the lower point as the pivot. So the queue and the calc map would use this pivot.
+	// We use the lower as the pivot. So the queue and the calc map would use this pivot.
 	public static int[,] ShortestPathRect(IntVector2 lower,IntVector2 upper)
 	{
 		int[,] calc = new int[Map.MAP_WIDTH + 2, Map.MAP_HEIGHT + 2];
@@ -95,7 +95,7 @@ public class PathFinder : MonoBehaviour{
 			int lower = begin.y, upper = end.y;
 			for(int i = lower; i <= upper; i++) {
 				IntVector2 temp = new IntVector2(begin.x,i);
-				if(!Map.IsEmpty(temp) && Map.Seek(temp)[0].GetType() != typeof(Enemy))
+				if(!Map.IsEmpty(temp) && !(Map.Seek(temp)[0].GetType() is Enemy))
 					return false;
 			}
 			return true;
@@ -103,7 +103,7 @@ public class PathFinder : MonoBehaviour{
 			int lower = begin.x, upper = end.x;
 			for(int i = lower; i <= upper; i++) {
 				IntVector2 temp = new IntVector2(i,begin.y);
-				if(!Map.IsEmpty(temp) && Map.Seek(temp)[0].GetType() != typeof(Enemy))
+				if(!Map.IsEmpty(temp) && !(Map.Seek(temp)[0].GetType() is Enemy))
 					return false;
 			}
 			return true;
@@ -146,7 +146,7 @@ public class PathFinder : MonoBehaviour{
     public static IntVector2 RetrievePlayer(IntVector2 playerPos, int[,] map)
     {
         int[,] cal = new int[Map.MAP_WIDTH + 2, Map.MAP_HEIGHT + 2];
-        int min = 100000, depth = 10000;
+        int min = 100000, depth = 100000;
         IntVector2 target = new IntVector2(0,0);
         Queue<IntVector2> queue = new Queue<IntVector2>();
         for (int i = 0; i < Map.MAP_WIDTH + 2; i++)
@@ -179,5 +179,5 @@ public class PathFinder : MonoBehaviour{
             }
         }
         return target;
-    }	
+    }
 }
