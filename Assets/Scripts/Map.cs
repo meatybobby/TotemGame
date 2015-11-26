@@ -114,7 +114,6 @@ public class Map {
                         if (mainMap[i, j][k].GetType() == typeof(Enemy) && (Enemy)mainMap[i, j][k] != c)
                         {
                             Enemy enemy = (Enemy)mainMap[i, j][k];
-                            enemy.disMap = FindPath.ShortestPath(enemy.pos, enemy.frontVector);
 							enemy.mapUpdated = true;
                         }
                 }

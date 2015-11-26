@@ -9,11 +9,10 @@ public class Enemy : Character {
 	//public GameObject attackTrigger;
 	public float attackSpeed;
 	public bool isAttack;
-
-    public List<IntVector2> shapeVector = new List<IntVector2>();
-    public List<IntVector2>[,] frontVector = new List<IntVector2>[3,3];
+	public List<IntVector2> shapeVector;
 	public Player player;
 	protected IntVector2[] guide = new IntVector2[(Map.MAP_WIDTH+2) * (Map.MAP_HEIGHT+2)];
+	// The step number of enemy
     protected int pace;
 	public IntVector2 targetPos;
 	public GameObject hand;
@@ -25,19 +24,11 @@ public class Enemy : Character {
 		mapUpdated = true;
 		isAttack = false;
 		pace = 0;
-        shapeVector.Add(new IntVector2(0, 0));
-        frontVector[2, 1] = new List<IntVector2>();
-        frontVector[1, 2] = new List<IntVector2>();
-        frontVector[1, 0] = new List<IntVector2>();
-        frontVector[0, 1] = new List<IntVector2>();
-        frontVector[2, 1].Add(new IntVector2(0, 0));
-        frontVector[1, 2].Add(new IntVector2(0, 0));
-        frontVector[1, 0].Add(new IntVector2(0, 0));
-        frontVector[0, 1].Add(new IntVector2(0, 0));
         player = GameObject.FindWithTag ("Player").GetComponent<Player> ();
 		disMap = new int[Map.MAP_WIDTH + 2, Map.MAP_HEIGHT + 2];
+		shapeVector = new List<IntVector2> ();
+		shapeVector.Add (new IntVector2(0,0));
 		Map.Create(this);
-		disMap = FindPath.ShortestPath(pos, frontVector);
 	}
 	
 	// Update is called once per frame
@@ -48,7 +39,8 @@ public class Enemy : Character {
 			FindDirection(player.pos);
 			pace = 0;
 		}
-		if (!inMoveThread && pace < disMap[targetPos.x , targetPos.y] -1)
+
+		if (!inMoveThread && pace < disMap[targetPos.x , targetPos.y] - 1)
 		{
 			//Debug.Log("move like jagger");
 			// Debug.Log("->"+guide[pace].x+" "+ guide[pace].y);
@@ -65,13 +57,8 @@ public class Enemy : Character {
 			isAttack = true;
 			StartCoroutine(BasicAttack());
 		}
-        else if (disMap[targetPos.x, targetPos.y] == -1)
-        {
-            targetPos = FindPath.RetrievePlayer(player.pos, disMap);
-            Debug.Log("I can't find player, "+targetPos.x+","+targetPos.y);
-            FindDirection(targetPos);
-        }
     }
+
 	void OnTriggerEnter2D(Collider2D other) {
 		// Destroy everything that leaves the trigger
 		if (other.tag == "bullet") {
@@ -84,12 +71,15 @@ public class Enemy : Character {
 		}
 		
 	}
-	private void FindDirection(IntVector2 pos)
+
+	private void FindDirection(IntVector2 playerPos)
 	{
-        targetPos = new IntVector2(pos.x, pos.y);
-		guide = FindPath.TracePath(pos, disMap);
+		disMap = PathFinder.ShortestPath(pos);
+		targetPos = PathFinder.RetrievePlayer (playerPos, disMap);
+		guide = PathFinder.TracePath(targetPos, disMap);
 		mapUpdated = false; 
 	}
+
 	private IEnumerator BasicAttack()
 	{
 		while(true) {
@@ -116,5 +106,6 @@ public class Enemy : Character {
 		}
 		isAttack = false;*/
 	}
+	
 }
 
