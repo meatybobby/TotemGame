@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -35,7 +35,7 @@ public class IntVector2{
 	}
 }
 public class Character : MonoBehaviour {
-
+	
 	public int HP;
 	public IntVector2 pos;
 	public IntVector2 dir;
@@ -45,20 +45,20 @@ public class Character : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-
+		
 	}
-
+	
 	public Character(){
 	}
-
-
+	
+	
 	// Move the character according to the vecList, 
 	// it will ignore the barriers on the map when moving
 	public IEnumerator MoveByVectorArray(List<IntVector2> vecList, float newSpeed) {
 		float tempSpeed = speed;
 		speed = newSpeed;
 		foreach (IntVector2 vec in vecList) {
-
+			
 			while (inMoveThread)
 				yield return new WaitForSeconds (0.01f);
 			// rotate the character when moving toward different direction
@@ -69,25 +69,25 @@ public class Character : MonoBehaviour {
 		}
 		speed = tempSpeed;
 	}
-
-
+	
+	
 	public void MoveByVector(IntVector2 offset) {
-
+		
 		IntVector2 newPos; // the new pos after being moved
 		newPos = Map.BoundPos(pos+offset);                
-
+		
 		//if (Map.mainMap [newPos.x, newPos.y].Count != 0)
-			//return;
-
+		//return;
+		
 		// Update the main-map position first
 		IntVector2 pre = new IntVector2(pos.x, pos.y);
 		pos = newPos; 
 		Map.UpdatePos (this, pre);
-
+		
 		Vector3 next = Map.GetRealPosition(newPos, this);
 		StartCoroutine(MoveThread (next));
 	}
-
+	
 	private IEnumerator MoveThread(Vector3 next) {
 		bool playerCatch = false;
 		Player p;
@@ -98,7 +98,7 @@ public class Character : MonoBehaviour {
 				p.caughtTotem.inMoveThread = true;
 			}
 		}
-
+		
 		// 往下走，z值先更新 （解決斜走重疊的問題）
 		if (transform.position.y > next.y) {
 			transform.position = new Vector3(transform.position.x, transform.position.y, next.z);
@@ -111,30 +111,30 @@ public class Character : MonoBehaviour {
 		}
 		inMoveThread = false;
 		transform.position = next;//new Vector3( next.x, next.y, next.z);
-
-
+		
+		
 		if (playerCatch) {
 			p = this as Player;
 			p.caughtTotem.inMoveThread = false;
 		}
 	}
-
-	public void MoveToPoint(IntVector2 des) {
 	
+	public void MoveToPoint(IntVector2 des) {
+		
 	}
-
+	
 	public void Rotate(IntVector2 a) {
-
+		
 		dir = a;
-
+		
 		int angle;
 		angle = a.x==0? (90*a.y):(90 - 90*a.x + 45*a.x*a.y);
-	
+		
 		transform.rotation = Quaternion.Euler (0.0f, 0.0f, (float)angle+90.0f);
 	}
-
+	
 	public int getDistance(Character c) {
 		return (pos.x - c.pos.x) * (pos.x - c.pos.x) + (pos.y - c.pos.y) * (pos.y - c.pos.y);
 	}
-
+	
 }

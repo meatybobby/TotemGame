@@ -79,5 +79,4 @@ public class TwoByTwoEnemy : Enemy {
 		mapUpdated = false; 
 		pace = 0;
 	}
-
 }

@@ -29,12 +29,11 @@ public class Enemy : Character {
 
 	public Enemy(){
 	}
-	
+
 
 	// Use this for initialization
 	void Start () {
 		Debug.Log ("enemy start!");
-
 		mapUpdated = true;
 		isAttack = false;
 		pace = 0;
@@ -44,7 +43,6 @@ public class Enemy : Character {
 		shapeVector.Add (new IntVector2(0,0));
 		Map.Create(this);
 		Rotate(dir);
-
 		anim = GetComponent<Enemy001Anim> ();
 	}
 	
@@ -81,7 +79,6 @@ public class Enemy : Character {
 				}
 			}
 		}
-
     }
 	void OnTriggerEnter2D(Collider2D other) {
 		// Destroy everything that leaves the trigger
@@ -97,7 +94,7 @@ public class Enemy : Character {
 		
 	}
 
-	
+
 	public void FindDirection(IntVector2 playerPos)
 	{
 		disMap = PathFinder.ShortestPath(pos);
@@ -128,7 +125,6 @@ public class Enemy : Character {
 	{
 		while(true) {
 			GameObject obj = Instantiate(hand, attackSpawn.position, attackSpawn.rotation) as GameObject;
-
 			yield return new WaitForSeconds(attackIntv);
 			if(!isAttack) {
 				Destroy(obj);
