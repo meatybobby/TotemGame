@@ -84,15 +84,7 @@ public class Character : MonoBehaviour {
 		pos = newPos; 
 		Map.UpdatePos (this, pre);
 
-		/*float desX = transform.position.x + (float)offset.x * Map.unitCell;
-		float desY = transform.position.y + (float)offset.y * Map.unitCell;
-		Vector3 next = new Vector3
-		(
-			Mathf.Clamp(desX, Boundary.xMin, Boundary.xMax),
-			Mathf.Clamp(desY, Boundary.yMin, Boundary.yMax),
-			0.0f
-		);*/
-		Vector3 next = Map.GetRealPosition(newPos);
+		Vector3 next = Map.GetRealPosition(newPos, this);
 		StartCoroutine(MoveThread (next));
 	}
 
@@ -140,6 +132,9 @@ public class Character : MonoBehaviour {
 	
 		transform.rotation = Quaternion.Euler (0.0f, 0.0f, (float)angle+90.0f);
 	}
-	
+
+	public int getDistance(Character c) {
+		return (pos.x - c.pos.x) * (pos.x - c.pos.x) + (pos.y - c.pos.y) * (pos.y - c.pos.y);
+	}
 
 }
