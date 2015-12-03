@@ -9,6 +9,17 @@ public static class Boundary {
 	public static float yMax = 3.3f;// = 1.875f;
 }
 
+public static class Direction {
+	public static IntVector2 LEFT = new IntVector2 (-1,0);
+	public static IntVector2 RIGHT = new IntVector2 (1,0);
+	public static IntVector2 UP = new IntVector2 (0,1);
+	public static IntVector2 DOWN = new IntVector2 (0,-1);
+	public static IntVector2 UP_LEFT = new IntVector2 (-1,1);
+	public static IntVector2 UP_RIGHT = new IntVector2 (1,1);
+	public static IntVector2 DOWN_LEFT = new IntVector2 (-1,-1);
+	public static IntVector2 DOWN_RIGHT = new IntVector2 (1,-1);
+}
+
 public class Map {
 
 	public static int MAP_WIDTH = 10;
@@ -27,7 +38,7 @@ public class Map {
 				//MAP_POS[i,j].y = -(j - (float)(MAP_HEIGHT+2) / 2 + 0.5f) * MAP_SIZE_Y;
 				MAP_POS[i,j].x = (i - (MAP_WIDTH+2)/2) * unitCell + (MAP_WIDTH%2==0? unitCell/2 : 0);
 				MAP_POS[i,j].y = (j - (MAP_HEIGHT+2)/2) * unitCell + (MAP_HEIGHT%2==0? unitCell/2 : 0);
-				MAP_POS[i,j].z = j;
+				MAP_POS[i,j].z = j*2;
 				mainMap[i,j] = new List<Character>();
 			}
 		}
@@ -99,25 +110,30 @@ public class Map {
 		return mainMap [pos.x, pos.y].Count == 0;
 	}
 
-	public static Vector3 GetRealPosition(IntVector2 pos){
-		return new Vector3 (MAP_POS [pos.x, pos.y].x, MAP_POS [pos.x, pos.y].y, MAP_POS [pos.x, pos.y].z);
+	public static Vector3 GetRealPosition(IntVector2 pos, Character c) {
+		float z = MAP_POS [pos.x, pos.y].z;
+		// Enemy is at higher layer
+		if (c is Enemy) {
+			z -= 1.0f;
+		}
+		return new Vector3 (MAP_POS [pos.x, pos.y].x, MAP_POS [pos.x, pos.y].y, z);
 	}
 
-    private static void ShortestMapUpdate(Character c)
-    {
-        for (int i = 0; i < MAP_WIDTH+2; i++)
-            for (int j = 0; j < MAP_HEIGHT+2; j++)
-            {
-                if (mainMap[i, j].Count > 0)
-                {
-                    for (int k = 0; k < mainMap[i, j].Count; k++)
-                        if (mainMap[i, j][k].GetType() == typeof(Enemy) && (Enemy)mainMap[i, j][k] != c)
-                        {
-                            Enemy enemy = (Enemy)mainMap[i, j][k];
-                            enemy.disMap = FindPath.ShortestPath(enemy.pos, enemy.frontVector);
-							enemy.mapUpdated = true;
-                        }
-                }
-            }
-    }
+	private static void ShortestMapUpdate(Character c)
+	{
+		for (int i = 0; i < MAP_WIDTH+2; i++)
+			for (int j = 0; j < MAP_HEIGHT+2; j++)
+		{
+			if (mainMap[i, j].Count > 0)
+			{
+				for (int k = 0; k < mainMap[i, j].Count; k++)
+					if (mainMap[i, j][k] is Enemy )
+				{
+					Enemy enemy = mainMap[i, j][k] as Enemy;
+					enemy.mapUpdated = true;
+				}
+			}
+		}
+	}
+	
 }
