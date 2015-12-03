@@ -8,7 +8,7 @@ public class Totem002 : Totem {
 	// Use this for initialization
 	void Start () {
 		anim = GetComponent<Animator>();
-	
+		characterId = 2;
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {

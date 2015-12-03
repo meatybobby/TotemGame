@@ -36,6 +36,7 @@ public class Player : Character {
 		joyStick = GameObject.FindWithTag ("JoyStick").GetComponent<Joystick> ();
 		Rotate (dir);
 		holdTime = 0f;
+		characterId = 0;
 	}
 	
 	void Update () {

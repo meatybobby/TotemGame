@@ -42,7 +42,7 @@ public class Character : MonoBehaviour {
 	public float speed;
 	public bool isMoving;
 	public bool inMoveThread;
-	
+	public int characterId;
 	// Use this for initialization
 	void Start () {
 		

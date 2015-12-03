@@ -15,7 +15,7 @@ public class Totem001 : Totem {
 		anim = GetComponent<Totem001Anim> ();
 		anim.playAnim (dir, FIRE);
 		StartCoroutine (Shooting ());
-	
+		characterId = 1;
 	}
 	
 
