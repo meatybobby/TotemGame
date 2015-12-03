@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 fileFormatVersion: 2
 guid: 1c7764b82b45e0744bffaa54d4ff7a90
 timeCreated: 1448548187
@@ -6,3 +7,24 @@ NativeFormatImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+=======
+<<<<<<< HEAD
+fileFormatVersion: 2
+guid: 1c7764b82b45e0744bffaa54d4ff7a90
+timeCreated: 1448548187
+licenseType: Free
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+=======
+fileFormatVersion: 2
+guid: 1c7764b82b45e0744bffaa54d4ff7a90
+timeCreated: 1448548187
+licenseType: Free
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+>>>>>>> d246a059eed16337a090b5d8e714fa403676fd07
+>>>>>>> origin/master

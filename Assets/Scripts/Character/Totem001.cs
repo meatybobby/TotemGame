@@ -14,7 +14,7 @@ public class Totem001 : Totem {
 		anim = GetComponent<Totem001Anim> ();
 		anim.playAnim (dir, SUMMON);
 		StartCoroutine (Shooting ());
-	
+		characterId = 1;
 	}
 	
 
@@ -23,16 +23,13 @@ public class Totem001 : Totem {
 		GameObject steamObj = Instantiate(steam, transform.position, transform.rotation) as GameObject;
 		Destroy (steamObj, 1f);
 		while(true) {
-
 			if(HP<=0) {
 				yield break;
 			}
-
 			// if totem faces up, left, or right, then 子彈要在圖騰下層
 			if(dir==Direction.UP || dir==Direction.LEFT || dir==Direction.RIGHT) { 
 				shotSpawn.position = new Vector3(shotSpawn.position.x, shotSpawn.position.y, transform.position.z+1);
 			}
-
 			anim.playAnim (dir, FIRE);
 			GameObject bullet = Instantiate(shot, shotSpawn.position, shotSpawn.rotation) as GameObject;
 			bullet.GetComponent<TotemBullet>().shooter = this;

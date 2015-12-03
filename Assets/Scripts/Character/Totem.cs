@@ -14,9 +14,6 @@ public class Totem : Character {
 
 
 
-
-
-
 	// Use this for initialization
 	void Start () {
 

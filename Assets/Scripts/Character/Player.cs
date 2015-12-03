@@ -36,6 +36,7 @@ public class Player : Character {
 		joyStick = GameObject.FindWithTag ("JoyStick").GetComponent<Joystick> ();
 		Rotate (dir);
 		holdTime = 0f;
+		characterId = 0;
 	}
 	
 	void Update () {
@@ -136,7 +137,6 @@ public class Player : Character {
 				}
 			}
 		}
-
 		/*
 		if (!(Mathf.Abs (moveH) == 0.0f && Mathf.Abs (moveV) == 0.0f) && !inMoveThread) {
 			
@@ -225,7 +225,6 @@ public class Player : Character {
 			caughtTotem.isCaught = false;
 			caughtTotem = null;
 			mode = IDLE;
-
 		}
 		
 		// Testing the MoveByVectorArray function by pressing 'M'
@@ -291,7 +290,6 @@ public class Player : Character {
 			if (Map.IsEmpty (plantPos)) {
 				Vector3 totemRealPos = Map.GetRealPosition (pos + dir, this);
 				GameObject totemObj;
-
 				switch(totemType){
 				case 0:
 					Debug.Log ("create totem!");
@@ -313,14 +311,8 @@ public class Player : Character {
 					break;
 
 				default:
-
 					break;
 				}
-
-				//if(newTotem != null) {
-					
-					
-				//}
 
 				totemNum++;
 			}
@@ -376,9 +368,12 @@ public class Player : Character {
 			}
 		}
 	}
+
 	public void SetIdle(){
 		this.mode = IDLE;
 	}
+
+
 	void OnTriggerEnter2D(Collider2D other) {
 		// Destroy everything that leaves the trigger
 		if (other.tag == "MonsterHand") {

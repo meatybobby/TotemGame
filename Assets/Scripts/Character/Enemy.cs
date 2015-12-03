@@ -27,6 +27,8 @@ public class Enemy : Character {
 	public const int ATTACK = 1;
 	public const int DIE = 2;
 
+	private float[] attackPriority;
+
 	public Enemy(){
 	}
 	
@@ -34,7 +36,6 @@ public class Enemy : Character {
 	// Use this for initialization
 	void Start () {
 		Debug.Log ("enemy start!");
-
 		mapUpdated = true;
 		isAttack = false;
 		pace = 0;
@@ -46,6 +47,7 @@ public class Enemy : Character {
 		Rotate(dir);
 
 		anim = GetComponent<Enemy001Anim> ();
+		attackPriority = new float[] {1,1,1};
 	}
 	
 	// Update is called once per frame
@@ -67,16 +69,16 @@ public class Enemy : Character {
 				}
 				MoveByVector (guide [pace]);
 				pace++;
-				isAttack = false;
 				SetAnimation(WALK);
 			} else if (pace == disMap [targetPos.x, targetPos.y] - 1) {
 				/*if(Map.IsEmpty(targetPos) || Map.Seek(targetPos)[0] is Enemy) {
 					FindDirection(player.pos);
 				}
 				else */if(!isAttack) {
+					Debug.Log(guide[pace]);
 					Rotate (guide [pace]);
 					isAttack = true;
-
+					SetAnimation(ATTACK);
 					StartCoroutine (BasicAttack ());
 				}
 			}
@@ -96,29 +98,22 @@ public class Enemy : Character {
 		}
 		
 	}
-
 	
+
 	public void FindDirection(IntVector2 playerPos)
 	{
 		disMap = PathFinder.ShortestPath(pos);
-		targetPos = null;
-		//if (getDistance (player) <= 25)
-			targetPos = PathFinder.RetrievePlayer (playerPos, disMap);
-		/*else {
-			Totem[] totems = FindObjectsOfType<Totem> ();
-			int min = 26;
-			foreach (Totem t in totems) {
-				if (getDistance (t) < min) {
-					min = getDistance (t);
-					targetPos = PathFinder.RetrievePlayer (t.pos, disMap);
-				}
+		IntVector2 tempPos = playerPos;
+		float minWeight = getDistance (player) * attackPriority [0];
+		Totem[] totems = FindObjectsOfType<Totem> ();
+		foreach (Totem t in totems) {
+			float weight = getDistance(t) * attackPriority[t.characterId];
+			if(weight < minWeight) {
+				minWeight = weight;
+				tempPos = t.pos;
 			}
-			if (targetPos == null) {
-				int rx = Random.Range (-3, 3), ry = Random.Range (-3, 3);
-				IntVector2 tempPos = Map.BoundPos (new IntVector2 (pos.x + rx, pos.y + ry));
-				targetPos = PathFinder.RetrievePlayer (tempPos, disMap);
-			}
-		}*/
+		}
+		targetPos = PathFinder.RetrievePlayer (tempPos, disMap);
 		guide = PathFinder.TracePath(targetPos, disMap);
 		pace = 0;
 		mapUpdated = false;
@@ -126,15 +121,10 @@ public class Enemy : Character {
 
 	protected IEnumerator BasicAttack()
 	{
-		while(true) {
-			GameObject obj = Instantiate(hand, attackSpawn.position, attackSpawn.rotation) as GameObject;
-			SetAnimation(ATTACK);
-			yield return new WaitForSeconds(attackIntv);
-			if(!isAttack) {
-				Destroy(obj);
-				yield break;
-			}
-		}
+		GameObject obj = Instantiate(hand, attackSpawn.position, attackSpawn.rotation) as GameObject;
+		yield return new WaitForSeconds(attackIntv);
+		Destroy(obj);
+		isAttack = false;
 	}
 
 	public void Rotate(IntVector2 a){

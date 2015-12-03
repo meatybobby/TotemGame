@@ -19,10 +19,7 @@ public class GameController : MonoBehaviour {
 
 	
 	IEnumerator MonsterWaves () {
-		while(true){
-			/*for(int i = 0; i < enemyCount; i++) {
-
-			}*/
+		while(true) {
 			if(enemyCount>=enemyNum) yield break;
 			int rx,ry;
 			IntVector2 newPos = new IntVector2(0,0);
@@ -38,8 +35,12 @@ public class GameController : MonoBehaviour {
 			//enemyPosition.x += Map.unitCell/2;
 			//enemyPosition.y += Map.unitCell/2;
 			Quaternion enemyRotation = Quaternion.Euler(0f,0f,0f);
+<<<<<<< HEAD
 
 			Enemy enemy = ((GameObject)Instantiate(monster1, enemyPosition , enemyRotation)).GetComponent<Enemy>() ;
+=======
+			Enemy enemy = ((GameObject)Instantiate(monster2, enemyPosition , enemyRotation)).GetComponent<Enemy>() ;
+>>>>>>> origin/master
 			enemy.pos = newPos;
 			enemyCount++;
 //			Map.Create(enemy);

@@ -8,10 +8,11 @@ public class Totem002 : Totem {
 	// Use this for initialization
 	void Start () {
 		anim = GetComponent<Animator>();
-
 		// the steam animation when created
 		GameObject steamObj = Instantiate(steam, transform.position, transform.rotation) as GameObject;
 		Destroy (steamObj, 1f);
+		characterId = 2;
+
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
