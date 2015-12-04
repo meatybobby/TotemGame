@@ -42,22 +42,17 @@ public class TwoByTwoEnemy : Enemy {
 				pace++;
 				isAttack = false;
 			} else if (pace == disMap [targetPos.x, targetPos.y] - 1) {
-<<<<<<< HEAD
-				if(Map.IsEmpty(targetPos)) {
-=======
+
 				/*if(Map.IsEmpty(targetPos)) {
->>>>>>> origin/master
 					FindDirection(player.pos);
 				}
 				else if(!isAttack) {
 					Rotate (guide [pace]);
 					isAttack = true;
 					StartCoroutine (BasicAttack ());
-<<<<<<< HEAD
-				}
-=======
+
 				}*/
->>>>>>> origin/master
+
 			}
 		}
 	}
@@ -65,15 +60,11 @@ public class TwoByTwoEnemy : Enemy {
 	private void FindDirection(IntVector2 playerPos)
 	{
 		disMap = PathFinder.ShortestPathRect(lower,upper);
-<<<<<<< HEAD
-		if (getDistance (player) <= 25)
-			targetPos = PathFinder.RetrievePlayer (playerPos, disMap);
-		else {
-=======
+
 		//if (getDistance (player) <= 25)
 			targetPos = PathFinder.RetrievePlayer (playerPos, disMap);
 		/*else {
->>>>>>> origin/master
+
 			Totem[] totems = FindObjectsOfType<Totem> ();
 			int min = 26;
 			foreach (Totem t in totems) {
@@ -88,19 +79,12 @@ public class TwoByTwoEnemy : Enemy {
 				targetPos = PathFinder.RetrievePlayer (tempPos, disMap);
 			}
 		}
-<<<<<<< HEAD
-		Debug.Log (targetPos.x + "." + targetPos.y);
-		guide = PathFinder.TracePath(targetPos, disMap);
-		mapUpdated = false; 
-		pace = 0;
-	}
 
-=======
 		Debug.Log (targetPos.x + "." + targetPos.y);*/
 		guide = PathFinder.TracePath(targetPos, disMap);
 		mapUpdated = false;
 		pace = 0;
 		Debug.Log (targetPos.x + "," + targetPos.y + "(" + guide [pace].x + "," + guide [pace].y + ")");
 	}
->>>>>>> origin/master
+
 }

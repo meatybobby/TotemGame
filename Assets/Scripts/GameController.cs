@@ -35,12 +35,8 @@ public class GameController : MonoBehaviour {
 			//enemyPosition.x += Map.unitCell/2;
 			//enemyPosition.y += Map.unitCell/2;
 			Quaternion enemyRotation = Quaternion.Euler(0f,0f,0f);
-<<<<<<< HEAD
 
 			Enemy enemy = ((GameObject)Instantiate(monster1, enemyPosition , enemyRotation)).GetComponent<Enemy>() ;
-=======
-			Enemy enemy = ((GameObject)Instantiate(monster2, enemyPosition , enemyRotation)).GetComponent<Enemy>() ;
->>>>>>> origin/master
 			enemy.pos = newPos;
 			enemyCount++;
 //			Map.Create(enemy);

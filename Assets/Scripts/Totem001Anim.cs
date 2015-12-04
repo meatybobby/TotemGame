@@ -5,11 +5,7 @@ public class Totem001Anim : MonoBehaviour {
 
 	private Animator anim;
 	GameObject front , back , left , right;
-<<<<<<< HEAD
 
-=======
-	
->>>>>>> origin/master
 	// Use this for initialization
 	void Start () {
 		anim = GetComponent<Animator>();
