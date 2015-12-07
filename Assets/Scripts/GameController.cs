@@ -5,6 +5,7 @@ public class GameController : MonoBehaviour {
 
 	public GameObject monster1;
 	public GameObject monster2;
+	public GameObject monster3;
 	public float waveWait;
 	public int enemyCount = 0;
 	public int enemyNum;
@@ -31,7 +32,7 @@ public class GameController : MonoBehaviour {
 				if(Map.IsEmpty(newPos) || Map.Seek(newPos)[0] is Enemy) break;
 			}
 
-			Vector3 enemyPosition = Map.GetRealPosition(newPos, new Enemy());
+			Vector3 enemyPosition = Map.GetRealPosition(newPos,monster1.GetComponent<Enemy>());
 			//enemyPosition.x += Map.unitCell/2;
 			//enemyPosition.y += Map.unitCell/2;
 			Quaternion enemyRotation = Quaternion.Euler(0f,0f,0f);

@@ -2,14 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class TwoByTwoEnemy : Enemy {
+public class Enemy002 : Enemy {
 	public IntVector2 lower, upper;
 
     // Use this for initialization
     void Start () {
         Debug.Log("enemy start!");
         mapUpdated = true;
-        isAttack = false;
+        //isAttack = false;
         pace = 0;
         player = GameObject.FindWithTag("Player").GetComponent<Player>();
         disMap = new int[Map.MAP_WIDTH + 2, Map.MAP_HEIGHT + 2];
@@ -40,7 +40,7 @@ public class TwoByTwoEnemy : Enemy {
 				}
 				MoveByVector (guide [pace]);
 				pace++;
-				isAttack = false;
+				//isAttack = false;
 			} else if (pace == disMap [targetPos.x, targetPos.y] - 1) {
 
 				/*if(Map.IsEmpty(targetPos)) {

@@ -123,17 +123,27 @@ public class Map {
 	{
 		for (int i = 0; i < MAP_WIDTH+2; i++)
 			for (int j = 0; j < MAP_HEIGHT+2; j++)
-		{
-			if (mainMap[i, j].Count > 0)
 			{
-				for (int k = 0; k < mainMap[i, j].Count; k++)
-					if (mainMap[i, j][k] is Enemy )
+				if (mainMap[i, j].Count > 0)
 				{
-					Enemy enemy = mainMap[i, j][k] as Enemy;
-					enemy.mapUpdated = true;
+					for (int k = 0; k < mainMap[i, j].Count; k++)
+						if (mainMap[i, j][k] is Enemy )
+						{
+							Enemy enemy = mainMap[i, j][k] as Enemy;
+							enemy.mapUpdated = true;
+						}
 				}
 			}
-		}
 	}
 
+	public static List<Character> FindAllType<T>() {	
+		List<Character> list = new List<Character> ();
+		for (int i = 0; i < MAP_WIDTH+2; i++)
+			for (int j = 0; j < MAP_HEIGHT+2; j++)
+				if (mainMap [i, j].Count > 0)
+					for (int k = 0; k < mainMap[i, j].Count; k++)
+						if (mainMap [i, j] [k] is T)
+							list.Add (mainMap [i, j] [k]);
+		return list;
+	}
 }
