@@ -32,7 +32,7 @@ public class GameController : MonoBehaviour {
 				if(Map.IsEmpty(newPos) || Map.Seek(newPos)[0] is Enemy) break;
 			}
 
-			Vector3 enemyPosition = Map.GetRealPosition(newPos,monster1.GetComponent<Enemy>());
+			Vector3 enemyPosition = Map.GetRealPosition(newPos, typeof(Enemy));
 			//enemyPosition.x += Map.unitCell/2;
 			//enemyPosition.y += Map.unitCell/2;
 			Quaternion enemyRotation = Quaternion.Euler(0f,0f,0f);

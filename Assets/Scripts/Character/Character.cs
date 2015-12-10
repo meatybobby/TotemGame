@@ -83,7 +83,7 @@ public class Character : MonoBehaviour {
 		IntVector2 pre = new IntVector2(pos.x, pos.y);
 		pos = newPos; 
 		Map.UpdatePos (this, pre);
-		Vector3 next = Map.GetRealPosition(newPos, this);
+		Vector3 next = Map.GetRealPosition(newPos, this.GetType());
 		StartCoroutine(MoveThread (next));
 	}
 	

@@ -1,13 +1,14 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\GameController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Character/JumpEnemy.cs">
     <Files>
-      <File FileName="Assets\Scripts\Character\Enemy.cs" Line="8" Column="30" />
-      <File FileName="Assets\Scripts\Character\Enemy002.cs" Line="5" Column="30" />
-      <File FileName="Assets\Scripts\Enenemy001Attacker.cs" Line="21" Column="23" />
-      <File FileName="Assets\Scripts\Character\Totem001.cs" Line="53" Column="30" />
-      <File FileName="Assets\Scripts\Enemy001Anim.cs" Line="12" Column="7" />
-      <File FileName="Assets\Scripts\GameController.cs" Line="17" Column="18" />
+      <File FileName="Assets/Scripts/Character/Player.cs" Line="282" Column="35" />
+      <File FileName="Assets/Scripts/Character/Totem001.cs" Line="17" Column="1" />
+      <File FileName="Assets/Scripts/Totem001Anim.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Mover.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Map.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Character/JumpEnemy.cs" Line="13" Column="2" />
+      <File FileName="Assets/Scripts/Character/Enemy.cs" Line="18" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

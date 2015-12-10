@@ -52,6 +52,8 @@ public class Totem001Anim : MonoBehaviour {
 				anim.SetTrigger ("right_die");
 				break;
 			case 3:
+				Debug.Log ("anim!");
+				//anim.Play("Totem001_right_summon");
 				anim.SetTrigger("right_summon");
 				break;
 			default :

@@ -288,11 +288,11 @@ public class Player : Character {
 			IntVector2 plantPos = Map.BoundPos (pos + dir);
 			// If the grid is empty
 			if (Map.IsEmpty (plantPos)) {
-				Vector3 totemRealPos = Map.GetRealPosition (pos + dir, this);
+				Vector3 totemRealPos = Map.GetRealPosition(pos + dir, typeof(Totem));
 				GameObject totemObj;
 				switch(totemType){
 				case 0:
-					Debug.Log ("create totem!");
+					//Debug.Log ("create totem!");
 					totemObj = Instantiate (totem, totemRealPos, Quaternion.Euler (0f, 0f, 0f)) as GameObject;
 					Totem001 newTotem = totemObj.GetComponent<Totem001> ();
 					newTotem.Rotate (dir);

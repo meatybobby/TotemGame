@@ -10,16 +10,24 @@ public class Totem001 : Totem {
 	public float shotIntv;
 	public Totem001Anim anim;
 	
+
 	void Start () {
 		anim = GetComponent<Totem001Anim> ();
 		anim.playAnim (dir, SUMMON);
+
+		Debug.Log ("Totem awake!");
 		StartCoroutine (Shooting ());
 		characterId = 1;
 	}
-	
+
+	void Update() {
+		//Debug.Log (transform.FindChild("Totem001_right").localScale.x+", "+transform.FindChild("Totem001_right").localScale.y);
+	}
 
 	IEnumerator Shooting () {
 		yield return new WaitForSeconds(1.0f);
+		Debug.Log ("done!");
+		//transform.FindChild ("Totem001_right").localScale = new Vector3 (1f,1f,1f);
 		GameObject steamObj = Instantiate(steam, transform.position, transform.rotation) as GameObject;
 		Destroy (steamObj, 1f);
 		while(true) {

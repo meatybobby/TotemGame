@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public static class Boundary {
 	public static float xMin = -3.3f;// = -1.875f;
@@ -110,13 +111,29 @@ public class Map {
 		return mainMap [pos.x, pos.y].Count == 0;
 	}
 
-	public static Vector3 GetRealPosition(IntVector2 pos, Character c) {
+	public static Vector3 GetRealPosition(IntVector2 pos, Type type) {
+
 		float z = MAP_POS [pos.x, pos.y].z;
 		// Enemy is at higher layer
-		if (c is Enemy) {
+		//if (c is Enemy) {
+		if(type==typeof(Enemy) || type.IsSubclassOf(typeof(Enemy))) {
 			z -= 1.0f;
 		}
+
 		return new Vector3 (MAP_POS [pos.x, pos.y].x, MAP_POS [pos.x, pos.y].y, z);
+	}
+	public static Vector3 GetRealPosition(IntVector2 pos, Type type, Vector2 offset) {
+		
+		float z = MAP_POS [pos.x, pos.y].z;
+		// Enemy is at higher layer
+		//if (c is Enemy) {
+		if(type==typeof(Enemy) || type.IsSubclassOf(typeof(Enemy))) {
+			z -= 1.0f;
+		}
+		if (offset == null) 
+			return new Vector3 (MAP_POS [pos.x, pos.y].x, MAP_POS [pos.x, pos.y].y, z);
+		else
+			return new Vector3 (MAP_POS [pos.x, pos.y].x+offset.x, MAP_POS [pos.x, pos.y].y+offset.y, z);
 	}
 
 	private static void ShortestMapUpdate(Character c)
