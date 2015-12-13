@@ -14,29 +14,25 @@ public class Player : Character {
 	public float joyStickSensitivity = 0.5f;
 	public IntVector2 holdDir;
 
-	public GameObject totem;
-	public GameObject totem2;
 	public Totem caughtTotem;
-	private IntVector2 oldDir;
-	
-	public int totemNum = 0;
-	public int maxTotemNum;
-
+	//private IntVector2 oldDir;
 	private Joystick joyStick;
 	private Animator anim;
 	private float holdTime;
+	public TotemSummoner summoner;
 
 	
 	void Start () {
 		mode = IDLE;
 		//Map.mainMap [1, 1].Add (this);
 		Map.Create (this);
-		oldDir = dir;
+		//oldDir = dir;
 		anim = GetComponent<Animator>();
 		joyStick = GameObject.FindWithTag ("JoyStick").GetComponent<Joystick> ();
 		Rotate (dir);
 		holdTime = 0f;
 		characterId = 0;
+		summoner = GetComponent<TotemSummoner> ();
 	}
 	
 	void Update () {
@@ -208,21 +204,17 @@ public class Player : Character {
 			foreach (Character c in charList) {
 				// If there's a totem in front of Player
 				if (c is Totem) {
-					Debug.Log("Caught");
+					//Debug.Log("Caught");
 					caughtTotem = (Totem)c;
-					caughtTotem.transform.parent = transform;
-					caughtTotem.isCaught = true;
+					caughtTotem.CaughtByPlayer ();
 					mode = CATCH;
-					caughtTotem.transform.FindChild("TotemCatchLight").gameObject.SetActive(true);
 					break;
 				}
 			}
 		}
 		else if(mode == CATCH && holdTime < holdTimePara && !inMoveThread && !isMoving) {
-			Debug.Log("Dismiss");
-			caughtTotem.transform.FindChild("TotemCatchLight").gameObject.SetActive(false);
-			caughtTotem.transform.parent = null;
-			caughtTotem.isCaught = false;
+			//Debug.Log("Dismiss");
+			caughtTotem.ReleasedByPlayer();
 			caughtTotem = null;
 			mode = IDLE;
 		}
@@ -242,6 +234,12 @@ public class Player : Character {
 			vecList.Add(new IntVector2(0,1));
 			float newSpeed = 10.0f;
 			StartCoroutine(MoveByVectorArray(vecList, newSpeed));
+		}
+
+		if (HP <= 0) {
+			Debug.Log ("Destroy!!");
+			Destroy (gameObject);
+			Map.Destroy (this);
 		}
 	}
 	public void MoveByVector(IntVector2 offset) {
@@ -268,8 +266,13 @@ public class Player : Character {
 		} else if (!Map.IsEmpty(newPos)) {
 			return;
 		}
-		
-		base.MoveByVector (offset);
+
+		// Update the main-map position first
+		IntVector2 pre = new IntVector2(pos.x, pos.y);
+		pos = newPos; 
+		Map.UpdatePos (this, pre);
+		Vector3 next = Map.GetRealPosition(newPos, this.GetType());
+		StartCoroutine(MoveThread (next));
 	}
 	
 	public void Rotate(IntVector2 a) {
@@ -283,39 +286,8 @@ public class Player : Character {
 	{
 		// Plant a totem when pressing left ctrl and not moving and not slant
 		if (/*Input.GetKeyDown (KeyCode.LeftControl) &&*/ !inMoveThread &&
-		    (Mathf.Abs (dir.x + dir.y) == 1) && totemNum < maxTotemNum) {
-			
-			IntVector2 plantPos = Map.BoundPos (pos + dir);
-			// If the grid is empty
-			if (Map.IsEmpty (plantPos)) {
-				Vector3 totemRealPos = Map.GetRealPosition(pos + dir, typeof(Totem));
-				GameObject totemObj;
-				switch(totemType){
-				case 0:
-					//Debug.Log ("create totem!");
-					totemObj = Instantiate (totem, totemRealPos, Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-					Totem001 newTotem = totemObj.GetComponent<Totem001> ();
-					newTotem.Rotate (dir);
-					newTotem.pos = pos + dir;
-					newTotem.isCaught = false;
-					newTotem.playerRef = this;
-					Map.Create (newTotem);
-					break;
-				case 1:
-					totemObj = Instantiate (totem2, totemRealPos, Quaternion.Euler (0f, 0f, 0f)) as GameObject;
-					Totem002 newTotem2 = totemObj.GetComponent<Totem002> ();
-					newTotem2.pos = pos + dir;
-					newTotem2.isCaught = false;
-					newTotem2.playerRef = this;
-					Map.Create (newTotem2);
-					break;
-
-				default:
-					break;
-				}
-
-				totemNum++;
-			}
+		    (Mathf.Abs (dir.x + dir.y) == 1)) {
+			summoner.Summon (totemType, pos + dir, dir);
 		}
 	}
 
@@ -376,20 +348,33 @@ public class Player : Character {
 
 	void OnTriggerEnter2D(Collider2D other) {
 		// Destroy everything that leaves the trigger
-		if (other.tag == "MonsterHand") {
-			Destroy (other.gameObject);
-			//Debug.Log ("Player attacked by monster!");
-			HP--;
-			if (HP <= 0) {
-				Debug.Log ("Destroy!!");
-				Destroy (gameObject);
-				Map.Destroy (this);
-			}
-		} 
-		if (other.tag == "Enemy") {
-			Debug.Log ("touched by enemy!");
+
+		
+	}
+
+	protected IEnumerator MoveThread(Vector3 next) {
+		bool playerCatch = false;
+		if(mode==CATCH) {
+			playerCatch = true;
+			caughtTotem.inMoveThread = true;
 		}
 		
+		// 往下走，z值先更新 （解決斜走重疊的問題）
+		if (transform.position.y > next.y) {
+			transform.position = new Vector3(transform.position.x, transform.position.y, next.z);
+		}
+		Vector3 nextXY = new Vector3 (next.x, next.y, transform.position.z); // 不要移動z
+		inMoveThread = true;
+		while (transform.position != nextXY) {
+			transform.position = Vector3.MoveTowards(transform.position, nextXY, speed * Time.deltaTime);
+			yield return null;
+		}
+		inMoveThread = false;
+		transform.position = next;//new Vector3( next.x, next.y, next.z);
+		
+		if (playerCatch) {
+			caughtTotem.inMoveThread = false;
+		}
 	}
 	
 	

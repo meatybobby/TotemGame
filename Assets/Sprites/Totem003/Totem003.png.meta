@@ -1,0 +1,239 @@
+fileFormatVersion: 2
+guid: fe1dd15fd019c489293ffc16cb1a4109
+timeCreated: 1449939940
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Totem003_0
+    21300002: Totem003_1
+    21300004: Totem003_2
+    21300006: Totem003_3
+    21300008: Totem003_4
+    21300010: Totem003_5
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Totem003_0
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 241
+        width: 224
+        height: 137
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -82, y: 68.5}
+        - {x: -108, y: 23.5}
+        - {x: -108, y: -63.5}
+        - {x: -60, y: -68.5}
+        - {x: 71, y: -68.5}
+        - {x: 107, y: -40.5}
+        - {x: 107, y: -4.5}
+        - {x: 83, y: 68.5}
+      - - {x: 109, y: 45.5}
+        - {x: 111, y: 43.5}
+        - {x: 112, y: 43.5}
+        - {x: 112, y: 51.5}
+        - {x: 109, y: 50.5}
+    - name: Totem003_1
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 61
+        width: 244
+        height: 141
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 98, y: 69.5}
+        - {x: -93, y: 69.5}
+        - {x: -119, y: 56.5}
+        - {x: -119, y: -62.5}
+        - {x: -116, y: -70.5}
+        - {x: 81, y: -70.5}
+        - {x: 116, y: -48.5}
+        - {x: 120, y: -41.5}
+        - {x: 120, y: -7.5}
+      - - {x: 106, y: -55.5}
+        - {x: 94, y: -67.5}
+        - {x: 95, y: -70.5}
+        - {x: 102, y: -70.5}
+        - {x: 115, y: -60.5}
+        - {x: 115, y: -55.5}
+      - - {x: -7, y: -64.5}
+        - {x: -7, y: -66.5}
+        - {x: -5, y: -68.5}
+        - {x: 7, y: -68.5}
+        - {x: 9, y: -66.5}
+        - {x: 8, y: -63.5}
+        - {x: -5, y: -62.5}
+      - - {x: -113, y: -55.5}
+        - {x: -116, y: -56.5}
+        - {x: -116, y: -61.5}
+        - {x: -111, y: -64.5}
+        - {x: -106, y: -64.5}
+        - {x: -105, y: -62.5}
+        - {x: -105, y: -58.5}
+        - {x: -108, y: -55.5}
+      - - {x: -118, y: 60.5}
+        - {x: -121, y: 59.5}
+        - {x: -121, y: 54.5}
+        - {x: -116, y: 51.5}
+        - {x: -111, y: 51.5}
+        - {x: -110, y: 53.5}
+        - {x: -110, y: 57.5}
+        - {x: -113, y: 60.5}
+    - name: Totem003_2
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 35
+        width: 238
+        height: 327
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 118, y: 27.5}
+        - {x: 118, y: 42.5}
+        - {x: 110, y: 76.5}
+        - {x: 93, y: 131.5}
+        - {x: 85, y: 150.5}
+        - {x: 78, y: 156.5}
+        - {x: 55, y: 161.5}
+        - {x: -30, y: 161.5}
+        - {x: -61, y: 157.5}
+        - {x: -91, y: 148.5}
+        - {x: -114, y: 79.5}
+        - {x: -119, y: 34.5}
+        - {x: -119, y: 29.5}
+        - {x: -101, y: -42.5}
+        - {x: -101, y: -50.5}
+        - {x: -95, y: -81.5}
+        - {x: -78, y: -141.5}
+        - {x: -66, y: -150.5}
+        - {x: -39, y: -161.5}
+        - {x: 40, y: -161.5}
+        - {x: 62, y: -157.5}
+        - {x: 78, y: -144.5}
+        - {x: 94, y: -79.5}
+    - name: Totem003_3
+      rect:
+        serializedVersion: 2
+        x: 597
+        y: 248
+        width: 164
+        height: 51
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -77, y: 21.5}
+        - {x: -80, y: 10.5}
+        - {x: -80, y: -20.5}
+        - {x: -69, y: -25.5}
+        - {x: -28, y: -25.5}
+        - {x: -23, y: -13.5}
+        - {x: -23, y: 14.5}
+        - {x: -31, y: 21.5}
+      - - {x: 64, y: 25.5}
+        - {x: 32, y: 25.5}
+        - {x: 24, y: 11.5}
+        - {x: 24, y: -10.5}
+        - {x: 27, y: -19.5}
+        - {x: 39, y: -22.5}
+        - {x: 70, y: -22.5}
+        - {x: 80, y: -13.5}
+        - {x: 80, y: 9.5}
+        - {x: 78, y: 18.5}
+    - name: Totem003_4
+      rect:
+        serializedVersion: 2
+        x: 567
+        y: 43
+        width: 94
+        height: 93
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -37, y: 46.5}
+        - {x: -46, y: 34.5}
+        - {x: -46, y: 16.5}
+        - {x: -44, y: 16.5}
+        - {x: -41, y: 17.5}
+        - {x: -27, y: -2.5}
+        - {x: 15, y: -46.5}
+        - {x: 22, y: -46.5}
+        - {x: 38, y: -25.5}
+        - {x: 46, y: 20.5}
+        - {x: 46, y: 46.5}
+    - name: Totem003_5
+      rect:
+        serializedVersion: 2
+        x: 693
+        y: 40
+        width: 102
+        height: 97
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -49, y: 48.5}
+        - {x: -49, y: 26.5}
+        - {x: -18, y: -47.5}
+        - {x: -12, y: -47.5}
+        - {x: 48, y: 15.5}
+        - {x: 48, y: 41.5}
+        - {x: 46, y: 48.5}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

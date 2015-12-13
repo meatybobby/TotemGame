@@ -33,6 +33,10 @@ public class IntVector2{
 	public static IntVector2 operator -(IntVector2 a) {
 		return new IntVector2 (-a.x, -a.y);
 	}
+	public override string ToString ()
+	{
+		return string.Format ("(" + x + "," + y + ")");
+	}
 }
 public class Character : MonoBehaviour {
 	
@@ -43,6 +47,7 @@ public class Character : MonoBehaviour {
 	public bool isMoving;
 	public bool inMoveThread;
 	public int characterId;
+	public bool isDead;
 	// Use this for initialization
 	void Start () {
 		
@@ -87,17 +92,7 @@ public class Character : MonoBehaviour {
 		StartCoroutine(MoveThread (next));
 	}
 	
-	private IEnumerator MoveThread(Vector3 next) {
-		bool playerCatch = false;
-		Player p;
-		if (this.GetType () == typeof(Player)) {
-			p = this as Player;
-			if(p.mode==Player.CATCH) {
-				playerCatch = true;
-				p.caughtTotem.inMoveThread = true;
-			}
-		}
-		
+	protected IEnumerator MoveThread(Vector3 next) {
 		// 往下走，z值先更新 （解決斜走重疊的問題）
 		if (transform.position.y > next.y) {
 			transform.position = new Vector3(transform.position.x, transform.position.y, next.z);
@@ -110,12 +105,6 @@ public class Character : MonoBehaviour {
 		}
 		inMoveThread = false;
 		transform.position = next;//new Vector3( next.x, next.y, next.z);
-		
-		
-		if (playerCatch) {
-			p = this as Player;
-			p.caughtTotem.inMoveThread = false;
-		}
 	}
 	
 	public void MoveToPoint(IntVector2 des) {
@@ -131,10 +120,14 @@ public class Character : MonoBehaviour {
 		
 		transform.rotation = Quaternion.Euler (0.0f, 0.0f, (float)angle+90.0f);
 	}
-
+	
 	
 	public int getDistance(Character c) {
 		return (pos.x - c.pos.x) * (pos.x - c.pos.x) + (pos.y - c.pos.y) * (pos.y - c.pos.y);
 	}
 
+	public void CauseDamage(int harm){
+		HP = HP - harm;
+	}
+	
 }

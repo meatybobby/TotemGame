@@ -39,7 +39,7 @@ public class Map {
 				//MAP_POS[i,j].y = -(j - (float)(MAP_HEIGHT+2) / 2 + 0.5f) * MAP_SIZE_Y;
 				MAP_POS[i,j].x = (i - (MAP_WIDTH+2)/2) * unitCell + (MAP_WIDTH%2==0? unitCell/2 : 0);
 				MAP_POS[i,j].y = (j - (MAP_HEIGHT+2)/2) * unitCell + (MAP_HEIGHT%2==0? unitCell/2 : 0);
-				MAP_POS[i,j].z = j*2;
+				MAP_POS[i,j].z = (j-1)*3;
 				mainMap[i,j] = new List<Character>();
 			}
 		}
@@ -57,8 +57,14 @@ public class Map {
 		if (c is Enemy) { // Enemy 佔地面積比較多要另外判斷
 			Enemy enemy = c as Enemy;
 			foreach (IntVector2 offset in enemy.shapeVector) {
-				mainMap [pre.x + offset.x, pre.y + offset.y].Remove (enemy);
-				mainMap [enemy.pos.x + offset.x, enemy.pos.y + offset.y].Add (enemy);
+				IntVector2 newPos = new IntVector2 (pre.x + offset.x, pre.y + offset.y);
+				if (isInBounded (newPos)) {
+					mainMap [newPos.x, newPos.y].Remove (enemy);
+				}
+				newPos = new IntVector2 (enemy.pos.x + offset.x, enemy.pos.y + offset.y);
+				if (isInBounded (newPos)) {
+					mainMap [newPos.x, newPos.y].Add (enemy);
+				}
 			}
 		} else {
 			mainMap [pre.x, pre.y].Remove (c);
@@ -86,7 +92,10 @@ public class Map {
 		if (c is Enemy) { // Enemy 佔地面積比較多要另外判斷
 			Enemy enemy = c as Enemy;
 			foreach (IntVector2 offset in enemy.shapeVector) {
-				mainMap[enemy.pos.x+offset.x, enemy.pos.y+offset.y].Add(enemy);
+				IntVector2 newPos = new IntVector2 (enemy.pos.x + offset.x, enemy.pos.y + offset.y);
+				if (isInBounded (newPos)) {
+					mainMap [newPos.x, newPos.y].Add (enemy);
+				}
 			}
 		} else {
 			mainMap [c.pos.x, c.pos.y].Add (c);
@@ -98,7 +107,10 @@ public class Map {
 		if (c is Enemy) { // Enemy 佔地面積比較多要另外判斷
 			Enemy enemy = c as Enemy;
 			foreach (IntVector2 offset in enemy.shapeVector) {
-				mainMap[enemy.pos.x+offset.x, enemy.pos.y+offset.y].Remove(enemy);
+				IntVector2 newPos = new IntVector2 (enemy.pos.x + offset.x, enemy.pos.y + offset.y);
+				if (isInBounded (newPos)) {
+					mainMap [newPos.x, newPos.y].Remove (enemy);
+				}
 			}
 		} else {
 			mainMap [c.pos.x, c.pos.y].Remove (c);
@@ -130,12 +142,15 @@ public class Map {
 		if(type==typeof(Enemy) || type.IsSubclassOf(typeof(Enemy))) {
 			z -= 1.0f;
 		}
-		if (offset == null) 
-			return new Vector3 (MAP_POS [pos.x, pos.y].x, MAP_POS [pos.x, pos.y].y, z);
-		else
-			return new Vector3 (MAP_POS [pos.x, pos.y].x+offset.x, MAP_POS [pos.x, pos.y].y+offset.y, z);
+		return new Vector3 (MAP_POS [pos.x, pos.y].x+offset.x, MAP_POS [pos.x, pos.y].y+offset.y, z);
 	}
-
+	public static bool isInBounded(IntVector2 unbound) {
+		if (unbound.x > MAP_WIDTH || unbound.x < 1)
+			return false;
+		if (unbound.y > MAP_HEIGHT || unbound.y < 1)
+			return false;
+		return true;
+	}
 	private static void ShortestMapUpdate(Character c)
 	{
 		for (int i = 0; i < MAP_WIDTH+2; i++)
@@ -161,6 +176,39 @@ public class Map {
 					for (int k = 0; k < mainMap[i, j].Count; k++)
 						if (mainMap [i, j] [k] is T)
 							list.Add (mainMap [i, j] [k]);
+		return list;
+	}
+
+	public static List<Character> MapRayCast(IntVector2 origin, IntVector2 dir) {
+		List<Character> list = new List<Character> ();
+		int i = origin.x;
+		int j = origin.y;
+		if (dir == Direction.LEFT) {
+			for(i = i-1; i > 0 ; i--) {
+				if(mainMap[i, j].Count > 0 && !(mainMap[i,j][0] is Enemy)) {
+					list.Add(mainMap[i,j][0]);
+				}
+			}
+		} else if (dir == Direction.RIGHT) {
+			for(i = i+1; i <= MAP_WIDTH ; i++) {
+				if(mainMap[i, j].Count > 0 && !(mainMap[i,j][0] is Enemy)) {
+					list.Add(mainMap[i,j][0]);
+				}
+			}
+		} else if (dir == Direction.UP) {
+			for(j = j+1; j <= MAP_HEIGHT ; j++) {
+				if(mainMap[i, j].Count > 0 && !(mainMap[i,j][0] is Enemy)) {
+					list.Add(mainMap[i,j][0]);
+				}
+			}
+		} else if (dir == Direction.DOWN) {
+			for(j = j-1; j > 0 ; j--) {
+				if(mainMap[i, j].Count > 0 && !(mainMap[i,j][0] is Enemy)) {
+					list.Add(mainMap[i,j][0]);
+				}
+			}
+		}
+
 		return list;
 	}
 }

@@ -1,0 +1,125 @@
+fileFormatVersion: 2
+guid: 650c4221f210d4829b0026c1e285ae27
+timeCreated: 1449960579
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Enemy003_energy_all_0
+    21300002: Enemy003_energy_all_1
+    21300004: Enemy003_energy_all_2
+    21300006: Enemy003_energy_all_3
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Enemy003_energy_all_0
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 3
+        width: 65
+        height: 89
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -32.5, y: 44.5}
+        - {x: -32.5, y: -27.5}
+        - {x: -26.5, y: -36.5}
+        - {x: -16.5, y: -44.5}
+        - {x: 32.5, y: -44.5}
+        - {x: 32.5, y: 40.5}
+        - {x: 30.5, y: 44.5}
+    - name: Enemy003_energy_all_1
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 75
+        width: 14
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Enemy003_energy_all_2
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 3
+        width: 68
+        height: 87
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 22, y: 43.5}
+        - {x: -32, y: 43.5}
+        - {x: -34, y: 32.5}
+        - {x: -34, y: -36.5}
+        - {x: -32, y: -43.5}
+        - {x: 28, y: -43.5}
+        - {x: 34, y: -33.5}
+        - {x: 34, y: 30.5}
+        - {x: 33, y: 40.5}
+    - name: Enemy003_energy_all_3
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 6
+        width: 68
+        height: 87
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -34, y: 43.5}
+        - {x: -34, y: -43.5}
+        - {x: 34, y: -43.5}
+        - {x: 34, y: 43.5}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

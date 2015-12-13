@@ -1,0 +1,297 @@
+fileFormatVersion: 2
+guid: 8248a2a22da634c36ba506032417141e
+timeCreated: 1449748004
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Enemy002_left_0
+    21300002: Enemy002_left_1
+    21300004: Enemy002_left_2
+    21300006: Enemy002_front_3
+    21300008: Enemy002_front_4
+    21300010: Enemy002_front_5
+    21300012: Enemy002_front_6
+    21300014: Enemy002_back_7
+    21300016: Enemy002_t_8
+    21300018: Enemy002_left_9
+    21300020: Enemy002_front_10
+    21300022: Enemy002_back_11
+    21300024: Enemy002_back_12
+    21300026: Enemy002_left_13
+    21300028: Enemy002_left_14
+    21300030: Enemy002_left_15
+    21300032: Enemy002_front_16
+    21300034: Enemy002_front_17
+    21300036: Enemy002_front_18
+    21300038: Enemy002_back_19
+    21300040: Enemy002_back_20
+    21300042: Enemy002_t_21
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Enemy002_left_0
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 21
+        width: 138
+        height: 176
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Enemy002_left_1
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 119
+        width: 97
+        height: 81
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Enemy002_left_2
+      rect:
+        serializedVersion: 2
+        x: 277
+        y: 144
+        width: 49
+        height: 48
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Enemy002_front_3
+      rect:
+        serializedVersion: 2
+        x: 345
+        y: 20
+        width: 134
+        height: 175
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Enemy002_front_4
+      rect:
+        serializedVersion: 2
+        x: 523
+        y: 178
+        width: 16
+        height: 15
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Enemy002_front_5
+      rect:
+        serializedVersion: 2
+        x: 599
+        y: 178
+        width: 14
+        height: 13
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Enemy002_front_6
+      rect:
+        serializedVersion: 2
+        x: 654
+        y: 125
+        width: 46
+        height: 66
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Enemy002_back_7
+      rect:
+        serializedVersion: 2
+        x: 727
+        y: 24
+        width: 128
+        height: 169
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Enemy002_t_8
+      rect:
+        serializedVersion: 2
+        x: 1016
+        y: 86
+        width: 16
+        height: 110
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Enemy002_left_9
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 87
+        width: 30
+        height: 45
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Enemy002_front_10
+      rect:
+        serializedVersion: 2
+        x: 509
+        y: 73
+        width: 121
+        height: 91
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Enemy002_back_11
+      rect:
+        serializedVersion: 2
+        x: 879
+        y: 117
+        width: 27
+        height: 59
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Enemy002_back_12
+      rect:
+        serializedVersion: 2
+        x: 928
+        y: 112
+        width: 41
+        height: 64
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Enemy002_left_13
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 35
+        width: 48
+        height: 66
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Enemy002_left_14
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 25
+        width: 60
+        height: 88
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Enemy002_left_15
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 41
+        width: 17
+        height: 18
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Enemy002_front_16
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 9
+        width: 37
+        height: 58
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Enemy002_front_17
+      rect:
+        serializedVersion: 2
+        x: 593
+        y: 12
+        width: 41
+        height: 54
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Enemy002_front_18
+      rect:
+        serializedVersion: 2
+        x: 655
+        y: 38
+        width: 45
+        height: 70
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Enemy002_back_19
+      rect:
+        serializedVersion: 2
+        x: 873
+        y: 21
+        width: 23
+        height: 58
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Enemy002_back_20
+      rect:
+        serializedVersion: 2
+        x: 926
+        y: 19
+        width: 43
+        height: 66
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Enemy002_t_21
+      rect:
+        serializedVersion: 2
+        x: 1002
+        y: 27
+        width: 30
+        height: 35
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

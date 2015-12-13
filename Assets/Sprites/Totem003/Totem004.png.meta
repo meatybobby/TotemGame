@@ -1,0 +1,93 @@
+fileFormatVersion: 2
+guid: b04cf61c1b0ed4844acf04c32e109f82
+timeCreated: 1449951752
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Totem003_2
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Totem003_2
+      rect:
+        serializedVersion: 2
+        x: 315
+        y: 35
+        width: 236
+        height: 326
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 94, y: -79}
+        - {x: 118, y: 28}
+        - {x: 118, y: 43}
+        - {x: 110, y: 77}
+        - {x: 93, y: 132}
+        - {x: 85, y: 151}
+        - {x: 78, y: 157}
+        - {x: 55, y: 162}
+        - {x: -30, y: 162}
+        - {x: -61, y: 158}
+        - {x: -91, y: 149}
+        - {x: -114, y: 80}
+        - {x: -118, y: 45}
+        - {x: -118, y: 24}
+        - {x: -102, y: -51}
+        - {x: -95, y: -81}
+        - {x: -90, y: -93}
+        - {x: -78, y: -141}
+        - {x: -66, y: -150}
+        - {x: -39, y: -161}
+        - {x: 40, y: -161}
+        - {x: 62, y: -157}
+        - {x: 78, y: -144}
+        - {x: 90, y: -90}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
