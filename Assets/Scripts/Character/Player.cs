@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityStandardAssets.CrossPlatformInput;
 
 public class Player : Character {
@@ -8,18 +9,27 @@ public class Player : Character {
 	public const int IDLE = 0;
 	public const int CATCH = 1;
 	public int mode;
-	
+	public float opacity = 0.2f;
+
 	//public Transform totemSpawn;
 	public float holdTimePara = 0.5f;
 	public float joyStickSensitivity = 0.5f;
 	public IntVector2 holdDir;
-
+	
 	public Totem caughtTotem;
 	//private IntVector2 oldDir;
 	private Joystick joyStick;
 	private Animator anim;
 	private float holdTime;
+	private Color temp;
 	public TotemSummoner summoner;
+
+	public float idleSpeed;
+	public float catchSpeed;
+
+	public GameObject sweat_left, sweat_right, sweat_back, sweat_front;
+	public GameObject playerStone;
+	public GameObject catchIcon;
 
 	
 	void Start () {
@@ -33,19 +43,27 @@ public class Player : Character {
 		holdTime = 0f;
 		characterId = 0;
 		summoner = GetComponent<TotemSummoner> ();
+		temp = catchIcon.GetComponent<Image>().color;
+		temp.a = opacity;
+		catchIcon.GetComponent<Image> ().color = temp;
+		//Hp GUI initialize
+		HpInitialize ();
 	}
 	
 	void Update () {
+		//Hp GUI
+		HpUpdate ();
+
 		//float moveH = Input.GetAxis ("Horizontal"); //PC
 		float moveH = CrossPlatformInputManager.GetAxis("Horizontal");
 		//float moveV = Input.GetAxis ("Vertical"); //PC
 		float moveV = CrossPlatformInputManager.GetAxis("Vertical");
-
+		
 		float length = Mathf.Sqrt (moveH * moveH + moveV * moveV);
 		float angle = Mathf.Atan2 (moveV, moveH);
 		//print ("len:"+length+" angle:"+angle*Mathf.Rad2Deg);
 		//print (moveH + ", " + moveV + " angle: " + angle);
-
+		
 		if (!inMoveThread) {
 			IntVector2 movement = new IntVector2(1,0);
 			if(length > 0.0f) {
@@ -77,7 +95,7 @@ public class Player : Character {
 				else{
 					Debug.Log ("No angle match!! "+angle);
 				}
-
+				
 				if(length >= joyStickSensitivity) { // trigger move
 					if (mode == CATCH) {
 						if(Mathf.Abs(movement.x) == 1) {
@@ -94,7 +112,7 @@ public class Player : Character {
 							isMoving  = true;
 							Rotate (movement);
 						}
-
+						
 						MoveByVector (movement);
 					}
 				}
@@ -108,7 +126,7 @@ public class Player : Character {
 						isMoving = false;
 						if(mode!=CATCH) {
 							// change dir to only four directions
-
+							
 							Rotate(movement);
 						} else{
 							// don't change dir when CATCH
@@ -118,14 +136,14 @@ public class Player : Character {
 					else if(movement != dir && mode!=CATCH) {
 						Rotate(movement);
 					}
-
+					
 				}
 			}
 			else{
 				if(Mathf.Abs(dir.x) == 1) {
 					// allow only four directions when IDLE
 					dir = dir.x==1 ? Direction.RIGHT : Direction.LEFT;
-
+					
 				}
 				if(isMoving) {
 					isMoving = false;
@@ -182,9 +200,9 @@ public class Player : Character {
 			
 			oldDir = dir;
 		}*/
-
+		
 		// hold press a period of time
-		if (joyStick.axisPressState && length <  joyStickSensitivity  && !inMoveThread && !isMoving) {
+		/*if (joyStick.axisPressState && length <  joyStickSensitivity  && !inMoveThread && !isMoving) {
 			if(holdTime == 0f)
 				holdDir = dir;
 			else if(holdDir != dir) {
@@ -194,31 +212,48 @@ public class Player : Character {
 		} 
 		else if(!joyStick.axisPressState) {
 			holdTime = 0f;
-		}
-		
-		// Catch or release the totem when hold press
+		}*/
 
-		if (mode == IDLE && holdTime > holdTimePara && !inMoveThread &&!isMoving && Mathf.Abs(dir.x+dir.y)==1 ) {
+		//Catch Icon opacity
+		if(mode == IDLE)
+			temp.a = opacity;
+		else
+			temp.a = 1.0f;
+		catchIcon.GetComponent<Image> ().color = temp;
+		if (mode == IDLE && Mathf.Abs (dir.x + dir.y) == 1) {
 			IntVector2 actionPos = pos + dir;
 			List<Character> charList = Map.Seek (actionPos);
 			foreach (Character c in charList) {
 				// If there's a totem in front of Player
 				if (c is Totem) {
-					//Debug.Log("Caught");
-					caughtTotem = (Totem)c;
-					caughtTotem.CaughtByPlayer ();
-					mode = CATCH;
+					temp.a = 1.0f;
+					catchIcon.GetComponent<Image> ().color = temp;
 					break;
 				}
 			}
+		} 
+		// Catch or release the totem when hold press
+		if (Input.GetKeyDown (KeyCode.Space)) {
+			if (mode == IDLE && /*holdTime > holdTimePara &&*/ !inMoveThread && !isMoving && Mathf.Abs (dir.x + dir.y) == 1) {
+				IntVector2 actionPos = pos + dir;
+				List<Character> charList = Map.Seek (actionPos);
+				foreach (Character c in charList) {
+					// If there's a totem in front of Player
+					if (c is Totem) {
+						//Debug.Log("Caught");
+						caughtTotem = (Totem)c;
+						caughtTotem.CaughtByPlayer ();
+						mode = CATCH;
+						break;
+					}
+				}
+			} else if (mode == CATCH && /*holdTime < holdTimePara &&*/ !inMoveThread && !isMoving) {
+				//Debug.Log("Dismiss");
+				caughtTotem.ReleasedByPlayer ();
+				caughtTotem = null;
+				mode = IDLE;
+			}
 		}
-		else if(mode == CATCH && holdTime < holdTimePara && !inMoveThread && !isMoving) {
-			//Debug.Log("Dismiss");
-			caughtTotem.ReleasedByPlayer();
-			caughtTotem = null;
-			mode = IDLE;
-		}
-		
 		// Testing the MoveByVectorArray function by pressing 'M'
 		if (Input.GetKeyDown (KeyCode.M) && !isMoving && mode != CATCH) {
 			List<IntVector2> vecList = new List<IntVector2>();
@@ -235,13 +270,29 @@ public class Player : Character {
 			float newSpeed = 10.0f;
 			StartCoroutine(MoveByVectorArray(vecList, newSpeed));
 		}
-
+		
 		if (HP <= 0) {
-			Debug.Log ("Destroy!!");
-			Destroy (gameObject);
-			Map.Destroy (this);
+			Debug.Log ("The Player is fukcing dead!");
+			Die();
+
 		}
 	}
+
+	private void Die(){
+		//Debug.Log (transform.position);
+		// Create the player's tomb on the mainMap
+		SetIdle (true);
+		GameObject obj = Instantiate (playerStone, this.transform.position, this.transform.rotation) as GameObject;
+		Ground tomb = obj.GetComponent<Ground> ();
+		tomb.pos = this.pos;
+		Map.Create (tomb);
+
+
+		Map.Destroy (this);
+		Destroy (healthPanel);
+		Destroy (gameObject);
+	}
+
 	public void MoveByVector(IntVector2 offset) {
 		IntVector2 newPos = Map.BoundPos(pos+offset);
 		if (mode == CATCH) {
@@ -266,7 +317,7 @@ public class Player : Character {
 		} else if (!Map.IsEmpty(newPos)) {
 			return;
 		}
-
+		
 		// Update the main-map position first
 		IntVector2 pre = new IntVector2(pos.x, pos.y);
 		pos = newPos; 
@@ -276,7 +327,7 @@ public class Player : Character {
 	}
 	
 	public void Rotate(IntVector2 a) {
-
+		
 		dir = a;
 		ChangeAnimation (a);
 		
@@ -290,7 +341,29 @@ public class Player : Character {
 			summoner.Summon (totemType, pos + dir, dir);
 		}
 	}
+	
+	public void Catch(){
+		if (mode == IDLE && !inMoveThread &&!isMoving && Mathf.Abs(dir.x+dir.y)==1 ) {
+			IntVector2 actionPos = pos + dir;
+			List<Character> charList = Map.Seek (actionPos);
+			foreach (Character c in charList) {
+				// If there's a totem in front of Player
+				if (c is Totem) {
+					//Debug.Log("Caught");
+					caughtTotem = (Totem)c;
+					caughtTotem.CaughtByPlayer ();
+					SetIdle(false);
+					break;
+				}
+			}
+		}
+		else if(mode == CATCH && !inMoveThread && !isMoving) {
+			//Debug.Log("Dismiss");
 
+			SetIdle(true);
+		}
+	}
+	
 	public void ChangeAnimation(IntVector2 a) {
 		if (isMoving) {
 			if(a == Direction.LEFT) {
@@ -340,17 +413,45 @@ public class Player : Character {
 			}
 		}
 	}
-
-	public void SetIdle(){
-		this.mode = IDLE;
+	
+	public void SetIdle(bool isIdle) {
+		if (isIdle) {
+			if(caughtTotem!=null) {
+				caughtTotem.ReleasedByPlayer();
+				caughtTotem = null;
+			}
+			mode = IDLE;
+			speed = idleSpeed;
+			StopSweating();
+		} 
+		else {
+			mode = CATCH;
+			speed = catchSpeed;
+			StartSweating();
+		}
+	}
+	
+	
+	private void StartSweating() {
+		if (dir == Direction.UP) {
+			sweat_back.SetActive (true);
+		} else if (dir == Direction.DOWN) {
+			sweat_front.SetActive(true);
+		}
+		else if (dir == Direction.RIGHT || dir == Direction.DOWN_RIGHT || dir == Direction.UP_RIGHT) {
+			sweat_right.SetActive (true);
+		} else {
+			sweat_left.SetActive(true);
+		}
+	}
+	private void StopSweating() {
+		sweat_left.SetActive (false);
+		sweat_right.SetActive (false);
+		sweat_back.SetActive (false);
+		sweat_front.SetActive (false);
 	}
 
 
-	void OnTriggerEnter2D(Collider2D other) {
-		// Destroy everything that leaves the trigger
-
-		
-	}
 
 	protected IEnumerator MoveThread(Vector3 next) {
 		bool playerCatch = false;

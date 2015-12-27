@@ -5,9 +5,9 @@ public class TotemBullet : MonoBehaviour {
 
 	private Animator anim;
 	public float speed;
-	public Totem shooter;
+	public Totem001 shooter;
 	public float destroyTime = 0.001f;
-	public int damage = 1;
+
 
 	void Start () {
 		anim = GetComponent<Animator>();
@@ -18,11 +18,13 @@ public class TotemBullet : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D other) {
 
-		if (other.tag == "Enemy" || other.tag=="Player" ||
-		    (other.tag == "Totem" && other.GetComponent<Totem> () != shooter) ) {
+		if (other.tag == "Enemy" || other.tag=="Player" || other.tag=="Rock" ||
+		    (other.tag == "Totem" && other.GetComponent<Totem001> () != shooter) ) {
 			// Can't be destroyed by the collider of the totem who shot the bullet
-			if (other.tag=="Enemy") {
-				other.GetComponent<Character> ().CauseDamage (damage);
+			if (other.tag=="Enemy" || other.tag=="Rock") {
+				Character c = other.GetComponent<Character> ();
+				if(c!=null)
+					c.CauseDamage (shooter.damage);
 			}
 
 			Destroy (GetComponent<CircleCollider2D>()); // trigger only once;

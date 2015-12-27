@@ -12,20 +12,24 @@ public class Totem : Character {
 	public Player playerRef;
 	public GameObject steam;
 
-	public void Initialize(int charId) {
+	public void Initialize() {
 		isDead = false;
-		characterId = charId;
 		SummonSteam ();
+		//Hp GUI initialize
+		HpInitialize ();
 	}
 		
 	public void Die() {
 		isDead = true;
+		Destroy (healthPanel);
+		Destroy (this);
+		Map.Destroy(this);
 		SetCatchLight (false);
+		Destroy (GetComponent<Collider2D>());
 		Destroy(gameObject, 2.5f);
 		if(isCaught) {
-			playerRef.SetIdle();
+			playerRef.SetIdle(true);
 		}
-		Map.Destroy(this);
 	}
 
 	public void CaughtByPlayer() {
@@ -47,4 +51,5 @@ public class Totem : Character {
 	private void SetCatchLight(bool val) {
 		transform.FindChild("TotemCatchLight").gameObject.SetActive(val);
 	}
+
 }

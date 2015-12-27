@@ -6,19 +6,20 @@ public class Enemy003 : Enemy {
 	public IntVector2 lower, upper;
 	public float moveWait;
 	//private List<IntVector2> dir;
-	private int jumpingStep;
+	//private int jumpingStep;
 
 	private Enemy003Anim anim;
 	public GameObject energyWave;
-	public List<GameObject> attackTargets = new List<GameObject>();
-
-	public int damage = 5;
-
+	public List<Character> attackTargets = new List<Character>();
+	
 	void Start () {
 		Initialize ();
 
 		//isAttack = false;
 		anim = GetComponent<Enemy003Anim> ();
+
+		attackPriority = new float[] {1,1,1,1,1};
+		defaultPriority = new float[] {1,1,1,1,1};
 
 		shapeVector = new List<IntVector2> ();
 		shapeVector.Add (new IntVector2(0,0));
@@ -28,18 +29,20 @@ public class Enemy003 : Enemy {
 
 		lower = pos;
 		upper = new IntVector2 (lower.x + 1, lower.y + 1);
-		offset.x = offset.y = Map.unitCell / 2;
-		jumpingStep = 100;
+		//offset.x = offset.y = Map.unitCell / 2;
+		//jumpingStep = 100;
 		//SetAnimation (IDLE);
 	}
 
 	// Update is called once per frame
 	void Update () {
+		//Hp GUI
+		HpUpdate ();
 		if (HP <= 0 && !isDead) {
 			SetAnimation(DIE);
 			Die ();
 		}
-		if (HP>0 && !inMoveThread) {
+		if (HP>0 && !inMoveThread && player!=null) {
 			if(mapUpdated == true)
 			{
 				lower = pos;
@@ -53,7 +56,8 @@ public class Enemy003 : Enemy {
 				//Debug.Log("move like jagger");
 				// Debug.Log("->"+guide[pace].x+" "+ guide[pace].y);
 				// Check if it can jump more than one step
-				if (guide [pace] != dir) {
+				if (guide [pace] != dir || !isMoving) {
+					isMoving = true;
 					Rotate (guide [pace]);
 				}
 				/*List<IntVector2> movingList = new List<IntVector2>();
@@ -67,7 +71,7 @@ public class Enemy003 : Enemy {
 				StartCoroutine(MoveByVectorArray(movingList,speed*movingList.Count*2));*/
 				MoveByVector(guide[pace]);
 				pace++;
-				SetAnimation(WALK);
+				//SetAnimation(WALK);
 
 			} else if (pace == disMap [targetPos.x, targetPos.y]) {
 				/*if(Map.IsEmpty(targetPos) || Map.Seek(targetPos)[0] is Enemy) {
@@ -77,8 +81,10 @@ public class Enemy003 : Enemy {
 					Rotate (guide [pace]);
 					StartCoroutine (BasicAttack ());
 				}*/
+				isMoving = false;
 				if(!isAttack) {
 					isAttack = true;
+					//Debug.Log (guide[pace-1]);
 					SetAnimation(ATTACK);
 					StartCoroutine (JumpAttack());
 				}
@@ -157,17 +163,19 @@ public class Enemy003 : Enemy {
 
 	public IEnumerator JumpAttack() {
 		yield return new WaitForSeconds(attackIntv);
-
-		foreach (GameObject c in attackTargets) {
-			if (c != null && (c.tag=="Player" || c.tag=="Totem") )
-				c.GetComponent<Character>().CauseDamage (damage);
+		if (isDead)
+			yield break;
+		foreach (Character c in attackTargets) {
+			if (c != null && (c.gameObject.tag=="Player" || c.gameObject.tag=="Totem") )
+				c.CauseDamage (damage);
 		}
+		ShakeTheGround ();
 		GameObject energy = Instantiate (energyWave, transform.position, transform.rotation) as GameObject;
 		yield return new WaitForSeconds (1.5f);
 		Destroy (energy);
 		isAttack = false;
 	}
-	public void Rotate(IntVector2 a){
+	public void Rotate(IntVector2 a) {
 		dir = a;
 		SetAnimation (WALK);
 	}
@@ -230,6 +238,10 @@ public class Enemy003 : Enemy {
 		Map.UpdatePos (this, pre);
 		Vector3 next = Map.GetRealPosition(newPos, this.GetType(), this.offset);
 		StartCoroutine(MoveThread (next));
+	}
+
+	private void ShakeTheGround() {
+		Camera.main.GetComponent<EZCameraShake.CameraShaker> ().ShakeOnce (0.5f, 5.0f, 0.2f, 2.0f);
 	}
 	
 }

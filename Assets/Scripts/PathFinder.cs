@@ -9,10 +9,10 @@ public class PathFinder : MonoBehaviour{
 	static PathFinder()
 	{
 		four_dir = new List<IntVector2>();
-		four_dir.Add(new IntVector2(-1,0));
-		four_dir.Add(new IntVector2(1,0));
-		four_dir.Add(new IntVector2(0,-1));
-		four_dir.Add(new IntVector2(0,1));
+		four_dir.Add(Direction.LEFT);
+		four_dir.Add(Direction.RIGHT);
+		four_dir.Add(Direction.UP);
+		four_dir.Add(Direction.DOWN);
 	}
 
 	public static int[,] ShortestPath(IntVector2 pos)
@@ -173,7 +173,7 @@ public class PathFinder : MonoBehaviour{
 	{
 		int[,] cal = new int[Map.MAP_WIDTH + 2, Map.MAP_HEIGHT + 2];
 		int min = 100000, depth = 100000;
-		IntVector2 target = new IntVector2(0,0);
+		IntVector2 target = null;
 		Queue<IntVector2> queue = new Queue<IntVector2>();
 		for (int i = 0; i < Map.MAP_WIDTH + 2; i++)
 			for (int j = 0; j < Map.MAP_HEIGHT + 2; j++)

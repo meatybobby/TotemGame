@@ -13,12 +13,15 @@ public class CameraController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//transform.position = player.transform.position;
-		float playerX = player.transform.position.x;
-		float playerY = player.transform.position.y;
-		float xPos = Mathf.Clamp(playerX, minX, maxX);
-		float yPos = Mathf.Clamp(playerY, minY, maxX);
-		float zPos = transform.position.z;
-		transform.position = new Vector3 (xPos, yPos, zPos);
+		if (player != null) {
+			float playerX = player.transform.position.x;
+			float playerY = player.transform.position.y;
+			float xPos = Mathf.Clamp(playerX, minX, maxX);
+			float yPos = Mathf.Clamp(playerY, minY, maxX);
+			float zPos = -10f;
+			transform.position = new Vector3 (xPos, yPos, zPos);
+
+		}
 
 	}
 }
