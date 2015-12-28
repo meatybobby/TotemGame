@@ -32,7 +32,10 @@ public class Map {
 	private static List<Character>[,] mainMap = new List<Character>[MAP_WIDTH+2, MAP_HEIGHT+2];
 
 	static Map() {
+		Initialize ();
+	}
 
+	public static void Initialize() {
 		for (int i = 0; i < MAP_WIDTH + 2; i++) {
 			for (int j = 0; j < MAP_HEIGHT + 2; j++) {
 				//MAP_POS[i,j].x = (i - (float)(MAP_WIDTH+2) / 2 + 0.5f) * MAP_SIZE_X;
@@ -179,36 +182,36 @@ public class Map {
 		return list;
 	}
 
-	public static List<Character> MapRayCast(IntVector2 origin, IntVector2 dir) {
-		List<Character> list = new List<Character> ();
+	public static Character MapRayCast(IntVector2 origin, IntVector2 dir) {
+
 		int i = origin.x;
 		int j = origin.y;
 		if (dir == Direction.LEFT) {
 			for(i = i-1; i > 0 ; i--) {
 				if(mainMap[i, j].Count > 0 && !(mainMap[i,j][0] is Enemy)) {
-					list.Add(mainMap[i,j][0]);
+					return mainMap[i,j][0];
 				}
 			}
 		} else if (dir == Direction.RIGHT) {
 			for(i = i+1; i <= MAP_WIDTH ; i++) {
 				if(mainMap[i, j].Count > 0 && !(mainMap[i,j][0] is Enemy)) {
-					list.Add(mainMap[i,j][0]);
+					return mainMap[i,j][0];
 				}
 			}
 		} else if (dir == Direction.UP) {
 			for(j = j+1; j <= MAP_HEIGHT ; j++) {
 				if(mainMap[i, j].Count > 0 && !(mainMap[i,j][0] is Enemy)) {
-					list.Add(mainMap[i,j][0]);
+					return mainMap[i,j][0];
 				}
 			}
 		} else if (dir == Direction.DOWN) {
 			for(j = j-1; j > 0 ; j--) {
 				if(mainMap[i, j].Count > 0 && !(mainMap[i,j][0] is Enemy)) {
-					list.Add(mainMap[i,j][0]);
+					return mainMap[i,j][0];
 				}
 			}
 		}
 
-		return list;
+		return null;
 	}
 }

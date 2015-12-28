@@ -14,7 +14,7 @@ public class Totem001 : Totem {
 	void Start () {
 		anim = GetComponent<Totem001Anim> ();
 		//anim.playAnim (dir, SUMMON);
-		Initialize(1);
+		Initialize();
 		StartCoroutine (Shooting ());
 	}
 
@@ -27,7 +27,7 @@ public class Totem001 : Totem {
 
 	public void Die(){
 		anim.playAnim (dir, DIE);
-		Destroy (GetComponent<BoxCollider2D>());
+		//Destroy (GetComponent<BoxCollider2D>());
 		base.Die ();
 	}
 
@@ -62,9 +62,6 @@ public class Totem001 : Totem {
 		shotSpawn.rotation = Quaternion.Euler (0.0f, 0.0f, (float)angle);
 	}
 
-	void OnTriggerEnter2D(Collider2D other) {
-		
-		
-	}
+
 
 }

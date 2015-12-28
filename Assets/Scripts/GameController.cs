@@ -18,21 +18,41 @@ public class GameController : MonoBehaviour {
 		wave = GetComponent<WaveController>();
 		wave.ReadFile("level1");
 		next = wave.Next ();
+	//	Map.Initialize ();
 	}
 
 	void Update () {
 		timer += Time.deltaTime;
 		if (next != null) {
 			while (next != null && timer >= next.bornTime) {
-				Enemy enemy = next.monster.GetComponent<Enemy> ();
-				Vector3 enemyPosition = Map.GetRealPosition (next.bornPos, typeof(Enemy), enemy.offset);
-				Quaternion enemyRotation = Quaternion.Euler (0f, 0f, 0f);
-				enemy = ((GameObject)Instantiate (next.monster, enemyPosition, enemyRotation)).GetComponent<Enemy> ();
-				enemy.pos = next.bornPos;
-				Map.Create (enemy);
+				Character c = next.monster.GetComponent<Character> ();
+				Vector3 charPosition;
+				//charPosition = Map.GetRealPosition (next.bornPos, typeof(Enemy), c.offset);
+				if(c.gameObject.tag=="Enemy") {
+					Enemy e = c as Enemy;
+					charPosition = Map.GetRealPosition (next.bornPos, typeof(Enemy), e.offset);
+				}
+				else {
+					charPosition = Map.GetRealPosition (next.bornPos, typeof(Enemy));
+				}
+				
+				//Enemy enemy = next.monster.GetComponent<Enemy> ();
+				
+				//Vector3 enemyPosition = Map.GetRealPosition (next.bornPos, typeof(Enemy), enemy.offset);
+				//Debug.Log (enemy.offset);
+				Quaternion charRotation = Quaternion.Euler (0f, 0f, 0f);
+				c = ((GameObject)Instantiate (next.monster, charPosition, charRotation)).GetComponent<Character> ();
+				c.pos = next.bornPos;
+				Map.Create (c);
 				next = wave.Next ();
 			}
 		}
+	}
+
+	public void Reload() {
+		Time.timeScale = 1;
+		Map.Initialize ();
+		Application.LoadLevel (Application.loadedLevelName);
 	}
 
 	

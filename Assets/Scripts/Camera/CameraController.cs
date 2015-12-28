@@ -17,8 +17,13 @@ public class CameraController : MonoBehaviour {
 		float playerY = player.transform.position.y;
 		float xPos = Mathf.Clamp(playerX, minX, maxX);
 		float yPos = Mathf.Clamp(playerY, minY, maxX);
-		float zPos = transform.position.z;
+		float zPos = -10f;
 		transform.position = new Vector3 (xPos, yPos, zPos);
+		if (Input.GetKeyDown("space")) {
+			
+			//Camera.main.GetComponent<EZCameraShake.CameraShaker>().ShakeOnce(3.0f, 1.0f, 1.0f, 1.0f);
+			
+		}
 
 	}
 }

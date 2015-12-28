@@ -8,7 +8,7 @@ public class Totem003 : Totem {
 	// Use this for initialization
 	void Start () {
 		anim = GetComponent<Animator>();
-		Initialize (0);
+		Initialize ();
 	}
 
 	// Update is called once per frame
@@ -20,7 +20,7 @@ public class Totem003 : Totem {
 
 	public void Die() {
 		anim.Play ("Totem003_die");
-		Destroy (GetComponent<BoxCollider2D>());
+		//Destroy (GetComponent<BoxCollider2D>());
 		base.Die ();
 	}
 
