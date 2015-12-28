@@ -14,6 +14,8 @@ public class Totem004 : Totem {
 	
 	// Update is called once per frame
 	void Update () {
+		//Hp GUI
+		HpUpdate ();
 		if(HP<=0 && !isDead) {
 			Die ();
 		}

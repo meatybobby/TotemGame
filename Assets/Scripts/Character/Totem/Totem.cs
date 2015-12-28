@@ -15,17 +15,20 @@ public class Totem : Character {
 	public void Initialize() {
 		isDead = false;
 		SummonSteam ();
+		//Hp GUI initialize
+		HpInitialize ();
 	}
 		
 	public void Die() {
 		isDead = true;
+		Destroy (healthPanel);
 		Destroy (this);
 		Map.Destroy(this);
 		SetCatchLight (false);
 		Destroy (GetComponent<Collider2D>());
 		Destroy(gameObject, 2.5f);
 		if(isCaught) {
-			playerRef.SetIdle();
+			playerRef.SetIdle(true);
 		}
 	}
 

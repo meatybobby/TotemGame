@@ -63,7 +63,7 @@ public class TotemSummoner : MonoBehaviour
 	}
 
 	public void Summon(int totemId, IntVector2 pos, IntVector2 dir) {
-		Debug.Log (cost.Length);
+		//Debug.Log (cost.Length);
 		if (cost[totemId] > mana || totemNum == maxTotemNum)
 			return;
 		if (Map.isInBounded(pos) && Map.IsEmpty (pos)) {

@@ -25,6 +25,8 @@ public class Enemy004 : Enemy {
 	}
 
 	void Update () {
+		//Hp GUI
+		HpUpdate ();
 		if (HP>0 && !inMoveThread) {
 			if(mapUpdated == true)
 			{

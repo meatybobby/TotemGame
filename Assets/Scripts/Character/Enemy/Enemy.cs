@@ -24,7 +24,6 @@ public class Enemy : Character {
 	public bool isAttack;
 	public GameObject angry;
 	//public Transform angrySpawn;
-	//public bool isAngry;
 	public int angryNum;
 	public GameObject soul;
 	public int manaDrop = 3;
@@ -38,10 +37,13 @@ public class Enemy : Character {
 		//isAngry = false;
 		angryNum = 0;
 		Map.Create(this);
+		//Hp GUI initialize
+		HpInitialize ();
 	}
 
 	public void Die() {
 		isDead = true;
+		Destroy (healthPanel);
 		Destroy (this);
 		Map.Destroy(this);
 		for(int i = 0; i < manaDrop; i++) {

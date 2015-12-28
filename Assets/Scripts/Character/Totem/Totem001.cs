@@ -19,6 +19,8 @@ public class Totem001 : Totem {
 	}
 
 	void Update() {
+		//Hp GUI
+		HpUpdate ();
 		//Debug.Log (transform.FindChild("Totem001_right").localScale.x+", "+transform.FindChild("Totem001_right").localScale.y);
 		if(HP<=0 && !isDead) {
 			Die ();

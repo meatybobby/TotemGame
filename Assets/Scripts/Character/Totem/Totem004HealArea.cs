@@ -19,12 +19,15 @@ public class Totem004HealArea : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (totem == null) {
+			Destroy(this);
+		}
 		friendList.RemoveAll (item => item == null);
-		Debug.Log (friendList.Count);
+		//Debug.Log (friendList.Count);
 		if(friendList.Count > 0 && healFlag == false && !totem.isDead){
 			healFlag = true;
 			//attack animate and substract enemy's hp
-			Debug.Log("Heal somebody");
+		//	Debug.Log("Heal somebody");
 			StartCoroutine (Heal());
 		}
 	}
@@ -48,7 +51,7 @@ public class Totem004HealArea : MonoBehaviour {
 	}
 	
 	void OnTriggerExit2D(Collider2D other){
-		if (other.tag == "Enemy" || other.tag =="Player") {
+		if (other.tag == "Totem" || other.tag =="Player") {
 			friendList.Remove (other.gameObject);
 		}
 	}

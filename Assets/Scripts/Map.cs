@@ -182,36 +182,61 @@ public class Map {
 		return list;
 	}
 
-	public static Character MapRayCast(IntVector2 origin, IntVector2 dir) {
+	public static IntVector2 FindTotem002ForEnemy002(IntVector2 origin) {
+		List<IntVector2> dirVec = new List<IntVector2>();
+		dirVec.Add(Direction.LEFT);
+		dirVec.Add(Direction.RIGHT);
+		dirVec.Add(Direction.UP);
+		dirVec.Add(Direction.DOWN);
+		for (int i = 0; i < dirVec.Count; i++) {
+			IntVector2 temp = dirVec[i];
+			int randomIndex = UnityEngine.Random.Range(i, dirVec.Count);
+			dirVec[i] = PathFinder.four_dir[randomIndex];
+			dirVec[randomIndex] = temp;
+			//Debug.Log (i+": "+dirVec[i]);
+		}
+		foreach (IntVector2 dir in dirVec) {
+			Character c = MapRayCast(origin, dir);
+			if(c != null && (c is Totem002) ) {
 
+				Debug.Log (c.GetType() + " found!");
+				return dir;
+			}
+		}
+		
+		return new IntVector2 (0, 0);
+	}
+
+	public static Character MapRayCast(IntVector2 origin, IntVector2 dir) {
+		
 		int i = origin.x;
 		int j = origin.y;
 		if (dir == Direction.LEFT) {
 			for(i = i-1; i > 0 ; i--) {
-				if(mainMap[i, j].Count > 0 && !(mainMap[i,j][0] is Enemy)) {
+				if(mainMap[i, j].Count > 0 && (mainMap[i,j][0] is Player || mainMap[i,j][0] is Totem) ) {
 					return mainMap[i,j][0];
 				}
 			}
 		} else if (dir == Direction.RIGHT) {
 			for(i = i+1; i <= MAP_WIDTH ; i++) {
-				if(mainMap[i, j].Count > 0 && !(mainMap[i,j][0] is Enemy)) {
+				if(mainMap[i, j].Count > 0 && (mainMap[i,j][0] is Player || mainMap[i,j][0] is Totem)) {
 					return mainMap[i,j][0];
 				}
 			}
 		} else if (dir == Direction.UP) {
 			for(j = j+1; j <= MAP_HEIGHT ; j++) {
-				if(mainMap[i, j].Count > 0 && !(mainMap[i,j][0] is Enemy)) {
+				if(mainMap[i, j].Count > 0 && (mainMap[i,j][0] is Player || mainMap[i,j][0] is Totem)) {
 					return mainMap[i,j][0];
 				}
 			}
 		} else if (dir == Direction.DOWN) {
 			for(j = j-1; j > 0 ; j--) {
-				if(mainMap[i, j].Count > 0 && !(mainMap[i,j][0] is Enemy)) {
+				if(mainMap[i, j].Count > 0 && (mainMap[i,j][0] is Player || mainMap[i,j][0] is Totem)) {
 					return mainMap[i,j][0];
 				}
 			}
 		}
-
+		
 		return null;
 	}
 }

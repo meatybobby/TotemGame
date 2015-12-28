@@ -25,11 +25,13 @@ public class Enemy001 : Enemy {
 
 
 	void Update () {
+		//Hp GUI
+		HpUpdate ();
 		if (HP <= 0 && !isDead) {
 			SetAnimation(DIE);
 			Die ();
 		}
-		if (HP>0 && !inMoveThread) {
+		if (HP>0 && !inMoveThread && player!=null) {
 			if(mapUpdated == true)
 			{
 				FindDirection(player.pos);

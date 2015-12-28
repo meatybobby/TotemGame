@@ -23,8 +23,10 @@ public class Player : Character {
 	private float holdTime;
 	private Color temp;
 	public TotemSummoner summoner;
+	public float idleSpeed;
+	public float catchSpeed;
 
-	public GameObject sweatEffect;
+	public GameObject sweat_left, sweat_right, sweat_back, sweat_front;
 	public GameObject playerStone;
 	public GameObject catchIcon;
 
@@ -43,9 +45,14 @@ public class Player : Character {
 		temp = catchIcon.GetComponent<Image>().color;
 		temp.a = opacity;
 		catchIcon.GetComponent<Image> ().color = temp;
+		//Hp GUI initialize
+		HpInitialize ();
 	}
 	
 	void Update () {
+		//Hp GUI
+		HpUpdate ();
+
 		//float moveH = Input.GetAxis ("Horizontal"); //PC
 		float moveH = CrossPlatformInputManager.GetAxis("Horizontal");
 		//float moveV = Input.GetAxis ("Vertical"); //PC
@@ -271,9 +278,17 @@ public class Player : Character {
 	}
 
 	private void Die(){
-		Debug.Log (transform.position);
-		Instantiate (playerStone, this.transform.position, this.transform.rotation);
+		//Debug.Log (transform.position);
+		// Create the player's tomb on the mainMap
+		SetIdle (true);
+		GameObject obj = Instantiate (playerStone, this.transform.position, this.transform.rotation) as GameObject;
+		Ground tomb = obj.GetComponent<Ground> ();
+		tomb.pos = this.pos;
+		Map.Create (tomb);
+
+
 		Map.Destroy (this);
+		Destroy (healthPanel);
 		Destroy (gameObject);
 	}
 
@@ -336,16 +351,14 @@ public class Player : Character {
 					//Debug.Log("Caught");
 					caughtTotem = (Totem)c;
 					caughtTotem.CaughtByPlayer ();
-					mode = CATCH;
+					SetIdle(false);
 					break;
 				}
 			}
 		}
 		else if(mode == CATCH && !inMoveThread && !isMoving) {
 			//Debug.Log("Dismiss");
-			caughtTotem.ReleasedByPlayer();
-			caughtTotem = null;
-			mode = IDLE;
+			SetIdle(true);
 		}
 	}
 	
@@ -398,18 +411,46 @@ public class Player : Character {
 			}
 		}
 	}
-	
-	public void SetIdle(){
-		this.mode = IDLE;
+
+	public void SetIdle(bool isIdle) {
+		if (isIdle) {
+			if(caughtTotem!=null) {
+				caughtTotem.ReleasedByPlayer();
+				caughtTotem = null;
+			}
+			mode = IDLE;
+			speed = idleSpeed;
+			StopSweating();
+		} 
+		else {
+			mode = CATCH;
+			speed = catchSpeed;
+			StartSweating();
+		}
 	}
 	
 	
-	void OnTriggerEnter2D(Collider2D other) {
-		// Destroy everything that leaves the trigger
-		
-		
+	private void StartSweating() {
+		if (dir == Direction.UP) {
+			sweat_back.SetActive (true);
+		} else if (dir == Direction.DOWN) {
+			sweat_front.SetActive(true);
+		}
+		else if (dir == Direction.RIGHT || dir == Direction.DOWN_RIGHT || dir == Direction.UP_RIGHT) {
+			sweat_right.SetActive (true);
+		} else {
+			sweat_left.SetActive(true);
+		}
 	}
-	
+	private void StopSweating() {
+		sweat_left.SetActive (false);
+		sweat_right.SetActive (false);
+		sweat_back.SetActive (false);
+		sweat_front.SetActive (false);
+	}
+
+
+
 	protected IEnumerator MoveThread(Vector3 next) {
 		bool playerCatch = false;
 		if(mode==CATCH) {

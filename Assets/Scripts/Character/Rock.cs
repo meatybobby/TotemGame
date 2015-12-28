@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Rock : Character {
+public class Rock : Ground {
 
 	public Animator anim;
 

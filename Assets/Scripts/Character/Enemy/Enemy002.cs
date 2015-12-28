@@ -38,32 +38,62 @@ public class Enemy002 : Enemy {
 	}
 	
 	void Update() {
+		//Hp GUI
+		HpUpdate ();
 		if (HP <= 0 && !isDead) {
 			SetAnimation(DIE);
 			Die ();
 		}
-		if (HP>0 && !inMoveThread && fire == false) {
-			List<IntVector2> dirVec = new List<IntVector2>();
-			RaycastHit2D hit;
-			dirVec.Add(Direction.LEFT);
-			dirVec.Add(Direction.RIGHT);
-			dirVec.Add(Direction.UP);
-			dirVec.Add(Direction.DOWN);
-			for (int i = 0; i < dirVec.Count; i++) {
-				IntVector2 temp = dirVec[i];
-				int randomIndex = Random.Range(i, dirVec.Count);
-				dirVec[i] = PathFinder.four_dir[randomIndex];
-				dirVec[randomIndex] = temp;
-			}
-			int idx;
-			targetFound = false;
-			//Debug.Log ("Start Raycast!");
-			for(idx=0; idx<dirVec.Count; idx++) {
-				Vector2 tonguePos = new Vector2(tongue.transform.position.x,tongue.transform.position.y);
-				Vector2 hitDir = new Vector2(dirVec[idx].x, dirVec[idx].y);
+		if (HP>0 && !inMoveThread && fire == false && player!=null) {
 
-				//List<Character> charList = Map.MapRayCast(pos, dirVec[idx]);
-				Character attackTarget = Map.MapRayCast(pos, dirVec[idx]);
+			targetFound = false;
+			bool toHitTotem002 = false;
+			IntVector2 targetDir = new IntVector2(0,0);
+
+			// if angy, hit only totem002
+			if(angryNum > 0) { 
+				targetDir = Map.FindTotem002ForEnemy002(pos);
+				if(!(targetDir.x==0 && targetDir.y==0)){
+					toHitTotem002 = true;
+					targetFound = true;
+				}
+
+			}
+
+			Vector2 tonguePos = new Vector2(tongue.transform.position.x,tongue.transform.position.y);
+			if(toHitTotem002) {
+				if(dir!=targetDir) Rotate (targetDir);
+				fire = true;
+				isMoving = false;
+				SetAnimation (ATTACK);
+				attackWait = dir == Direction.DOWN ? 1.3f : 0.8f;
+				RaycastHit2D hit = Physics2D.Raycast(tonguePos, new Vector2(targetDir.x, targetDir.y), fireRange);
+				StartCoroutine( LongAttack (new Vector3(hit.point.x-tongue.transform.position.x,
+				                                        hit.point.y-tongue.transform.position.y,
+				                                        0.0f).normalized));
+			}
+			else {
+				List<IntVector2> dirVec = new List<IntVector2>();
+				RaycastHit2D hit;
+				dirVec.Add(Direction.LEFT);
+				dirVec.Add(Direction.RIGHT);
+				dirVec.Add(Direction.UP);
+				dirVec.Add(Direction.DOWN);
+				for (int i = 0; i < dirVec.Count; i++) {
+					IntVector2 temp = dirVec[i];
+					int randomIndex = Random.Range(i, dirVec.Count);
+					dirVec[i] = PathFinder.four_dir[randomIndex];
+					dirVec[randomIndex] = temp;
+				}
+				int idx;
+				
+				//Debug.Log ("Start Raycast!");
+				for(idx=0; idx<dirVec.Count; idx++) {
+
+					Vector2 hitDir = new Vector2(dirVec[idx].x, dirVec[idx].y);
+					
+					//List<Character> charList = Map.MapRayCast(pos, dirVec[idx]);
+					/*Character attackTarget = Map.MapRayCast(pos, dirVec[idx]);
 				if(attackTarget!=null) {
 					Debug.Log ("target: "+attackTarget.GetType());
 					targetFound = true;
@@ -76,28 +106,32 @@ public class Enemy002 : Enemy {
 
 					/*StartCoroutine( LongAttack (new Vector3(hitPos.x-tongue.transform.position.x,
 					                                        hitPos.y-tongue.transform.position.y,
-					                                        0.0f).normalized));*/
-					break;
-				}
-
-				/*hit = Physics2D.Raycast(tonguePos, hitDir, fireRange);
-				if (hit.collider != null && hit.collider.tag!="Enemy" && Map.isInBounded(pos)) {
-					//Debug.Log(tongue.transform.position+" "+hit.point);
-					//Debug.Log("Target: "+hit.collider.transform.name);
-					Debug.DrawLine(tongue.transform.position,hit.point);
-
-					targetFound = true;
-
-					if(dir!=dirVec[idx]) Rotate (dirVec[idx]);
-					fire = true;
-					isMoving = false;
-					SetAnimation (ATTACK);
-					attackWait = dir == Direction.DOWN ? 1.3f : 0.8f;
-					StartCoroutine( LongAttack (new Vector3(hit.point.x-tongue.transform.position.x,
-					                                        hit.point.y-tongue.transform.position.y,
 					                                        0.0f).normalized));
 					break;
 				}*/
+					
+					hit = Physics2D.Raycast(tonguePos, hitDir, fireRange);
+					if (hit.collider != null 
+					    && (hit.collider.tag=="Player" || hit.collider.tag=="Totem")
+					    && Map.isInBounded(pos)) {
+						//Debug.Log(tongue.transform.position+" "+hit.point);
+						//Debug.Log("Target: "+hit.collider.transform.name);
+						Debug.DrawLine(tongue.transform.position,hit.point);
+						
+						targetFound = true;
+						
+						if(dir!=dirVec[idx]) Rotate (dirVec[idx]);
+						fire = true;
+						isMoving = false;
+						SetAnimation (ATTACK);
+						attackWait = dir == Direction.DOWN ? 1.3f : 0.8f;
+						StartCoroutine( LongAttack (new Vector3(hit.point.x-tongue.transform.position.x,
+						                                        hit.point.y-tongue.transform.position.y,
+						                                        0.0f).normalized));
+						break;
+					}
+				}
+
 			}
 
 			if(!targetFound/*idx == dirVec.Count*/) {
@@ -147,7 +181,9 @@ public class Enemy002 : Enemy {
 		tongue.SetActive(true);
 		//countDown = firePeriod;
 		collideSomething = false;
-		Vector3 initTonguePos = new Vector3 (tongue.transform.position.x,tongue.transform.position.y,tongue.transform.position.z);
+		Vector3 initTonguePos = new Vector3 (tongue.transform.position.x,
+		                                     tongue.transform.position.y,
+		                                     tongue.transform.position.z);
 		Vector3 initTongueBodyScale = new Vector3 (tongueBody.transform.localScale.x, 
 		                                          tongueBody.transform.localScale.y,
 		                                          tongueBody.transform.localScale.z);
@@ -218,9 +254,6 @@ public class Enemy002 : Enemy {
 		tongue.SetActive(false);
 		yield return new WaitForSeconds (attackIntv);
 		fire = false;
-
-
-		//SetAnimation (WALK);
 	}
 	
 	public void Rotate(IntVector2 a){

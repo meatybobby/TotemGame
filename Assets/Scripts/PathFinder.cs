@@ -9,10 +9,10 @@ public class PathFinder : MonoBehaviour{
 	static PathFinder()
 	{
 		four_dir = new List<IntVector2>();
-		four_dir.Add(new IntVector2(-1,0));
-		four_dir.Add(new IntVector2(1,0));
-		four_dir.Add(new IntVector2(0,-1));
-		four_dir.Add(new IntVector2(0,1));
+		four_dir.Add(Direction.LEFT);
+		four_dir.Add(Direction.RIGHT);
+		four_dir.Add(Direction.UP);
+		four_dir.Add(Direction.DOWN);
 	}
 
 	public static int[,] ShortestPath(IntVector2 pos)
