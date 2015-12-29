@@ -24,7 +24,6 @@ public class Enemy : Character {
 	public bool isAttack;
 	public GameObject angry;
 	//public Transform angrySpawn;
-
 	public int angryNum;
 	public GameObject soul;
 	public int manaDrop = 3;

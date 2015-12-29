@@ -121,7 +121,6 @@ public class TotemSummoner : MonoBehaviour
 
 	private void drawMana() {
 		float rate = (float)mana / manaMax;
-		//Debug.Log ("rate " + rate);
 		maskRect.sizeDelta = new Vector2 (originSize.x, originSize.y * rate);
 		maskRect.anchoredPosition = new Vector2 (maskRect.anchoredPosition.x, originPos.y - originSize.y * (1 - rate));
 		if(mana < 10)

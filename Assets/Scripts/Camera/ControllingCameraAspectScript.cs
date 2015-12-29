@@ -10,7 +10,7 @@ public class ControllingCameraAspectScript : MonoBehaviour
 		// set the desired aspect ratio (the values in this example are
 		// hard-coded for 16:9, but you could make them into public
 		// variables instead so you can set them at design time)
-		float targetaspect = 9.0f / 16.0f;
+		float targetaspect = (float)Screen.width / (float)Screen.height;
 		
 		// determine the game window's current aspect ratio
 		float windowaspect = (float)Screen.width / (float)Screen.height;

@@ -53,6 +53,8 @@
      <Compile Include="Assets\Scripts\Camera\CameraUtilities.cs" />
      <Compile Include="Assets\Scripts\Camera\ControllingCameraAspectScript.cs" />
      <Compile Include="Assets\Scripts\Character\Character.cs" />
+     <Compile Include="Assets\Scripts\Character\Enemy\Boss001.cs" />
+     <Compile Include="Assets\Scripts\Character\Enemy\Boss001Attacker.cs" />
      <Compile Include="Assets\Scripts\Character\Enemy\Enemy.cs" />
      <Compile Include="Assets\Scripts\Character\Enemy\Enemy001.cs" />
      <Compile Include="Assets\Scripts\Character\Enemy\Enemy001Anim.cs" />
@@ -85,6 +87,7 @@
      <Compile Include="Assets\Scripts\Generator.cs" />
      <Compile Include="Assets\Scripts\Information.cs" />
      <Compile Include="Assets\Scripts\Joystick.cs" />
+     <Compile Include="Assets\Scripts\LevelController.cs" />
      <Compile Include="Assets\Scripts\Map.cs" />
      <Compile Include="Assets\Scripts\Mover.cs" />
      <Compile Include="Assets\Scripts\PathFinder.cs" />

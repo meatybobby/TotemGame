@@ -104,7 +104,7 @@ public class Enemy002 : Enemy {
 					attackWait = dir == Direction.DOWN ? 1.3f : 0.8f;
 					Vector3 hitPos = Map.GetRealPosition(attackTarget.pos, attackTarget.GetType() );
 
-					StartCoroutine( LongAttack (new Vector3(hitPos.x-tongue.transform.position.x,
+					/*StartCoroutine( LongAttack (new Vector3(hitPos.x-tongue.transform.position.x,
 					                                        hitPos.y-tongue.transform.position.y,
 					                                        0.0f).normalized));
 					break;
@@ -133,8 +133,6 @@ public class Enemy002 : Enemy {
 				}
 
 			}
-
-
 
 			if(!targetFound/*idx == dirVec.Count*/) {
 				if(mapUpdated == true)
@@ -168,7 +166,7 @@ public class Enemy002 : Enemy {
 		collideSomething = true;
 	}
 	
-	protected IEnumerator LongAttack(Vector3 attackDir){
+	protected IEnumerator LongAttack(Vector3 attackDir) {
 		/*if (countDown > 0){
 			yield return new WaitForSeconds (countDown);
 		}*/

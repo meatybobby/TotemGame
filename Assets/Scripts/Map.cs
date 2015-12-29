@@ -30,8 +30,13 @@ public class Map {
 	public static float unitCell = 0.75f;
 	public static Vector3[,] MAP_POS = new Vector3[MAP_WIDTH+2, MAP_HEIGHT+2];
 	private static List<Character>[,] mainMap = new List<Character>[MAP_WIDTH+2, MAP_HEIGHT+2];
+	public static GameObject[,] warningArea = new GameObject[MAP_WIDTH+2, MAP_HEIGHT+2];
 
 	static Map() {
+		Initialize ();
+	}
+
+	public static void Initialize() {
 		for (int i = 0; i < MAP_WIDTH + 2; i++) {
 			for (int j = 0; j < MAP_HEIGHT + 2; j++) {
 				//MAP_POS[i,j].x = (i - (float)(MAP_WIDTH+2) / 2 + 0.5f) * MAP_SIZE_X;
@@ -204,7 +209,7 @@ public class Map {
 	}
 
 	public static Character MapRayCast(IntVector2 origin, IntVector2 dir) {
-
+		
 		int i = origin.x;
 		int j = origin.y;
 		if (dir == Direction.LEFT) {
@@ -232,7 +237,7 @@ public class Map {
 				}
 			}
 		}
-
+		
 		return null;
 	}
 }

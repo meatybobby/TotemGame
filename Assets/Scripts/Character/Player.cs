@@ -23,7 +23,6 @@ public class Player : Character {
 	private float holdTime;
 	private Color temp;
 	public TotemSummoner summoner;
-
 	public float idleSpeed;
 	public float catchSpeed;
 
@@ -360,7 +359,6 @@ public class Player : Character {
 		}
 		else if(mode == CATCH && !inMoveThread && !isMoving) {
 			//Debug.Log("Dismiss");
-
 			SetIdle(true);
 		}
 	}
@@ -414,7 +412,7 @@ public class Player : Character {
 			}
 		}
 	}
-	
+
 	public void SetIdle(bool isIdle) {
 		if (isIdle) {
 			if(caughtTotem!=null) {

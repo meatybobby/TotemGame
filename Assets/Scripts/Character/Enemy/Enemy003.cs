@@ -13,8 +13,6 @@ public class Enemy003 : Enemy {
 	public List<Character> attackTargets = new List<Character>();
 	
 	void Start () {
-
-		
 		//isAttack = false;
 		anim = GetComponent<Enemy003Anim> ();
 		
@@ -29,7 +27,6 @@ public class Enemy003 : Enemy {
 		
 		lower = pos;
 		upper = new IntVector2 (lower.x + 1, lower.y + 1);
-		//offset.x = offset.y = Map.unitCell / 2;
 		//jumpingStep = 100;
 		//SetAnimation (IDLE);
 		Initialize ();

@@ -11,14 +11,17 @@ public class GameController : MonoBehaviour {
 	public int enemyCount = 0;
 	public int enemyNum;*/
 	public float timer;
-	public WaveController wave;
+	private WaveController wave;
 	private WaveInformation next;
+	public GameObject warningPrefab;
+	public GameObject warningPar;
+
 	void Start () {
 		timer = 0;
 		wave = GetComponent<WaveController>();
 		wave.ReadFile("level1");
 		next = wave.Next ();
-	//	Map.Initialize ();
+		initWarning ();
 	}
 
 	void Update () {
@@ -51,7 +54,24 @@ public class GameController : MonoBehaviour {
 
 	public void Reload() {
 		Time.timeScale = 1;
+		Map.Initialize ();
 		Application.LoadLevel (Application.loadedLevelName);
+	}
+
+	private void initWarning() {
+		IntVector2 temp = new IntVector2(0,0);
+		Quaternion charRotation = Quaternion.Euler (0f, 0f, 0f);
+		for (int i = 1; i <= Map.MAP_WIDTH; i++) {
+			for (int j = 1; j <= Map.MAP_HEIGHT; j++) {
+				temp.x = i;
+				temp.y = j;
+				Vector3 pos = Map.GetRealPosition(temp,typeof(Enemy));
+				pos.z = 2;
+				Map.warningArea[i,j] = Instantiate(warningPrefab, pos, charRotation) as GameObject;
+				Map.warningArea[i,j].transform.parent = warningPar.transform;
+				Map.warningArea[i,j].SetActive(false);
+			}
+		}
 	}
 
 	
