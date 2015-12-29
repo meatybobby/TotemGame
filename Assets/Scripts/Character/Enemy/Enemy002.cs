@@ -23,7 +23,6 @@ public class Enemy002 : Enemy {
 	private bool targetFound = false;
 
 	void Start () {
-		Initialize ();
 		attackPriority = new float[] {1,1,1,1,1};
 		defaultPriority = new float[] {1,1,1,1,1};
 		shapeVector = new List<IntVector2> ();
@@ -35,6 +34,7 @@ public class Enemy002 : Enemy {
 		countDown = 0.0f;
 		sprite = tongueBody.GetComponent<SpriteRenderer>();
 		spriteLen = new Vector2 (sprite.bounds.extents.x*13f,sprite.bounds.extents.y);
+		Initialize ();
 	}
 	
 	void Update() {

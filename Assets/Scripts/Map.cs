@@ -30,6 +30,7 @@ public class Map {
 	public static float unitCell = 0.75f;
 	public static Vector3[,] MAP_POS = new Vector3[MAP_WIDTH+2, MAP_HEIGHT+2];
 	private static List<Character>[,] mainMap = new List<Character>[MAP_WIDTH+2, MAP_HEIGHT+2];
+	public static GameObject[,] warningArea = new GameObject[MAP_WIDTH+2, MAP_HEIGHT+2];
 
 	static Map() {
 		Initialize ();
