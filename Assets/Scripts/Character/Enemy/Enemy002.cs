@@ -23,7 +23,6 @@ public class Enemy002 : Enemy {
 	private bool targetFound = false;
 
 	void Start () {
-		Initialize ();
 		attackPriority = new float[] {1,1,1,1,1};
 		defaultPriority = new float[] {1,1,1,1,1};
 		shapeVector = new List<IntVector2> ();
@@ -35,6 +34,7 @@ public class Enemy002 : Enemy {
 		countDown = 0.0f;
 		sprite = tongueBody.GetComponent<SpriteRenderer>();
 		spriteLen = new Vector2 (sprite.bounds.extents.x*13f,sprite.bounds.extents.y);
+		Initialize ();
 	}
 	
 	void Update() {
@@ -189,6 +189,9 @@ public class Enemy002 : Enemy {
 		Vector3 initTongueBodyScale = new Vector3 (tongueBody.transform.localScale.x, 
 		                                          tongueBody.transform.localScale.y,
 		                                          tongueBody.transform.localScale.z);
+		Vector3 initTongueBodyPos = new Vector3 (tongueBody.transform.position.x, 
+		                                        tongueBody.transform.position.y, 
+		                                        tongueBody.transform.position.z);
 		//Debug.Log(attackDir +" "+ fireSpeed +" "+ Time.deltaTime);
 		//Vector3 attackVec = attackDir * fireSpeed * Time.deltaTime;
 		//Debug.Log("attackVec( "+attackVec.x+", "+attackVec.y+")");
@@ -250,8 +253,10 @@ public class Enemy002 : Enemy {
 			}
 			yield return null;
 		}
+		tongueBody.transform.position = initTongueBodyPos;
 		tongue.transform.position = initTonguePos;
 		tongueBody.transform.localScale = initTongueBodyScale;
+
 		SetAnimation (IDLE);
 		tongue.SetActive(false);
 		yield return new WaitForSeconds (attackIntv);

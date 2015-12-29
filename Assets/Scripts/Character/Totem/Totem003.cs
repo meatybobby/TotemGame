@@ -15,6 +15,7 @@ public class Totem003 : Totem {
 	void Update(){
 		//Hp GUI
 		HpUpdate ();
+		ResetRangePosition();
 		if(HP<=0 && !isDead) {
 			Die ();
 		}

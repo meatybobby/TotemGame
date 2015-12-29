@@ -290,7 +290,8 @@ public class Player : Character {
 
 		Map.Destroy (this);
 		Destroy (healthPanel);
-		Destroy (gameObject);
+		Destroy(this);
+		Destroy (gameObject, 0.8f);
 	}
 
 	public void MoveByVector(IntVector2 offset) {
@@ -476,6 +477,15 @@ public class Player : Character {
 		if (playerCatch) {
 			caughtTotem.inMoveThread = false;
 		}
+	}
+
+	public void CauseDamage(int harm){
+		base.CauseDamage(harm);
+		Debug.Log ("player bing attack!");
+		ShakeCam();
+	}
+	private void ShakeCam() {
+		Camera.main.GetComponent<EZCameraShake.CameraShaker> ().ShakeOnce (0.5f, 5.0f, 0.5f, 0.5f);
 	}
 	
 	

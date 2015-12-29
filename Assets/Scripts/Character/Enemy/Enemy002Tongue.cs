@@ -22,7 +22,12 @@ public class Enemy002Tongue : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D other) {
 		if (other.tag == "Player" || other.tag=="Totem" || other.tag=="Rock") {
 			enemy002.setCollideSomethingTrue();
-			other.GetComponent<Character> ().CauseDamage (enemy002.damage);
+			if(other.tag=="Player") {
+				other.GetComponent<Player>().CauseDamage(enemy002.damage);
+			}
+			else {
+				other.GetComponent<Character> ().CauseDamage (enemy002.damage);
+			}
 		}
 	}
 	void OnTriggerExit2D(Collider2D other) {

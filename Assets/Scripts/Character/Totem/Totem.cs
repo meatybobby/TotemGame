@@ -12,6 +12,8 @@ public class Totem : Character {
 	public Player playerRef;
 	public GameObject steam;
 
+	public GameObject range;
+
 	public void Initialize() {
 		isDead = false;
 		SummonSteam ();
@@ -22,6 +24,7 @@ public class Totem : Character {
 	public void Die() {
 		isDead = true;
 		Destroy (healthPanel);
+		if(range) Destroy (range);
 		Destroy (this);
 		Map.Destroy(this);
 		SetCatchLight (false);
@@ -42,6 +45,13 @@ public class Totem : Character {
 		isCaught = false;
 		transform.parent = null;
 		SetCatchLight (false);
+	}
+
+	// for the z pos of totem002, 003, 004, which should always be at bottom-most
+	protected void ResetRangePosition() {
+		Vector3 rangePos =  transform.FindChild("range").transform.position;
+		transform.FindChild("range").transform.position = 
+			new Vector3(rangePos.x, rangePos.y, 30f);
 	}
 
 	private void SummonSteam() {

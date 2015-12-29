@@ -7,33 +7,34 @@ public class Enemy003 : Enemy {
 	public float moveWait;
 	//private List<IntVector2> dir;
 	//private int jumpingStep;
-
+	
 	private Enemy003Anim anim;
 	public GameObject energyWave;
 	public List<Character> attackTargets = new List<Character>();
 	
 	void Start () {
-		Initialize ();
 
+		
 		//isAttack = false;
 		anim = GetComponent<Enemy003Anim> ();
-
+		
 		attackPriority = new float[] {1,1,1,1,1};
 		defaultPriority = new float[] {1,1,1,1,1};
-
+		
 		shapeVector = new List<IntVector2> ();
 		shapeVector.Add (new IntVector2(0,0));
 		shapeVector.Add (new IntVector2(0,1));
 		shapeVector.Add (new IntVector2(1,0));
 		shapeVector.Add (new IntVector2(1,1));
-
+		
 		lower = pos;
 		upper = new IntVector2 (lower.x + 1, lower.y + 1);
 		//offset.x = offset.y = Map.unitCell / 2;
 		//jumpingStep = 100;
 		//SetAnimation (IDLE);
+		Initialize ();
 	}
-
+	
 	// Update is called once per frame
 	void Update () {
 		//Hp GUI
@@ -72,7 +73,7 @@ public class Enemy003 : Enemy {
 				MoveByVector(guide[pace]);
 				pace++;
 				//SetAnimation(WALK);
-
+				
 			} else if (pace == disMap [targetPos.x, targetPos.y]) {
 				/*if(Map.IsEmpty(targetPos) || Map.Seek(targetPos)[0] is Enemy) {
 					FindDirection(player.pos);
@@ -88,8 +89,8 @@ public class Enemy003 : Enemy {
 					SetAnimation(ATTACK);
 					StartCoroutine (JumpAttack());
 				}
-
-
+				
+				
 				/*if(!isAttack) {
 					Rotate (guide [pace]);
 					isAttack = true;
@@ -160,13 +161,13 @@ public class Enemy003 : Enemy {
 			MoveByVector(new IntVector2(2*dir[r].x,2*dir[r].y));
 		}
 	}*/
-
+	
 	public IEnumerator JumpAttack() {
 		yield return new WaitForSeconds(attackIntv);
 		if (isDead)
 			yield break;
 		foreach (Character c in attackTargets) {
-			if (c != null && (c.gameObject.tag=="Player" || c.gameObject.tag=="Totem") )
+			if (c != null )
 				c.CauseDamage (damage);
 		}
 		ShakeTheGround ();
@@ -185,7 +186,7 @@ public class Enemy003 : Enemy {
 			anim.playAnim (dir, mode);
 		}
 	}
-
+	
 	public void FindDirection(IntVector2 playerPos) {
 		disMap = PathFinder.ShortestPath(lower,upper);
 		IntVector2 tempPos = playerPos;
@@ -239,9 +240,9 @@ public class Enemy003 : Enemy {
 		Vector3 next = Map.GetRealPosition(newPos, this.GetType(), this.offset);
 		StartCoroutine(MoveThread (next));
 	}
-
+	
 	private void ShakeTheGround() {
-		Camera.main.GetComponent<EZCameraShake.CameraShaker> ().ShakeOnce (0.5f, 5.0f, 0.2f, 2.0f);
+		Camera.main.GetComponent<EZCameraShake.CameraShaker> ().ShakeOnce (1.5f, 7.0f, 0.5f, 2.0f);
 	}
 	
 }

@@ -18,10 +18,13 @@ public class Totem002 : Totem {
 	void Update() {
 		//Hp GUI
 		HpUpdate ();
+		ResetRangePosition();
 		if(HP<=0 && !isDead) {
 			//Debug.Log ("totem2 ready to die!");
 			Die ();
 		}
+
+
 	}
 	public void Die() {
 		anim.SetTrigger("isDie");

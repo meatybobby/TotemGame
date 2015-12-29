@@ -164,11 +164,11 @@ public class Character : MonoBehaviour {
 				SpriteRenderer[] sps;
 				sps = GetComponentsInChildren<SpriteRenderer>() as SpriteRenderer[];
 				foreach(SpriteRenderer sp in sps){
-					if(sp!=null) sp.color = new Color (1f, 0.7f, 0.7f);
+					if(sp!=null && sp.gameObject.tag!="Range") sp.color = new Color (1f, 0.7f, 0.7f);
 				}
 				yield return new WaitForSeconds(0.2f);
 				foreach(SpriteRenderer sp in sps){
-					if(sp!=null) sp.color = new Color (1f, 1f, 1f);
+					if(sp!=null && sp.gameObject.tag!="Range") sp.color = new Color (1f, 1f, 1f);
 				}
 				yield return new WaitForSeconds(0.2f);
 			}

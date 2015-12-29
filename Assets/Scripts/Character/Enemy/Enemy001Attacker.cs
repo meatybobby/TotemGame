@@ -21,8 +21,14 @@ public class Enemy001Attacker : MonoBehaviour {
 		// Destroy everything that leaves the trigger
 		if (other.tag == "Player" || other.tag=="Totem" || other.tag=="Rock") {
 			Destroy (this.gameObject);
-			Character target = other.GetComponent<Character> ();
-			target.CauseDamage(enemy001.damage);
+			//Character target = other.GetComponent<Character> ();
+			//target.CauseDamage(enemy001.damage);
+			if(other.tag=="Player") {
+				other.GetComponent<Player>().CauseDamage(enemy001.damage);
+			}
+			else {
+				other.GetComponent<Character>().CauseDamage(enemy001.damage);
+			}
 			/*if(other.tag=="Player") {
 				Player p = other.GetComponent<Player>();
 				p.CauseDamage(enemy001.damage);
