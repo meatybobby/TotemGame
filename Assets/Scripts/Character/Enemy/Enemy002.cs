@@ -166,7 +166,7 @@ public class Enemy002 : Enemy {
 		collideSomething = true;
 	}
 	
-	protected IEnumerator LongAttack(Vector3 attackDir){
+	protected IEnumerator LongAttack(Vector3 attackDir) {
 		/*if (countDown > 0){
 			yield return new WaitForSeconds (countDown);
 		}*/
@@ -187,6 +187,9 @@ public class Enemy002 : Enemy {
 		Vector3 initTongueBodyScale = new Vector3 (tongueBody.transform.localScale.x, 
 		                                          tongueBody.transform.localScale.y,
 		                                          tongueBody.transform.localScale.z);
+		Vector3 initTongueBodyPos = new Vector3 (tongueBody.transform.position.x,
+		                                         tongueBody.transform.position.y,
+		                                         tongueBody.transform.position.z);
 		//Debug.Log(attackDir +" "+ fireSpeed +" "+ Time.deltaTime);
 		//Vector3 attackVec = attackDir * fireSpeed * Time.deltaTime;
 		//Debug.Log("attackVec( "+attackVec.x+", "+attackVec.y+")");
@@ -250,6 +253,7 @@ public class Enemy002 : Enemy {
 		}
 		tongue.transform.position = initTonguePos;
 		tongueBody.transform.localScale = initTongueBodyScale;
+		tongueBody.transform.position = initTongueBodyPos;
 		SetAnimation (IDLE);
 		tongue.SetActive(false);
 		yield return new WaitForSeconds (attackIntv);
