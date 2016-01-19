@@ -22,7 +22,7 @@ public class TotemBullet : MonoBehaviour {
 		    (other.tag == "Totem" && other.GetComponent<Totem001> () != shooter) ) {
 			// Can't be destroyed by the collider of the totem who shot the bullet
 			if (other.tag=="Enemy" || other.tag=="Rock") {
-				Character c = other.GetComponent<Character> ();
+				Character c = other.GetComponentInParent<Character> ();
 				if(c!=null)
 					c.CauseDamage (shooter.damage);
 			}
