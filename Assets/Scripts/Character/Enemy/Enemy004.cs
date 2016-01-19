@@ -1,101 +1,53 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-// the 1x1 enemy which can jump.
 public class Enemy004 : Enemy {
-	
-	private bool isAttack;
-	public float moveIntv;
-	public float moveCnt;
+	public GameObject attackTail;
+	public float timer;
+	private int attackRow;
+	public int waitTime;
+	public float warningTime;
+	private Animator anim;
 
 	void Start () {
-		Debug.Log ("enemy004 start!");
-		player = GameObject.FindWithTag ("Player").GetComponent<Player> ();
-
-		disMap = new int[Map.MAP_WIDTH + 2, Map.MAP_HEIGHT + 2];
-		mapUpdated = true;
-		isAttack = false;
-		pace = 0;
-		moveCnt = 0f;
+		timer = 0;
 		shapeVector = new List<IntVector2> ();
-		shapeVector.Add (new IntVector2(0,0));
-		attackPriority = new float[] {1,1,1};
-		Map.Create(this);
-		Rotate(dir);
+		Vector3 orgin = transform.position;
+		transform.position = new Vector3(orgin.x + offset.x, orgin.y + offset.y, orgin.z);
+		anim = attackTail.GetComponent<Animator> ();
+		Initialize ();
 	}
-
+	
+	
 	void Update () {
-		//Hp GUI
-		HpUpdate ();
-		if (HP>0 && !inMoveThread) {
-			if(mapUpdated == true)
-			{
-				FindDirection(player.pos);
-			}			
-			//Debug.Log(pace + "," + disMap[targetPos.x, targetPos.y] + "/" + guide[pace].x + "," + guide[pace].y);
-			
-			if (pace < disMap [targetPos.x, targetPos.y] - 1) {
-				if(moveCnt < moveIntv) {
-					moveCnt += Time.deltaTime;
-					if(moveCnt == 0f) SetAnimation(IDLE);
-				}
-				else {
-					moveCnt = 0f;
-					if (guide [pace] != dir) {
-						Rotate (guide [pace]);
-					}
-					MoveByVector (guide [pace]);
-					pace++;
-				}
-
-			} else if (pace == disMap [targetPos.x, targetPos.y] - 1) {
-				/*if(Map.IsEmpty(targetPos) || Map.Seek(targetPos)[0] is Enemy) {
-					FindDirection(player.pos);
-				}
-				else */if(!isAttack) {
-					Rotate (guide [pace]);
-					isAttack = true;
-					SetAnimation(ATTACK);
-					//StartCoroutine (BasicAttack ());
-				}
-			}
+		timer += Time.deltaTime;
+		if (timer > waitTime) {
+			waitTime = -1;
 		}
-	}
-	/*protected IEnumerator BasicAttack(){
-		GameObject obj = Instantiate(hand, attackSpawn.position, attackSpawn.rotation) as GameObject;
-		yield return new WaitForSeconds(attackIntv);
-		Destroy(obj);
-		isAttack = false;
-	}*/
-	
-	public void Rotate(IntVector2 a){
-		dir = a;
-		int angle;
-		angle = a.x==0? (90*a.y):(90 - 90*a.x + 45*a.x*a.y);
-		
-		//attackSpawn.rotation = Quaternion.Euler (0.0f, 0.0f, (float)angle+90.0f);
-		
-		SetAnimation (WALK);
-	}
-	
-	public void SetAnimation(int mode) {
-		// this will cause error because before start()
-		/*if (anim != null) {
-			anim.playAnim (dir, mode);
-		}*/
-	}
-	
-	void OnTriggerEnter2D(Collider2D other) {
-		// Destroy everything that leaves the trigger
-		if (other.tag == "bullet") {
-			HP--;
-			if(HP==0) {
-				SetAnimation(DIE);
-				Destroy (GetComponent<CircleCollider2D>());
-				Destroy(gameObject, 1f);
-				Map.Destroy(this);
-			}
+		if (timer >= attackIntv && timer >= waitTime) {
+			timer = 0;
+			attackRow = Random.Range(-2, 2) + player.pos.x;
+			if(attackRow < 1) attackRow = 1;
+			else if(attackRow > Map.MAP_WIDTH) attackRow = Map.MAP_WIDTH;
+			warning();
 		}
 	}
 
+	void warning() {
+		for (int i = 1; i<=Map.MAP_HEIGHT; i++) {
+			Map.warningArea[attackRow,i].SetActive(true);
+		}
+		Invoke ("attack", warningTime);
+	}
+
+	void attack() {
+		for (int i = 1; i<= Map.MAP_HEIGHT; i++) {
+			Map.warningArea[attackRow,i].SetActive(false);
+		}
+		Vector3 realpos = Map.GetRealPosition (new IntVector2(attackRow,0), typeof(Enemy));
+		Vector3 originPos = attackTail.transform.position;
+		attackTail.transform.position = new Vector3 (realpos.x, originPos.y, originPos.z);
+		anim.SetTrigger("attack");
+	}
+	
 }
