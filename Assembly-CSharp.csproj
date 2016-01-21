@@ -68,6 +68,7 @@
      <Compile Include="Assets\Scripts\Character\Enemy\Enemy004.cs" />
      <Compile Include="Assets\Scripts\Character\Enemy\Enemy004Attacker.cs" />
      <Compile Include="Assets\Scripts\Character\Enemy\Enemy004Bullet.cs" />
+     <Compile Include="Assets\Scripts\Character\Enemy\Enemy010.cs" />
      <Compile Include="Assets\Scripts\Character\Ground.cs" />
      <Compile Include="Assets\Scripts\Character\JumpEnemy.cs" />
      <Compile Include="Assets\Scripts\Character\Player.cs" />
