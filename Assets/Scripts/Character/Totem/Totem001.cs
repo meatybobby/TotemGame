@@ -9,10 +9,13 @@ public class Totem001 : Totem {
 	public float bulletSpeed;
 	public float shotIntv;
 	public Totem001Anim anim;
-	
+
+	public AudioSource audio;
+	public AudioClip shootSound;
 
 	void Start () {
 		anim = GetComponent<Totem001Anim> ();
+		audio = GetComponent<AudioSource>();
 		//anim.playAnim (dir, SUMMON);
 		Initialize();
 		StartCoroutine (Shooting ());
@@ -29,6 +32,7 @@ public class Totem001 : Totem {
 
 	public void Die(){
 		anim.playAnim (dir, DIE);
+
 		//Destroy (GetComponent<BoxCollider2D>());
 		base.Die ();
 	}
@@ -47,6 +51,7 @@ public class Totem001 : Totem {
 				shotSpawn.position = new Vector3(shotSpawn.position.x, shotSpawn.position.y, transform.position.z+1);
 			}
 			anim.playAnim (dir, FIRE);
+			audio.PlayOneShot(shootSound, 0.2f);
 			GameObject bullet = Instantiate(shot, shotSpawn.position, shotSpawn.rotation) as GameObject;
 			bullet.GetComponent<TotemBullet>().shooter = this;
 			yield return new WaitForSeconds(shotIntv);

@@ -17,7 +17,7 @@ public class Enemy003AttackArea : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D other) {
 		//Debug.Log ("something detected");
 		if (other.tag == "Player" || other.tag == "Totem" || other.tag=="Rock") {
-			Debug.Log ("new target detected");
+			//Debug.Log ("new target detected");
 
 			host.attackTargets.Add(other.GetComponent<Character>());
 		}

@@ -32,10 +32,12 @@ public class Totem003AttackArea : MonoBehaviour {
 	}
 	protected IEnumerator CreateWave() {
 		yield return new WaitForSeconds (attackWait);
+
 		GameObject wave = Instantiate(waveEffect,new Vector3(transform.position.x,transform.position.y+0.12f,transform.position.z-2f),transform.rotation) as GameObject;
 		foreach (GameObject enemy in enemyList) {
-			if (enemy.GetComponent<Character> () != null)
-				enemy.GetComponent<Character> ().CauseDamage (totem.damage);
+			Character c = enemy.GetComponentInParent<Character>();
+			if (c != null)
+				c.CauseDamage (totem.damage);
 		}
 		Destroy (wave, 0.8f);
 		yield return new WaitForSeconds (attackIntv);

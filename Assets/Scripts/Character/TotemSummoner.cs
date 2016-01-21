@@ -62,10 +62,10 @@ public class TotemSummoner : MonoBehaviour
 		}
 	}
 
-	public void Summon(int totemId, IntVector2 pos, IntVector2 dir) {
+	public bool Summon(int totemId, IntVector2 pos, IntVector2 dir) {
 		//Debug.Log (cost.Length);
 		if (cost[totemId] > mana || totemNum == maxTotemNum)
-			return;
+			return false;
 		if (Map.isInBounded(pos) && Map.IsEmpty (pos)) {
 			Vector3 totemRealPos = Map.GetRealPosition(pos, typeof(Totem));
 			GameObject totemObj;
@@ -110,7 +110,10 @@ public class TotemSummoner : MonoBehaviour
 
 			totemNum++;
 			mana -= cost[totemId];
+
+			return true;
 		}
+		return false;
 	}
 
 	public void addMana(int add) {

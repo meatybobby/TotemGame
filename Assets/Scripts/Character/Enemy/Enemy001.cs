@@ -9,9 +9,8 @@ public class Enemy001 : Enemy {
 
 	private Transform attackSpawn;
 	private Enemy001Anim anim;
-
-
 	
+
 	void Start () {
 		attackPriority = new float[] {1,1,1,1,1};
 		defaultPriority = new float[] {1,1,1,1,1};
@@ -39,8 +38,8 @@ public class Enemy001 : Enemy {
 			//Debug.Log(pace + "," + disMap[targetPos.x,targetPos.y]);
 			//Debug.Log(pace + "," + disMap[targetPos.x, targetPos.y] + "/" + guide[pace].x + "," + guide[pace].y);
 			
-			if (pace < disMap [targetPos.x, targetPos.y] - 2
-			    || (pace == disMap [targetPos.x, targetPos.y]-2 && guide[pace]!=guide[pace+1])) {
+			if (!isAttack &&
+			    (pace < disMap [targetPos.x, targetPos.y] - 2 || (pace == disMap [targetPos.x, targetPos.y]-2 && guide[pace]!=guide[pace+1]) ) ) {
 				//Debug.Log("move like jagger");
 				// Debug.Log("->"+guide[pace].x+" "+ guide[pace].y);
 				if (guide [pace] != dir) {
@@ -96,11 +95,16 @@ public class Enemy001 : Enemy {
 
 
 	protected IEnumerator BasicAttack() {
+		Invoke("PlayAttackSound", 0.2f);
 		GameObject obj = Instantiate(hand, attackSpawn.position, attackSpawn.rotation) as GameObject;
 		obj.GetComponent<Enemy001Attacker> ().enemy001 = this;
 		yield return new WaitForSeconds(attackIntv);
 		Destroy(obj);
 		isAttack = false;
+	}
+
+	private void PlayAttackSound() {
+		GetComponent<AudioSource>().PlayOneShot(attackSound, 0.3f);
 	}
 
 	public void Rotate(IntVector2 a){

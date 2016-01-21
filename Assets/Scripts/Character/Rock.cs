@@ -4,6 +4,7 @@ using System.Collections;
 public class Rock : Ground {
 
 	public Animator anim;
+	public AudioClip stoneBreakSound;
 
 	void Start () {
 		anim = GetComponent<Animator>();
@@ -19,10 +20,11 @@ public class Rock : Ground {
 
 	private void Die() {
 		isDead = true;
+		GetComponent<AudioSource>().PlayOneShot(stoneBreakSound, 0.7f);
 		anim.Play("rock_die");
 		Map.Destroy (this);
 		Destroy (GetComponent<Collider2D> ());
 		Destroy (this);
-		Destroy (gameObject, 1.5f);
+		Destroy (gameObject, 2f);
 	}
 }

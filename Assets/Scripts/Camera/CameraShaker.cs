@@ -10,9 +10,12 @@ namespace EZCameraShake
         /// The single instance of the CameraShake in the current scene. Do not use if you have multiple instances.
         /// </summary>
         public static CameraShaker Instance;
-        static Dictionary<string, CameraShaker> instanceList = new Dictionary<string, CameraShaker>();
+		//static Dictionary<string, CameraShaker> instanceList;// = new Dictionary<string, CameraShaker>();
+		public Dictionary<string, CameraShaker> instanceList;// = new Dictionary<string, CameraShaker>();
+        // changed to non-static for reloading the scene
 
-        /// <summary>
+
+		/// <summary>
         /// The default position influcence of all shakes created by this shaker.
         /// </summary>
         public Vector3 DefaultPosInfluence = new Vector3(0.15f, 0.15f, 0.15f);
@@ -27,9 +30,18 @@ namespace EZCameraShake
 
         void Awake()
         {
-            Instance = this;
-            instanceList.Add(gameObject.name, this);
+			instanceList = new Dictionary<string, CameraShaker>();
+			Instance = this;
+			instanceList.Add(gameObject.name, this);
+			//Initialize(this);
         }
+
+		// Douglas added
+		/*public static void Initialize(CameraShaker cs) {
+			instanceList = new Dictionary<string, CameraShaker>();
+
+
+		}*/
 
         void Update()
         {
@@ -61,12 +73,15 @@ namespace EZCameraShake
 
         }
 
+
+
+
         /// <summary>
         /// Gets the CameraShaker with the given name, if it exists.
         /// </summary>
         /// <param name="name">The name of the camera shaker instance.</param>
         /// <returns></returns>
-        public static CameraShaker GetInstance(string name)
+        public CameraShaker GetInstance(string name) // static originally
         {
             CameraShaker c;
 

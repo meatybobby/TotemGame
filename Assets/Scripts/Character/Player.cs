@@ -10,7 +10,7 @@ public class Player : Character {
 	public const int CATCH = 1;
 	public int mode;
 	public float opacity = 0.2f;
-
+	
 	//public Transform totemSpawn;
 	public float holdTimePara = 0.5f;
 	public float joyStickSensitivity = 0.5f;
@@ -25,11 +25,13 @@ public class Player : Character {
 	public TotemSummoner summoner;
 	public float idleSpeed;
 	public float catchSpeed;
-
+	
 	public GameObject sweat_left, sweat_right, sweat_back, sweat_front;
 	public GameObject playerStone;
 	public GameObject catchIcon;
-
+	
+	public AudioClip placeTotemSound, catchTotemSound;
+	
 	
 	void Start () {
 		mode = IDLE;
@@ -52,21 +54,29 @@ public class Player : Character {
 	void Update () {
 		//Hp GUI
 		HpUpdate ();
-
-		//float moveH = Input.GetAxis ("Horizontal"); //PC
-		float moveH = CrossPlatformInputManager.GetAxis("Horizontal");
-		//float moveV = Input.GetAxis ("Vertical"); //PC
-		float moveV = CrossPlatformInputManager.GetAxis("Vertical");
 		
-		float length = Mathf.Sqrt (moveH * moveH + moveV * moveV);
-		float angle = Mathf.Atan2 (moveV, moveH);
+		//float moveH = Input.GetAxis ("Horizontal"); //PC
+		float moveH_left = CrossPlatformInputManager.GetAxis("Horizontal_Left");
+		//float moveV = Input.GetAxis ("Vertical"); //PC
+		float moveV_left = CrossPlatformInputManager.GetAxis("Vertical_Left");
+		
+		float length_left = Mathf.Sqrt (moveH_left * moveH_left + moveV_left * moveV_left);
+		float angle_left = Mathf.Atan2 (moveV_left, moveH_left);
+		
+		float moveH_right = CrossPlatformInputManager.GetAxis("Horizontal_Right");
+		float moveV_right = CrossPlatformInputManager.GetAxis("Vertical_Right");
+		float length_right = Mathf.Sqrt (moveH_right * moveH_right + moveV_right * moveV_right);
+		float angle_right = Mathf.Atan2 (moveV_right, moveH_right);
 		//print ("len:"+length+" angle:"+angle*Mathf.Rad2Deg);
 		//print (moveH + ", " + moveV + " angle: " + angle);
 		
 		if (!inMoveThread) {
 			IntVector2 movement = new IntVector2(1,0);
-			if(length > 0.0f) {
+			if((length_left > 0.0f && length_right == 0.0f ) || (length_right > 0.0f && length_left == 0.0f)) {
 				float offset = Mathf.PI/20;
+				float angle =    length_left > 0f ? angle_left : angle_right;
+				float length =   length_left > 0f ? length_left : length_right;
+				
 				if( Mathf.Abs (angle) <= Mathf.PI/8+offset) {
 					movement = Direction.RIGHT;
 				}
@@ -212,7 +222,7 @@ public class Player : Character {
 		else if(!joyStick.axisPressState) {
 			holdTime = 0f;
 		}*/
-
+		
 		//Catch Icon opacity
 		if(mode == IDLE)
 			temp.a = opacity;
@@ -273,26 +283,27 @@ public class Player : Character {
 		if (HP <= 0) {
 			Debug.Log ("The Player is fukcing dead!");
 			Die();
-
+			
 		}
 	}
-
+	
 	private void Die(){
 		//Debug.Log (transform.position);
 		// Create the player's tomb on the mainMap
+		isDead = true;
 		SetIdle (true);
 		GameObject obj = Instantiate (playerStone, this.transform.position, this.transform.rotation) as GameObject;
 		Ground tomb = obj.GetComponent<Ground> ();
 		tomb.pos = this.pos;
 		Map.Create (tomb);
-
-
+		
+		
 		Map.Destroy (this);
 		Destroy (healthPanel);
 		Destroy(this);
 		Destroy (gameObject, 0.8f);
 	}
-
+	
 	public void MoveByVector(IntVector2 offset) {
 		IntVector2 newPos = Map.BoundPos(pos+offset);
 		if (mode == CATCH) {
@@ -333,12 +344,15 @@ public class Player : Character {
 		
 	}
 	
+	
 	public void Summon(int totemType)
 	{
 		// Plant a totem when pressing left ctrl and not moving and not slant
 		if (/*Input.GetKeyDown (KeyCode.LeftControl) &&*/ !inMoveThread &&
 		    (Mathf.Abs (dir.x + dir.y) == 1)) {
-			summoner.Summon (totemType, pos + dir, dir);
+			if(summoner.Summon (totemType, pos + dir, dir)) {
+				PlaceTotemSound();
+			}
 		}
 	}
 	
@@ -412,21 +426,26 @@ public class Player : Character {
 			}
 		}
 	}
-
+	
 	public void SetIdle(bool isIdle) {
 		if (isIdle) {
 			if(caughtTotem!=null) {
 				caughtTotem.ReleasedByPlayer();
+				PlaceTotemSound();
 				caughtTotem = null;
 			}
 			mode = IDLE;
 			speed = idleSpeed;
 			StopSweating();
+			
+			CatchTotemSoundLoop(false);
+
 		} 
 		else {
 			mode = CATCH;
 			speed = catchSpeed;
 			StartSweating();
+			CatchTotemSoundLoop(true);
 		}
 	}
 	
@@ -449,9 +468,25 @@ public class Player : Character {
 		sweat_back.SetActive (false);
 		sweat_front.SetActive (false);
 	}
-
-
-
+	
+	private void PlaceTotemSound() {
+		GetComponent<AudioSource>().PlayOneShot (placeTotemSound ,  0.5F);
+	}
+	
+	private void CatchTotemSoundLoop(bool start) {
+		if(start) {
+			GetComponent<AudioSource>().loop = true;
+			GetComponent<AudioSource>().clip = catchTotemSound;
+			GetComponent<AudioSource>().volume = 1F;
+			GetComponent<AudioSource>().Play();
+		}
+		else {
+			GetComponent<AudioSource>().Stop();
+			GetComponent<AudioSource>().loop = false;
+		}
+	}
+	
+	
 	protected IEnumerator MoveThread(Vector3 next) {
 		bool playerCatch = false;
 		if(mode==CATCH) {
@@ -476,7 +511,7 @@ public class Player : Character {
 			caughtTotem.inMoveThread = false;
 		}
 	}
-
+	
 	public void CauseDamage(int harm){
 		base.CauseDamage(harm);
 		Debug.Log ("player bing attack!");
@@ -485,7 +520,5 @@ public class Player : Character {
 	private void ShakeCam() {
 		Camera.main.GetComponent<EZCameraShake.CameraShaker> ().ShakeOnce (0.5f, 5.0f, 0.5f, 0.5f);
 	}
-	
-	
 	
 }

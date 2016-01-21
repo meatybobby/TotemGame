@@ -14,6 +14,8 @@ public class Totem : Character {
 
 	public GameObject range;
 
+	public AudioClip dieSound;
+
 	public void Initialize() {
 		isDead = false;
 		SummonSteam ();
@@ -24,6 +26,7 @@ public class Totem : Character {
 	public void Die() {
 		isDead = true;
 		Destroy (healthPanel);
+		PlayDieSound();
 		if(range) Destroy (range);
 		Destroy (this);
 		Map.Destroy(this);
@@ -33,6 +36,10 @@ public class Totem : Character {
 		if(isCaught) {
 			playerRef.SetIdle(true);
 		}
+	}
+
+	private void PlayDieSound() {
+		GetComponent<AudioSource>().PlayOneShot (dieSound ,  0.3F);
 	}
 
 	public void CaughtByPlayer() {

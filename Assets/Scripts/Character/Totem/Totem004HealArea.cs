@@ -10,6 +10,8 @@ public class Totem004HealArea : MonoBehaviour {
 	public Totem004 totem;
 	private bool healFlag;
 
+	public AudioClip healSound;
+
 	// Use this for initialization
 	void Start () {
 		totem = GetComponentInParent<Totem004> ();
@@ -34,6 +36,7 @@ public class Totem004HealArea : MonoBehaviour {
 	
 	protected IEnumerator Heal() {
 		totem.anim.Play ("totem004_heal");
+		GetComponent<AudioSource>().PlayOneShot(healSound, 0.5f);
 		foreach (GameObject friend in friendList) {
 			if (friend.GetComponent<Character> () != null)
 				friend.GetComponent<Character> ().HealHP (totem.healPoint);

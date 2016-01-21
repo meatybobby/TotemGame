@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using Soomla.Levelup;
+namespace UnityStandardAssets.CrossPlatformInput
+{
 public class GameController : MonoBehaviour {
 
 	/*public GameObject monster1;
@@ -15,15 +17,54 @@ public class GameController : MonoBehaviour {
 	private WaveInformation next;
 	public GameObject warningPrefab;
 	public GameObject warningPar;
+	public Joystick joystick1;
+	public Joystick joystick2;
+	public GameObject playerObject;
+	private Player player;	
+	
+	public Transform canvasTranform;
+	public GameObject gameOverPrefab, gameClearPrefab, gameStartPrefab;
+	private GameObject gameOver, gameClear, gameStart;
+	private const int GAME_START=0, GAME_CLEAR=1, GAME_OVER=2;
+	
+	Level level;
+	public bool end = false;
+	
+	public static bool bossDead = false;
+		
+	public string levelId;
+	
+	
+
 
 	void Start () {
+		//Time.timeScale = 1;
+		Map.Initialize ();
 		timer = 0;
+		
+		PlayTextMessage(GAME_START);
+		
+		
+		//levelId = "level" + ApplicationModel.levelNum;
+		//level = new Level(levelId);
+		level = ApplicationModel.GetCurrentLevel();
+		
+		
 		wave = GetComponent<WaveController>();
-		wave.ReadFile("level1");
+		wave.ReadFile(level.ID);
 		next = wave.Next ();
 		initWarning ();
-	}
+		joystick1.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width/2,Screen.height);
+		joystick2.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width/2,Screen.height);
+		player = playerObject.GetComponent<Player>();
+		
+		
+		level.Start();
+		Debug.Log( "This level has been started "+level.GetTimesStarted()+" times.");
+		Debug.Log( "This level has been played "+level.GetTimesPlayed()+" times.");
 
+	}
+	
 	void Update () {
 		timer += Time.deltaTime;
 		if (next != null) {
@@ -47,17 +88,51 @@ public class GameController : MonoBehaviour {
 				c = ((GameObject)Instantiate (next.monster, charPosition, charRotation)).GetComponent<Character> ();
 				c.pos = next.bornPos;
 				Map.Create (c);
+				Debug.Log ("No enmey in Map? "+Map.NoEnemy());
 				next = wave.Next ();
 			}
 		}
+		if(!end && player.isDead) {
+			Debug.Log("Game Over!");
+			end = true;
+			level.End(false);
+			PlayTextMessage(GAME_OVER);
+			Invoke("ReturnToMap", 5f);
+		}
+		else if(timer > Time.deltaTime && next==null  && !end && Map.NoEnemy() && (!(level.ID=="level5") || bossDead) ) {
+			Debug.Log ("You win!");
+			end = true;
+			level.End(true);
+			PlayTextMessage(GAME_CLEAR);
+			Debug.Log ("Duration: "+level.GetPlayDurationMillis());
+			Debug.Log ("Fastest: "+level.GetFastestDurationMillis());
+			Invoke("ReturnToMap", 5f);
+		}
+		
+	}
+	
+	
+	private void PlayTextMessage(int type) {
+		switch(type) {
+			case GAME_START:
+				gameStart = Instantiate(gameStartPrefab) as GameObject;
+				gameStart.transform.SetParent(canvasTranform, false);
+				break;
+			case GAME_OVER:
+				gameOver = Instantiate(gameOverPrefab) as GameObject;
+				gameOver.transform.SetParent(canvasTranform, false);
+				break;
+			case GAME_CLEAR:
+				gameClear = Instantiate(gameClearPrefab) as GameObject;
+				gameClear.transform.SetParent(canvasTranform, false);
+				break;
+		}
+	}
+	public static void BossDie() {
+		bossDead = true;
 	}
 
-	public void Reload() {
-		Time.timeScale = 1;
-		Map.Initialize ();
-		Application.LoadLevel (Application.loadedLevelName);
-	}
-
+	// Red warning area for enemies initially set to invisible
 	private void initWarning() {
 		IntVector2 temp = new IntVector2(0,0);
 		Quaternion charRotation = Quaternion.Euler (0f, 0f, 0f);
@@ -73,7 +148,18 @@ public class GameController : MonoBehaviour {
 			}
 		}
 	}
-
+	public void Reload() {
+		Time.timeScale = 1;
+		Application.LoadLevel (Application.loadedLevelName);
+	}
+	public void ReturnToMap() {
+		Time.timeScale = 1;
+		Application.LoadLevel("LevelSelect");
+	}
+	/*public static void Pause() {
+		Time.timeScale = 0;
+		level.Pause();
+	}*/
 	
 	/*IEnumerator MonsterWaves () {
 		while(true) {
@@ -102,4 +188,5 @@ public class GameController : MonoBehaviour {
 		}
 		
 	}*/
+}
 }

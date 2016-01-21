@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
+
 public class Enemy002 : Enemy {
 	
 	public float fireRange = 3.0f;
@@ -21,6 +22,8 @@ public class Enemy002 : Enemy {
 	private Enemy002Anim anim;
 
 	private bool targetFound = false;
+	
+
 
 	void Start () {
 		attackPriority = new float[] {1,1,1,1,1};
@@ -34,6 +37,7 @@ public class Enemy002 : Enemy {
 		countDown = 0.0f;
 		sprite = tongueBody.GetComponent<SpriteRenderer>();
 		spriteLen = new Vector2 (sprite.bounds.extents.x*13f,sprite.bounds.extents.y);
+
 		Initialize ();
 	}
 	
@@ -171,6 +175,7 @@ public class Enemy002 : Enemy {
 			yield return new WaitForSeconds (countDown);
 		}*/
 		yield return new WaitForSeconds (attackWait);
+		GetComponent<AudioSource>().PlayOneShot (attackSound ,  0.7F);
 		if (dir == Direction.UP) {
 			tongue.GetComponent<Enemy002Tongue> ().SetZPos (transform.position.z - 1.3f);
 		} else if (dir == Direction.DOWN) {

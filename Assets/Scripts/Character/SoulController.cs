@@ -4,6 +4,7 @@ using System.Collections;
 public class SoulController : MonoBehaviour {
 	public Player player;
 	public TotemSummoner summoner;
+	public AudioClip getManaSound;
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindWithTag ("Player").GetComponent<Player> ();
@@ -28,6 +29,8 @@ public class SoulController : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D other) {
 		if (other.tag == "Player") {
+			GetComponent<AudioSource>().PlayOneShot(getManaSound,  0.3F);
+
 			summoner.addMana (1);
 			Destroy (GetComponent<Collider2D> ());
 			StartCoroutine(MoveThread ());

@@ -9,6 +9,9 @@ namespace UnityStandardAssets.CrossPlatformInput
 		public GameObject UICanvas;
 		public GameObject backpackView;
 		public float extendSpeed;
+		public Sprite backpackOpen;
+		public Sprite backpackClose;
+
 		public Button extendButton;
 		private RectTransform rectBackpack;
 		private RectTransform rectExtendButton;
@@ -32,6 +35,7 @@ namespace UnityStandardAssets.CrossPlatformInput
 
 		public void DisplayMenu() {
 			Time.timeScale = 0;
+			//GameController.Pause();
 			for (int i=0; i<buttons.Length; i++)
 				buttons [i].interactable = false;
 			joystick.enabled = false;
@@ -45,26 +49,31 @@ namespace UnityStandardAssets.CrossPlatformInput
 			joystick.enabled = true;
 			Time.timeScale = 1;
 		}
+
+
+
+
+
 		public void ExtendBackpack(){
 			if (backpackState == false) {
 				backpackState = true;
-				StartCoroutine(ExtendScrollView(new Vector2(300,100)));
+				StartCoroutine(ExtendScrollView(new Vector2(300,100),backpackState));
 			} else {
 				backpackState = false;
-				StartCoroutine(ExtendScrollView(new Vector2(1,100)));
+				StartCoroutine(ExtendScrollView(new Vector2(1,100),backpackState));
 			}
 		}
-		private IEnumerator ExtendScrollView(Vector2 target){
+		private IEnumerator ExtendScrollView(Vector2 target,bool backpackState){
 			Vector2 directionVector = new Vector2(target.x - rectBackpack.sizeDelta.x, target.y - rectBackpack.sizeDelta.y).normalized;
+			Image image = extendButton.GetComponent<Image> ();
+			if (backpackState == true)
+				image.sprite = backpackOpen;
 			while(rectBackpack.sizeDelta != target){
-				rectExtendButton.anchoredPosition += directionVector * extendSpeed * Time.deltaTime * -1;
-				if(rectExtendButton.anchoredPosition.x < -285 )
-					rectExtendButton.anchoredPosition = new Vector2(-285,0);
-				if(rectExtendButton.anchoredPosition.x > 0 )
-					rectExtendButton.anchoredPosition = new Vector2(0,0);
 				rectBackpack.sizeDelta = Vector2.MoveTowards(rectBackpack.sizeDelta, target, extendSpeed * Time.deltaTime);
 				yield return null;
 			}
+			if(backpackState == false)
+				image.sprite = backpackClose;
 		}
 	}
 }
