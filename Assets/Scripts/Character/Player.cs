@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityStandardAssets.CrossPlatformInput;
+using CnControls;
 
 public class Player : Character {
 	
@@ -10,7 +11,7 @@ public class Player : Character {
 	public const int CATCH = 1;
 	public int mode;
 	public float opacity = 0.2f;
-
+	
 	//public Transform totemSpawn;
 	public float holdTimePara = 0.5f;
 	public float joyStickSensitivity = 0.5f;
@@ -18,18 +19,21 @@ public class Player : Character {
 	
 	public Totem caughtTotem;
 	//private IntVector2 oldDir;
-	private Joystick joyStick;
+
 	private Animator anim;
 	private float holdTime;
 	private Color temp;
 	public TotemSummoner summoner;
 	public float idleSpeed;
 	public float catchSpeed;
-
+	
 	public GameObject sweat_left, sweat_right, sweat_back, sweat_front;
 	public GameObject playerStone;
 	public GameObject catchIcon;
-
+	
+	public AudioClip placeTotemSound, catchTotemSound;
+	private AudioSource audio;
+	
 	
 	void Start () {
 		mode = IDLE;
@@ -37,7 +41,8 @@ public class Player : Character {
 		Map.Create (this);
 		//oldDir = dir;
 		anim = GetComponent<Animator>();
-		joyStick = GameObject.FindWithTag ("JoyStick").GetComponent<Joystick> ();
+		audio = GetComponent<AudioSource>();
+	
 		Rotate (dir);
 		holdTime = 0f;
 		characterId = 0;
@@ -45,6 +50,7 @@ public class Player : Character {
 		temp = catchIcon.GetComponent<Image>().color;
 		temp.a = opacity;
 		catchIcon.GetComponent<Image> ().color = temp;
+		transform.position = Map.GetRealPosition(new IntVector2(1,1), typeof(Player));
 		//Hp GUI initialize
 		HpInitialize ();
 	}
@@ -52,21 +58,25 @@ public class Player : Character {
 	void Update () {
 		//Hp GUI
 		HpUpdate ();
-
-		//float moveH = Input.GetAxis ("Horizontal"); //PC
-		float moveH = CrossPlatformInputManager.GetAxis("Horizontal");
-		//float moveV = Input.GetAxis ("Vertical"); //PC
-		float moveV = CrossPlatformInputManager.GetAxis("Vertical");
 		
+		//float moveH = Input.GetAxis ("Horizontal"); //PC
+		//float moveH = CrossPlatformInputManager.GetAxis("Horizontal_Left");
+		float moveH = CnInputManager.GetAxis ("Horizontal");
+		//float moveV = Input.GetAxis ("Vertical"); //PC
+		//float moveV = CrossPlatformInputManager.GetAxis("Vertical_Left");
+		float moveV = CnInputManager.GetAxis ("Vertical");
+
 		float length = Mathf.Sqrt (moveH * moveH + moveV * moveV);
 		float angle = Mathf.Atan2 (moveV, moveH);
 		//print ("len:"+length+" angle:"+angle*Mathf.Rad2Deg);
 		//print (moveH + ", " + moveV + " angle: " + angle);
-		
+
 		if (!inMoveThread) {
 			IntVector2 movement = new IntVector2(1,0);
-			if(length > 0.0f) {
+			if( length > 0.0f ) {
 				float offset = Mathf.PI/20;
+				
+				
 				if( Mathf.Abs (angle) <= Mathf.PI/8+offset) {
 					movement = Direction.RIGHT;
 				}
@@ -212,7 +222,7 @@ public class Player : Character {
 		else if(!joyStick.axisPressState) {
 			holdTime = 0f;
 		}*/
-
+		
 		//Catch Icon opacity
 		if(mode == IDLE)
 			temp.a = opacity;
@@ -233,25 +243,7 @@ public class Player : Character {
 		} 
 		// Catch or release the totem when hold press
 		if (Input.GetKeyDown (KeyCode.Space)) {
-			if (mode == IDLE && /*holdTime > holdTimePara &&*/ !inMoveThread && !isMoving && Mathf.Abs (dir.x + dir.y) == 1) {
-				IntVector2 actionPos = pos + dir;
-				List<Character> charList = Map.Seek (actionPos);
-				foreach (Character c in charList) {
-					// If there's a totem in front of Player
-					if (c is Totem) {
-						//Debug.Log("Caught");
-						caughtTotem = (Totem)c;
-						caughtTotem.CaughtByPlayer ();
-						mode = CATCH;
-						break;
-					}
-				}
-			} else if (mode == CATCH && /*holdTime < holdTimePara &&*/ !inMoveThread && !isMoving) {
-				//Debug.Log("Dismiss");
-				caughtTotem.ReleasedByPlayer ();
-				caughtTotem = null;
-				mode = IDLE;
-			}
+			Catch();
 		}
 		// Testing the MoveByVectorArray function by pressing 'M'
 		if (Input.GetKeyDown (KeyCode.M) && !isMoving && mode != CATCH) {
@@ -273,26 +265,27 @@ public class Player : Character {
 		if (HP <= 0) {
 			Debug.Log ("The Player is fukcing dead!");
 			Die();
-
+			
 		}
 	}
-
+	
 	private void Die(){
 		//Debug.Log (transform.position);
 		// Create the player's tomb on the mainMap
+		isDead = true;
 		SetIdle (true);
 		GameObject obj = Instantiate (playerStone, this.transform.position, this.transform.rotation) as GameObject;
 		Ground tomb = obj.GetComponent<Ground> ();
 		tomb.pos = this.pos;
 		Map.Create (tomb);
-
-
+		
+		
 		Map.Destroy (this);
 		Destroy (healthPanel);
 		Destroy(this);
 		Destroy (gameObject, 0.8f);
 	}
-
+	
 	public void MoveByVector(IntVector2 offset) {
 		IntVector2 newPos = Map.BoundPos(pos+offset);
 		if (mode == CATCH) {
@@ -333,12 +326,15 @@ public class Player : Character {
 		
 	}
 	
+	
 	public void Summon(int totemType)
 	{
 		// Plant a totem when pressing left ctrl and not moving and not slant
 		if (/*Input.GetKeyDown (KeyCode.LeftControl) &&*/ !inMoveThread &&
 		    (Mathf.Abs (dir.x + dir.y) == 1)) {
-			summoner.Summon (totemType, pos + dir, dir);
+			if(summoner.Summon (totemType, pos + dir, dir)) {
+				PlaceTotemSound();
+			}
 		}
 	}
 	
@@ -412,21 +408,26 @@ public class Player : Character {
 			}
 		}
 	}
-
+	
 	public void SetIdle(bool isIdle) {
 		if (isIdle) {
 			if(caughtTotem!=null) {
 				caughtTotem.ReleasedByPlayer();
+				PlaceTotemSound();
 				caughtTotem = null;
 			}
 			mode = IDLE;
 			speed = idleSpeed;
 			StopSweating();
+			
+			CatchTotemSoundLoop(false);
+			
 		} 
 		else {
 			mode = CATCH;
 			speed = catchSpeed;
 			StartSweating();
+			CatchTotemSoundLoop(true);
 		}
 	}
 	
@@ -449,9 +450,25 @@ public class Player : Character {
 		sweat_back.SetActive (false);
 		sweat_front.SetActive (false);
 	}
-
-
-
+	
+	private void PlaceTotemSound() {
+		audio.PlayOneShot (placeTotemSound ,  0.5F);
+	}
+	
+	private void CatchTotemSoundLoop(bool start) {
+		if(start) {
+			audio.loop = true;
+			audio.clip = catchTotemSound;
+			audio.volume = 1F;
+			audio.Play();
+		}
+		else {
+			audio.Stop();
+			audio.loop = false;
+		}
+	}
+	
+	
 	protected IEnumerator MoveThread(Vector3 next) {
 		bool playerCatch = false;
 		if(mode==CATCH) {
@@ -476,7 +493,7 @@ public class Player : Character {
 			caughtTotem.inMoveThread = false;
 		}
 	}
-
+	
 	public void CauseDamage(int harm){
 		base.CauseDamage(harm);
 		Debug.Log ("player bing attack!");
@@ -485,7 +502,5 @@ public class Player : Character {
 	private void ShakeCam() {
 		Camera.main.GetComponent<EZCameraShake.CameraShaker> ().ShakeOnce (0.5f, 5.0f, 0.5f, 0.5f);
 	}
-	
-	
 	
 }

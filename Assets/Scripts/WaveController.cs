@@ -8,12 +8,15 @@ public class WaveInformation
 	public float bornTime;
 	public GameObject monster;
 	public IntVector2 bornPos;
+	public int waveItemType;
 }
 
-public class WaveController : MonoBehaviour {
+public class WaveController : MonoBehaviour
+{
 	public List<GameObject> monster;
-	private List<WaveInformation> waveInfo;
-	private int now;
+	private List<WaveInformation[]> waveInfo;
+	private int nowWave;
+	private int nowMon;
 	// Use this for initialization
 	/*void Start () {
 		
@@ -24,27 +27,47 @@ public class WaveController : MonoBehaviour {
 		
 	}*/
 
-	public void ReadFile(string filename) {
+	public void ReadFile (string filename)
+	{
 		TextAsset textAsset = Resources.Load (filename) as TextAsset;
 		StringReader reader = new StringReader (textAsset.text);
-		waveInfo = new List<WaveInformation> ();
+		waveInfo = new List<WaveInformation[]> ();
 		string s;
+		int monsterNum;
+		WaveInformation[] wave;
 		while (true) {
-			s = reader.ReadLine();
-			if(s == null) break;
-			string[] sp = s.Split(new char[] {' '});
-			WaveInformation temp = new WaveInformation();
-			temp.bornTime = float.Parse(sp[0]);
-			temp.monster = monster[int.Parse(sp[1])] ;
-			temp.bornPos = new IntVector2(int.Parse(sp[2]),int.Parse(sp[3]));
-			waveInfo.Add(temp);
+			s = reader.ReadLine ();
+			if (s == null)
+				break;
+			monsterNum = int.Parse (s);
+			wave = new WaveInformation[monsterNum];
+			for (int i = 0; i < monsterNum; i++) {
+				s = reader.ReadLine ();
+				string[] sp = s.Split (new char[] { ' ' });
+				wave [i] = new WaveInformation();
+				wave [i].bornTime = float.Parse (sp [0]);
+				wave [i].monster = monster [int.Parse (sp [1])];
+				wave [i].waveItemType = int.Parse (sp [1]);
+				wave [i].bornPos = new IntVector2 (int.Parse (sp [2]), int.Parse (sp [3]));
+			}
+			waveInfo.Add (wave);
 		}
-		now = 0;
+		nowWave = 0;
 	}
 
-	public WaveInformation Next() {
-		if (now == waveInfo.Count)
+	public WaveInformation Next ()
+	{
+		if (nowMon == waveInfo[nowWave].Length)
 			return null;
-		return waveInfo [now++];
+		return waveInfo[nowWave][nowMon++];
+	}
+
+	public bool NextWave()
+	{
+		if (nowWave == waveInfo.Count)
+			return false;
+		nowWave++;
+		nowMon = 0;
+		return true;
 	}
 }

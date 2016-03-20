@@ -7,9 +7,11 @@ public class Enemy002Anim : MonoBehaviour {
 	public GameObject front , back , left;
 
 
+	
 	// Use this for initialization
 	void Start () {
 		anim = GetComponent<Animator>();
+
 	//	front = this.transform.FindChild("Enemy002_front").gameObject;
 	//	back = this.transform.FindChild("Enemy002_back").gameObject;
 	//	left = this.transform.FindChild("Enemy002_left").gameObject;

@@ -1,16 +1,33 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\GameController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/DestroyByBoundary.cs">
     <Files>
-      <File FileName="Assets\Scripts\GameController.cs" Line="22" Column="17" />
-      <File FileName="Assets\Scripts\Camera\CameraShakePresets.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Camera\CameraShakeInstance.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Camera\CameraShaker.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Camera\CameraUtilities.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Character\Enemy\Enemy002.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Character\Enemy\Enemy003.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Character\Enemy\Boss001.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Map.cs" Line="26" Column="34" />
+      <File FileName="Assets/Scripts/Character/Totem/Totem.cs" Line="40" Column="3" />
+      <File FileName="Assets/Scripts/Character/Enemy/Enemy.cs" Line="91" Column="26" />
+      <File FileName="Assets/Scripts/GameController.cs" Line="4" Column="22" />
+      <File FileName="Assets/Scripts/Character/Totem/Totem001.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Character/Totem/Totem002Taunt.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Character/Totem/Totem002.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Character/Totem/Totem003AttackArea.cs" Line="42" Column="22" />
+      <File FileName="Assets/Scripts/Character/Player.cs" Line="45" Column="2" />
+      <File FileName="Assets/Scripts/Character/Character.cs" Line="9" Column="8" />
+      <File FileName="Assets/Scripts/DestroyByBoundary.cs" Line="1" Column="1" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="Assembly-CSharp" expanded="True">
+            <Node name="Scripts" expanded="True">
+              <Node name="Character" expanded="True">
+                <Node name="Totem" expanded="True" />
+              </Node>
+              <Node name="DestroyByBoundary.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />

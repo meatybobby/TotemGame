@@ -28,6 +28,8 @@ public class Enemy : Character {
 	public GameObject soul;
 	public int manaDrop = 3;
 
+	public AudioClip attackSound, dieSound;
+
 	public void Initialize() {
 		player = GameObject.FindWithTag ("Player").GetComponent<Player> ();
 		isMoving = false;
@@ -43,6 +45,7 @@ public class Enemy : Character {
 
 	public void Die() {
 		isDead = true;
+		GetComponent<AudioSource>().PlayOneShot(dieSound, 0.5f);
 		Destroy (healthPanel);
 		Destroy (this);
 		Map.Destroy(this);
@@ -52,6 +55,7 @@ public class Enemy : Character {
 		}
 		Destroy (GetComponent<Collider2D>());
 		Destroy(gameObject, 1.5f);
+		ApplicationModel.currentEnemyNum--;
 	}
 	
 	public void FindDirection(IntVector2 playerPos) {

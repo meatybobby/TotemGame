@@ -39,6 +39,8 @@ public class IntVector2{
 		return string.Format ("(" + x + "," + y + ")");
 	}
 }
+
+//[RequireComponent(typeof(AudioSource))]
 public class Character : MonoBehaviour {
 	
 	public int HP;
@@ -60,7 +62,8 @@ public class Character : MonoBehaviour {
 	protected Canvas canvas;
 	protected GameObject healthPanel;
 	protected Slider healthSlider;
-	
+
+
 	public Character(){
 	}
 	
@@ -181,7 +184,7 @@ public class Character : MonoBehaviour {
 		canvas = GameObject.FindGameObjectWithTag ("Canvas").GetComponent<Canvas>();
 		HP = maxHP;
 		healthPanel = Instantiate(healthPrefab) as GameObject;
-		healthPanel.transform.SetParent(canvas.transform, false);
+		healthPanel.transform.SetParent(canvas.transform.FindChild("HP area"), false);
 		healthSlider = healthPanel.GetComponentInChildren<Slider>();
 	}
 	

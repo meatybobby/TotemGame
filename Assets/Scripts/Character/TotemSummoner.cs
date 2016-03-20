@@ -3,7 +3,9 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class TotemSummoner : MonoBehaviour
-{
+{	
+	public GameObject gameCtrl;
+	private UIController uiCtrl;
 	public int mana;
 	public int manaMax;
 	public int[] cost;
@@ -20,6 +22,8 @@ public class TotemSummoner : MonoBehaviour
 	private Vector2 originSize;
 	private Vector2 originPos;
 	private GameObject[] buttons;
+
+	public float manaInterval;
 
 	// Use this for initialization
 	void Start ()
@@ -41,15 +45,16 @@ public class TotemSummoner : MonoBehaviour
 			buttons[count].GetComponent<Image>().color = temp;
 			count++;
 		}
+		uiCtrl = gameCtrl.GetComponent<UIController> ();
 	}
 
 	// Update is called once per frame
 	void Update ()
 	{
 		reManaTime += Time.deltaTime;
-		if (reManaTime >= 3) {
+		if (reManaTime >= manaInterval) {
 			reManaTime = 0;
-			addMana(1);
+			addMana (1);
 		}
 		drawMana ();
 		for(int i=0; i<cost.Length; i++){
@@ -58,14 +63,24 @@ public class TotemSummoner : MonoBehaviour
 				temp.a = 1.0f;
 			else
 				temp.a = opacity;
+
 			buttons[i].GetComponent<Image>().color = temp;
 		}
+		for (int i=0; i<cost.Length; i++) {
+			if (mana >= cost[i]){
+				if(!uiCtrl.backpackState)uiCtrl.ExtendBackpack();
+				break;
+			}
+			if(uiCtrl.backpackState)uiCtrl.ExtendBackpack();
+		
+		}
+
 	}
 
-	public void Summon(int totemId, IntVector2 pos, IntVector2 dir) {
+	public bool Summon(int totemId, IntVector2 pos, IntVector2 dir) {
 		//Debug.Log (cost.Length);
 		if (cost[totemId] > mana || totemNum == maxTotemNum)
-			return;
+			return false;
 		if (Map.isInBounded(pos) && Map.IsEmpty (pos)) {
 			Vector3 totemRealPos = Map.GetRealPosition(pos, typeof(Totem));
 			GameObject totemObj;
@@ -110,7 +125,10 @@ public class TotemSummoner : MonoBehaviour
 
 			totemNum++;
 			mana -= cost[totemId];
+
+			return true;
 		}
+		return false;
 	}
 
 	public void addMana(int add) {

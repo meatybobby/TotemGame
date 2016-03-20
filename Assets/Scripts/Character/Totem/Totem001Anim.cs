@@ -4,9 +4,8 @@ using System.Collections;
 public class Totem001Anim : MonoBehaviour {
 
 	private Animator anim;
-	GameObject front , back , left , right;
-
-	// Use this for initialization
+	private GameObject front , back , left , right;
+	
 	void Start () {
 		anim = GetComponent<Animator>();
 		front = this.transform.FindChild("Totem001_front").gameObject;
@@ -53,7 +52,6 @@ public class Totem001Anim : MonoBehaviour {
 				break;
 			case 3:
 				Debug.Log ("anim!");
-				//anim.Play("Totem001_right_summon");
 				anim.SetTrigger("right_summon");
 				break;
 			default :
@@ -99,8 +97,5 @@ public class Totem001Anim : MonoBehaviour {
 		}
 	
 	}
-
-
-
-
+	
 }

@@ -8,34 +8,38 @@ public class TotemBullet : MonoBehaviour {
 	public Totem001 shooter;
 	public float destroyTime = 0.001f;
 
+	public AudioClip bulletBreakSound;
+
 
 	void Start () {
 		anim = GetComponent<Animator>();
 		GetComponent<Rigidbody2D> ().velocity = transform.right * speed;
 	}
-
-
-
+	
 	void OnTriggerEnter2D(Collider2D other) {
 
 		if (other.tag == "Enemy" || other.tag=="Player" || other.tag=="Rock" ||
 		    (other.tag == "Totem" && other.GetComponent<Totem001> () != shooter) ) {
 			// Can't be destroyed by the collider of the totem who shot the bullet
 			if (other.tag=="Enemy" || other.tag=="Rock") {
-				Character c = other.GetComponent<Character> ();
-				if(c!=null)
+				Character c = other.GetComponentInParent<Character> ();
+				if(c!=null){
 					c.CauseDamage (shooter.damage);
-			}
+				}
 
+			}
+			GetComponent<AudioSource>().PlayOneShot(bulletBreakSound, 0.2f);
 			Destroy (GetComponent<CircleCollider2D>()); // trigger only once;
 
 			GetComponent<Rigidbody2D> ().velocity = new Vector3(0f,0f,0f);
 			anim.SetTrigger("isBoom");
 			// rotate to zero degree for the explosion animation
 			transform.rotation = Quaternion.Euler (0f, 0f, 0f);
-			Destroy(gameObject, 1f);
 		}
 		
 	}
 
+	public void RemoveBullet(){
+		Destroy(gameObject);
+	}
 }

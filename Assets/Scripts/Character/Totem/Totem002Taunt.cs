@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-//嘲諷區域
+
 public class Totem002Taunt : MonoBehaviour {
 
-	private Totem002 totem002;
 	public List<Enemy> enemyList;
+
+	private Totem002 totem002;
 	private bool isIdle = true;
 	
 	void Start () {
@@ -14,6 +15,7 @@ public class Totem002Taunt : MonoBehaviour {
 	}
 
 	void Update() {
+		// remomve the enemies that have been destroyed
 		enemyList.RemoveAll (item => item == null);
 	
 		if (!isIdle && enemyList.Count==0) {
@@ -23,9 +25,7 @@ public class Totem002Taunt : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
-		//Debug.Log (other.tag);
 		if (other.tag == "Enemy") {
-			//Debug.Log("Taunt");
 			totem002.anim.SetTrigger("isTaunt");
 			isIdle = false;
 			Enemy enemy = other.GetComponent<Enemy> ();
@@ -40,7 +40,6 @@ public class Totem002Taunt : MonoBehaviour {
 	
 	void OnTriggerExit2D(Collider2D other) {
 		if (other.tag == "Enemy") {
-			//Debug.Log ("Enenmy exit collider!");
 			totem002.anim.SetTrigger("isIdle");
 			Enemy enemy = other.GetComponent<Enemy> ();
 			enemy.CancelAngry ();
@@ -50,3 +49,4 @@ public class Totem002Taunt : MonoBehaviour {
 		}
 	}
 }
+

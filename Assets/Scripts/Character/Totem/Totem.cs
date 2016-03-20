@@ -11,8 +11,8 @@ public class Totem : Character {
 	public bool isCaught;
 	public Player playerRef;
 	public GameObject steam;
-
 	public GameObject range;
+	public AudioClip dieSound;
 
 	public void Initialize() {
 		isDead = false;
@@ -24,15 +24,19 @@ public class Totem : Character {
 	public void Die() {
 		isDead = true;
 		Destroy (healthPanel);
+		PlayDieSound();
 		if(range) Destroy (range);
 		Destroy (this);
 		Map.Destroy(this);
 		SetCatchLight (false);
 		Destroy (GetComponent<Collider2D>());
-		Destroy(gameObject, 2.5f);
 		if(isCaught) {
 			playerRef.SetIdle(true);
 		}
+	}
+
+	public void RemoveGameObject(){
+		Destroy(gameObject);
 	}
 
 	public void CaughtByPlayer() {
@@ -52,6 +56,10 @@ public class Totem : Character {
 		Vector3 rangePos =  transform.FindChild("range").transform.position;
 		transform.FindChild("range").transform.position = 
 			new Vector3(rangePos.x, rangePos.y, 30f);
+	}
+
+	private void PlayDieSound() {
+		GetComponent<AudioSource>().PlayOneShot (dieSound ,  0.3F);
 	}
 
 	private void SummonSteam() {
